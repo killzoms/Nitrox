@@ -11,7 +11,7 @@ namespace NitroxClient.Helpers
 {
     public class NitroxProtobufSerializer
     {
-        private readonly RuntimeTypeModel model;
+        public readonly RuntimeTypeModel model;
         private readonly Dictionary<Type, int> knownTypes;
 
         public static NitroxProtobufSerializer Main;
@@ -31,10 +31,12 @@ namespace NitroxClient.Helpers
 
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
+                NitroxModel.Logger.Log.Info(type);
                 bool hasUweProtobuf = (type.GetCustomAttributes(typeof(ProtoContractAttribute), true).Length > 0);
 
                 if (hasUweProtobuf)
                 {
+                    NitroxModel.Logger.Log.Info("UweProtoFound!");
                     // As of the latest protobuf update they will automatically register detected attributes.
                     model.Add(type, true);
                     knownTypes[type] = int.MaxValue; // UWE precompiled is going to pass everything to us
@@ -47,22 +49,10 @@ namespace NitroxClient.Helpers
             model.SerializeWithLengthPrefix(stream, o, o.GetType(), PrefixStyle.Base128, 0);
         }
 
-        public void Serialize(ProtoWriter writer, object o)
-        {
-            Stream stream = (Stream)writer.GetType().GetField("dest", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(writer); // really...
-            model.SerializeWithLengthPrefix(stream, o, o.GetType(), PrefixStyle.Base128, 0);
-        }
-
         public T Deserialize<T>(Stream stream)
         {
             T t = (T)Activator.CreateInstance(typeof(T));
             return (T)Deserialize(stream, t, typeof(T));
-        }
-
-        public object Deserialize(ProtoReader reader, object o, Type t)
-        {
-            Stream stream = (Stream)reader.GetType().GetField("_source", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(reader); // really...
-            return Deserialize(stream, o, t);
         }
 
         public object Deserialize(Stream stream, object o, Type t)
@@ -74,21 +64,24 @@ namespace NitroxClient.Helpers
         {
             foreach (Type type in Assembly.Load(assemblyName).GetTypes())
             {
+                NitroxModel.Logger.Log.Info(type);
                 bool hasUweProtobuf = (type.GetCustomAttributes(typeof(ProtoContractAttribute), true).Length > 0);
 
                 if (hasUweProtobuf)
                 {
+                    NitroxModel.Logger.Log.Info("UweProtoFound!");
                     // As of the latest protobuf update they will automatically register detected attributes.
                     model.Add(type, true);
                     knownTypes[type] = int.MaxValue; // UWE precompiled is going to pass everything to us
                 }
                 else if (HasNitroxProtoContract(type))
                 {
+                    NitroxModel.Logger.Log.Info("NitroxProtoFound!");
                     model.Add(type, true);
                     knownTypes[type] = int.MaxValue; // UWE precompiled is going to pass everything to us
 
-                    ManuallyRegisterNitroxProtoMembers(type.GetFields(), type);
-                    ManuallyRegisterNitroxProtoMembers(type.GetProperties(), type);
+                    ManuallyRegisterNitroxProtoMembers(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static), type);
+                    ManuallyRegisterNitroxProtoMembers(type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static), type);
                 }
             }
         }

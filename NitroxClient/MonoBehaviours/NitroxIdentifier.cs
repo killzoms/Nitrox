@@ -13,7 +13,7 @@ namespace NitroxClient.MonoBehaviours
     public class NitroxIdentifier : MonoBehaviour, IProtoTreeEventListener
     {
         [ProtoMember(1)]
-        public NitroxId Id { get; set; }
+        public NitroxId Id;
 
         private static Dictionary<NitroxId, GameObject> gameObjectsById = new Dictionary<NitroxId, GameObject>();
 

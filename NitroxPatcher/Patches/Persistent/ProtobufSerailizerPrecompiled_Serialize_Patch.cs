@@ -18,7 +18,9 @@ namespace NitroxPatcher.Patches.Persistent
         {
             if (num == int.MaxValue)
             {
-                NitroxProtobufSerializer.Main.Serialize(writer, obj);
+                int key = (int)NitroxProtobufSerializer.Main.model.GetType().InvokeMember("GetKey", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, NitroxProtobufSerializer.Main.model, new object[] { obj.GetType(), false, true });
+                NitroxModel.Logger.Log.Info(obj.GetType() + " " + key);
+                NitroxProtobufSerializer.Main.model.GetType().InvokeMember("Serialize", BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance, null, NitroxProtobufSerializer.Main.model, new object[] { key, obj, writer });
                 return false;
             }
 
