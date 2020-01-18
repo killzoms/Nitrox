@@ -23,11 +23,6 @@ namespace NitroxPatcher
         private static readonly HarmonyInstance harmony = HarmonyInstance.Create("com.nitroxmod.harmony");
         private static bool isApplied;
 
-        private static readonly string[] assemblies = new string[]
-        {
-            "NitroxModel.dll",
-        };
-        
         public static void Execute()
         {
             Log.EnableInGameMessages();
@@ -105,7 +100,7 @@ namespace NitroxPatcher
         private static IContainer CreatePatchingContainer()
         {
             ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterModule(new NitroxPatchesModule());
+            builder.RegisterModule<NitroxPatchesModule>();
             return builder.Build();
         }
 
@@ -116,7 +111,6 @@ namespace NitroxPatcher
             GameObject nitroxRoot = new GameObject();
             nitroxRoot.name = "Nitrox";
             nitroxRoot.AddComponent<NitroxBootstrapper>();
-            NitroxClient.Helpers.NitroxProtobufSerializer serializer = new NitroxClient.Helpers.NitroxProtobufSerializer(assemblies);
 
             Log.Info("Behaviours applied.");
         }

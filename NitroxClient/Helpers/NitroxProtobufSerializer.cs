@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using ProtoBuf;
 using ProtoBuf.Meta;
 
@@ -11,18 +9,14 @@ namespace NitroxClient.Helpers
 {
     public class NitroxProtobufSerializer
     {
+        private readonly Dictionary<Type, int> knownTypes;
         public readonly RuntimeTypeModel model;
         public readonly Dictionary<Type, int> NitroxTypes = new Dictionary<Type, int>();
 
-        private readonly Dictionary<Type, int> knownTypes;
-
-        public static NitroxProtobufSerializer Main;
-
-        protected RuntimeTypeModel Model { get { return model; } }
+        protected RuntimeTypeModel Model => model;
 
         public NitroxProtobufSerializer(params string[] assemblies)
         {
-            Main = this;
             model = TypeModel.Create();
             knownTypes = (Dictionary<Type, int>)typeof(ProtobufSerializerPrecompiled).GetField("knownTypes", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 
@@ -33,7 +27,7 @@ namespace NitroxClient.Helpers
 
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                bool hasUweProtobuf = (type.GetCustomAttributes(typeof(ProtoContractAttribute), true).Length > 0);
+                bool hasUweProtobuf = type.GetCustomAttributes(typeof(ProtoContractAttribute), true).Length > 0;
 
                 if (hasUweProtobuf)
                 {
@@ -65,7 +59,7 @@ namespace NitroxClient.Helpers
         {
             foreach (Type type in Assembly.Load(assemblyName).GetTypes())
             {
-                bool hasUweProtobuf = (type.GetCustomAttributes(typeof(ProtoContractAttribute), true).Length > 0);
+                bool hasUweProtobuf = type.GetCustomAttributes(typeof(ProtoContractAttribute), true).Length > 0;
 
                 if (hasUweProtobuf)
                 {
@@ -106,10 +100,10 @@ namespace NitroxClient.Helpers
                 foreach (object customAttribute in property.GetCustomAttributes(true))
                 {
                     Type attributeType = customAttribute.GetType();
-
                     if (attributeType.ToString().Contains("ProtoMemberAttribute"))
                     {
-                        int tag = (int)attributeType.GetProperty("Tag", BindingFlags.Public | BindingFlags.Instance).GetValue(customAttribute, new object[] { });
+                        int tag = (int)attributeType.GetProperty("Tag", BindingFlags.Public | BindingFlags.Instance)
+                            .GetValue(customAttribute, new object[0]);
                         model[type].Add(tag, property.Name);
                     }
                 }

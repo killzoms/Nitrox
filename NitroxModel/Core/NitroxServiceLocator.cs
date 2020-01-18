@@ -42,6 +42,12 @@ namespace NitroxModel.Core
             CheckServiceResolutionViability();
             return CurrentLifetimeScope.Resolve<T>();
         }
+        
+        public static T LocateServiceNoScope<T>()
+            where T : class
+        {
+            return DependencyContainer.Resolve<T>();
+        }
 
         public static object LocateService(Type serviceType)
         {

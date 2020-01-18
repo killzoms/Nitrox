@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.IO;
+using System.Reflection;
 using Harmony;
-using ProtoBuf;
 using NitroxClient.Helpers;
+using NitroxModel.Core;
 
 namespace NitroxPatcher.Patches.Persistent
 {
     public class ProtobufSerializerPrecompiled_Deserialize_Patch : NitroxPatch, IPersistentPatch
     {
-        static Type TARGET_TYPE = typeof(ProtobufSerializer);
-        static MethodInfo TARGET_METHOD = TARGET_TYPE.GetMethod("Deserialize", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly Type TARGET_TYPE = typeof(ProtobufSerializer);
+        private static readonly MethodInfo TARGET_METHOD = TARGET_TYPE.GetMethod("Deserialize", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private static NitroxProtobufSerializer serializer { get; } = NitroxServiceLocator.LocateServiceNoScope<NitroxProtobufSerializer>();
 
         public static bool Prefix(Stream stream, object target, Type type)
         {
             int key;
-            if (NitroxProtobufSerializer.Main.NitroxTypes.TryGetValue(type, out key))
+            if (serializer.NitroxTypes.TryGetValue(type, out key))
             {
-                NitroxProtobufSerializer.Main.Deserialize(stream, target, type);
+                serializer.Deserialize(stream, target, type);
                 return false;
             }
 
