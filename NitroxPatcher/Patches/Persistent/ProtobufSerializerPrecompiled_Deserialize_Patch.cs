@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.IO;
 using Harmony;
 using ProtoBuf;
 using NitroxClient.Helpers;
@@ -11,15 +12,15 @@ namespace NitroxPatcher.Patches.Persistent
 {
     public class ProtobufSerializerPrecompiled_Deserialize_Patch : NitroxPatch
     {
-        static Type TARGET_TYPE = typeof(ProtobufSerializerPrecompiled);
-        MethodInfo TARGET_METHOD = TARGET_TYPE.GetMethod("Deserialize", BindingFlags.Instance | BindingFlags.NonPublic);
+        static Type TARGET_TYPE = typeof(ProtobufSerializer);
+        static MethodInfo TARGET_METHOD = TARGET_TYPE.GetMethod("Deserialize", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        public static bool Prefix(int num, object obj, ProtoReader reader, ref object __result)
+        public static bool Prefix(Stream stream, object target, Type type)
         {
-            if (num == int.MaxValue)
+            int key;
+            if (NitroxProtobufSerializer.Main.NitroxTypes.TryGetValue(type, out key))
             {
-                int key = (int)NitroxProtobufSerializer.Main.model.GetType().InvokeMember("GetKey", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, NitroxProtobufSerializer.Main.model, new object[] { obj.GetType(), false, true });
-                __result = NitroxProtobufSerializer.Main.model.GetType().InvokeMember("Deserialize", BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance, null, NitroxProtobufSerializer.Main.model, new object[] { key, obj, reader });
+                NitroxProtobufSerializer.Main.Deserialize(stream, target, type);
                 return false;
             }
 

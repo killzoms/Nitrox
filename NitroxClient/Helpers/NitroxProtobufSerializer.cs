@@ -12,6 +12,8 @@ namespace NitroxClient.Helpers
     public class NitroxProtobufSerializer
     {
         public readonly RuntimeTypeModel model;
+        public readonly Dictionary<Type, int> NitroxTypes = new Dictionary<Type, int>();
+
         private readonly Dictionary<Type, int> knownTypes;
 
         public static NitroxProtobufSerializer Main;
@@ -31,15 +33,14 @@ namespace NitroxClient.Helpers
 
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             {
-                NitroxModel.Logger.Log.Info(type);
                 bool hasUweProtobuf = (type.GetCustomAttributes(typeof(ProtoContractAttribute), true).Length > 0);
 
                 if (hasUweProtobuf)
                 {
-                    NitroxModel.Logger.Log.Info("UweProtoFound!");
                     // As of the latest protobuf update they will automatically register detected attributes.
                     model.Add(type, true);
                     knownTypes[type] = int.MaxValue; // UWE precompiled is going to pass everything to us
+                    NitroxTypes[type] = int.MaxValue;
                 }
             }
         }
@@ -64,21 +65,20 @@ namespace NitroxClient.Helpers
         {
             foreach (Type type in Assembly.Load(assemblyName).GetTypes())
             {
-                NitroxModel.Logger.Log.Info(type);
                 bool hasUweProtobuf = (type.GetCustomAttributes(typeof(ProtoContractAttribute), true).Length > 0);
 
                 if (hasUweProtobuf)
                 {
-                    NitroxModel.Logger.Log.Info("UweProtoFound!");
                     // As of the latest protobuf update they will automatically register detected attributes.
                     model.Add(type, true);
                     knownTypes[type] = int.MaxValue; // UWE precompiled is going to pass everything to us
+                    NitroxTypes[type] = int.MaxValue;
                 }
                 else if (HasNitroxProtoContract(type))
                 {
-                    NitroxModel.Logger.Log.Info("NitroxProtoFound!");
                     model.Add(type, true);
                     knownTypes[type] = int.MaxValue; // UWE precompiled is going to pass everything to us
+                    NitroxTypes[type] = int.MaxValue;
 
                     ManuallyRegisterNitroxProtoMembers(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static), type);
                     ManuallyRegisterNitroxProtoMembers(type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static), type);

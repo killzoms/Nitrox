@@ -17,6 +17,9 @@ namespace NitroxClient.MonoBehaviours
 
         private static Dictionary<NitroxId, GameObject> gameObjectsById = new Dictionary<NitroxId, GameObject>();
 
+        private NitroxIdentifier() // Default for Proto
+        {}
+
         public void Start()
         {
             // Just in case this object comes to life via serialization
@@ -88,7 +91,6 @@ namespace NitroxClient.MonoBehaviours
 
         public void OnProtoDeserializeObjectTree(ProtobufSerializer _)
         {
-            NitroxModel.Logger.Log.Info("Deserialized " + Id);
             gameObjectsById[Id] = gameObject;
         }
     }
