@@ -14,43 +14,13 @@ namespace NitroxServer.GameLogic.Players
     {
         public const long VERSION = 1;
 
-        [ProtoMember(1)]
-        public Dictionary<string, PersistedPlayerData> SerializablePlayersByPlayerName
-        {
-            get
-            {
-                lock (playersByPlayerName)
-                {
-                    serializablePlayersByPlayerName = new Dictionary<string, PersistedPlayerData>(playersByPlayerName);
-                    return serializablePlayersByPlayerName;
-                }
-            }
-            set { playersByPlayerName = value; }
-        }
-
-        private Dictionary<string, PersistedPlayerData> serializablePlayersByPlayerName = new Dictionary<string, PersistedPlayerData>();
-
-        [ProtoMember(2)]
-        public Dictionary<NitroxId, EquippedItemData> SerializableModules
-        {
-            get
-            {
-                lock (ModulesItemsById)
-                {
-                    serializableModules = new Dictionary<NitroxId, EquippedItemData>(ModulesItemsById);
-                    return serializableModules;
-                }
-            }
-            set { ModulesItemsById = value; }
-        }
-
-        Dictionary<NitroxId, EquippedItemData> serializableModules = new Dictionary<NitroxId, EquippedItemData>();
-
         [ProtoMember(3)]
         public ushort currentPlayerId = 0;
 
+        [ProtoMember(2)]
         public Dictionary<NitroxId, EquippedItemData> ModulesItemsById = new Dictionary<NitroxId, EquippedItemData>();
 
+        [ProtoMember(1)]
         private Dictionary<string, PersistedPlayerData> playersByPlayerName = new Dictionary<string, PersistedPlayerData>();
         
         public void AddEquipment(string playerName, EquippedItemData equippedItem)

@@ -16,7 +16,7 @@ namespace NitroxServer.GameLogic.Entities
         {
             get
             {
-                serializableEntities = new Dictionary<NitroxId, Entity>(entitiesById);
+                serializableEntities = entitiesById;
                 return serializableEntities;
             }
             set
@@ -221,6 +221,7 @@ namespace NitroxServer.GameLogic.Entities
         private void AfterDeserialization()
         {
             AddEntities(serializableEntities.Values);
+            serializableEntities.Clear();
         }
     }
 }
