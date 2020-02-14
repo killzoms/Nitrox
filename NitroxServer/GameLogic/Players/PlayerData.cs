@@ -204,13 +204,6 @@ namespace NitroxServer.GameLogic.Players
             }
         }
 
-        [ProtoAfterDeserialization]
-        private void AfterDeserialization()
-        {
-            playersByPlayerName = serializablePlayersByPlayerName;
-            ModulesItemsById = serializableModules;
-        }
-
         [ProtoContract]
         public class PersistedPlayerData
         {
