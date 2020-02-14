@@ -23,14 +23,15 @@ namespace NitroxClient.GameLogic.InitialSync
             Vector3 position = packet.PlayerSpawnData;
             Optional<NitroxId> subRootId = packet.PlayerSubRootId;
 
-            if (!(position.x == 0 && position.y == 0 && position.z == 0))
+            if (position.x == 0 && position.y == 0 && position.z == 0)
             {
-                Player.main.SetPosition(position);
+                position = Player.mainObject.transform.position;
             }
+            Player.main.SetPosition(position);
 
             if (subRootId.IsPresent())
             {
-                Optional<GameObject> sub = NitroxIdentifier.GetObjectFrom(subRootId.Get());
+                Optional<GameObject> sub = NitroxEntity.GetObjectFrom(subRootId.Get());
 
                 if (sub.IsPresent())
                 {

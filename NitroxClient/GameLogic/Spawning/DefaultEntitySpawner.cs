@@ -13,8 +13,8 @@ namespace NitroxClient.GameLogic.Spawning
         {
             TechType techType = entity.TechType.Enum();
             GameObject prefab;
-
-            if (!PrefabDatabase.TryGetPrefab(entity.ClassId, out prefab))
+            IPrefabRequest prefabRequest = PrefabDatabase.GetPrefabAsync(entity.ClassId);
+            if (!prefabRequest.TryGetPrefab(out prefab)) // I realize its more code but Sorry couldnt stand all the warnings
             {
                 prefab = CraftData.GetPrefabForTechType(techType, false);
                 if (prefab == null)
@@ -24,20 +24,24 @@ namespace NitroxClient.GameLogic.Spawning
             }
 
             GameObject gameObject = Utils.SpawnFromPrefab(prefab, null);
-            gameObject.transform.position = entity.Position;
-            gameObject.transform.localScale = entity.Scale;
+            gameObject.transform.position = entity.Transform.Position;
+            gameObject.transform.rotation = entity.Transform.Rotation;
+            gameObject.transform.localScale = entity.Transform.LocalScale;
 
             if (parent.IsPresent())
             {
                 gameObject.transform.SetParent(parent.Get().transform, true);
             }
 
-            gameObject.transform.localRotation = entity.Rotation;
             gameObject.SetActive(true);
 
-            NitroxIdentifier.SetNewId(gameObject, entity.Id);
-            LargeWorldEntity.Register(gameObject);
+            NitroxEntity.SetNewId(gameObject, entity.Id);
             CrafterLogic.NotifyCraftEnd(gameObject, techType);
+
+            if (parent.IsPresent() && parent.Get().GetComponent<LargeWorldEntityCell>())
+            {
+                LargeWorldEntity.Register(gameObject);
+            }
 
             return Optional<GameObject>.Of(gameObject);
         }
