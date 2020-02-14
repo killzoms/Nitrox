@@ -9,40 +9,9 @@ namespace NitroxServer.GameLogic.Items
     public class InventoryData
     {
         [ProtoMember(1)]
-        public Dictionary<NitroxId, ItemData> SerializableInsertedInventoryItemsById
-        {
-            get
-            {
-                lock (insertedInventoryItemsById)
-                {
-                    serializableInsertedInventoryItemsById = new Dictionary<NitroxId, ItemData>(insertedInventoryItemsById);
-                    return serializableInsertedInventoryItemsById;
-                }
-            }
-            set { insertedInventoryItemsById = value; }
-        }
-
-        private Dictionary<NitroxId, ItemData> serializableInsertedInventoryItemsById = new Dictionary<NitroxId, ItemData>();
-
-        [ProtoMember(2)]
-        public Dictionary<NitroxId, ItemData> SerializableStorageSlotItemsById
-        {
-            get
-            {
-                lock (storageSlotItemsById)
-                {
-                    serializableStorageSlotItemsById = new Dictionary<NitroxId, ItemData>(storageSlotItemsById);
-                    return serializableStorageSlotItemsById;
-                }
-            }
-            set { storageSlotItemsById = value; }
-        }
-
-        private Dictionary<NitroxId, ItemData> serializableStorageSlotItemsById = new Dictionary<NitroxId, ItemData>();
-
-        [ProtoIgnore]
         private Dictionary<NitroxId, ItemData> insertedInventoryItemsById = new Dictionary<NitroxId, ItemData>();
-
+        
+        [ProtoMember(2)]
         private Dictionary<NitroxId, ItemData> storageSlotItemsById = new Dictionary<NitroxId, ItemData>();
 
         public void ItemAdded(ItemData itemData)
@@ -94,13 +63,6 @@ namespace NitroxServer.GameLogic.Items
             {
                 return new List<ItemData>(storageSlotItemsById.Values);
             }
-        }
-
-        [ProtoAfterDeserialization]
-        private void AfterDeserialization()
-        {
-            insertedInventoryItemsById = serializableInsertedInventoryItemsById;
-            storageSlotItemsById = serializableStorageSlotItemsById;
         }
     }
 }
