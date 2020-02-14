@@ -14,19 +14,6 @@ namespace NitroxServer.GameLogic.Vehicles
     public class VehicleData
     {
         [ProtoMember(1)]
-        public Dictionary<NitroxId, VehicleModel> SerializableVehiclesById
-        {
-            get
-            {
-                lock (vehiclesById)
-                {
-                    return new Dictionary<NitroxId, VehicleModel>(vehiclesById);
-                }
-            }
-            set { vehiclesById = value; }
-        }
-
-        [ProtoIgnore]
         private Dictionary<NitroxId, VehicleModel> vehiclesById = new Dictionary<NitroxId, VehicleModel>();
         
         public void UpdateVehicle(VehicleMovementData vehicleMovement)

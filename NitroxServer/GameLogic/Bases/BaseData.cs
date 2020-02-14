@@ -11,36 +11,11 @@ namespace NitroxServer.GameLogic.Bases
     public class BaseData
     {
         public const long VERSION = 1;
+
         [ProtoMember(1)]
-        public Dictionary<NitroxId, BasePiece> SerializableBasePiecesById
-        {
-            get
-            {
-                lock (basePiecesById)
-                {
-                    return new Dictionary<NitroxId, BasePiece>(basePiecesById);
-                }
-            }
-            set { basePiecesById = value; }
-        }
-
-        [ProtoMember(2)]
-        public List<BasePiece> SerializableCompletedBasePieceHistory
-        {
-            get
-            {
-                lock (completedBasePieceHistory)
-                {
-                    return new List<BasePiece>(completedBasePieceHistory);
-                }
-            }
-            set { completedBasePieceHistory = value; }
-        }
-
-        [ProtoIgnore]
         private Dictionary<NitroxId, BasePiece> basePiecesById = new Dictionary<NitroxId, BasePiece>();
 
-        [ProtoIgnore]
+        [ProtoMember(2)]
         private List<BasePiece> completedBasePieceHistory = new List<BasePiece>();
 
         public void AddBasePiece(BasePiece basePiece)

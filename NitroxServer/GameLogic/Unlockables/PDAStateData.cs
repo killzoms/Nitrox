@@ -54,7 +54,8 @@ namespace NitroxServer.GameLogic.Unlockables
             {
                 lock (partiallyUnlockedByTechType)
                 {
-                    return new List<PDAEntry>(partiallyUnlockedByTechType.Values);
+                    serializedPartiallyUnlockedByTechType = new List<PDAEntry>(partiallyUnlockedByTechType.Values);
+                    return serializedPartiallyUnlockedByTechType;
                 }
             }
             set
@@ -67,6 +68,8 @@ namespace NitroxServer.GameLogic.Unlockables
                 }
             }
         }
+
+        private List<PDAEntry> serializedPartiallyUnlockedByTechType = new List<PDAEntry>();
 
         [ProtoMember(5)]
         public List<PDALogEntry> SerializedPDALog
@@ -169,6 +172,15 @@ namespace NitroxServer.GameLogic.Unlockables
                         }
                     }
                 }
+            }
+        }
+
+        [ProtoAfterDeserialization]
+        private void AfterDeserialization()
+        {
+            foreach (PDAEntry entry in serializedPartiallyUnlockedByTechType)
+            {
+                partiallyUnlockedByTechType.Add(entry.TechType, entry);
             }
         }
     }
