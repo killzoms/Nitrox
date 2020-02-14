@@ -152,7 +152,7 @@ namespace NitroxServer.Serialization.World
 
             if (fileLoadedWorld.IsPresent())
             {
-                return fileLoadedWorld.Get();
+                return fileLoadedWorld.Value;
             }
 
             return CreateFreshWorld();

@@ -26,11 +26,11 @@ namespace NitroxClient.Communication.Packets.Processors
 
                 if (packet.SubRootId.IsPresent())
                 {
-                    GameObject sub = NitroxEntity.RequireObjectFrom(packet.SubRootId.Get());
+                    GameObject sub = NitroxEntity.RequireObjectFrom(packet.SubRootId.Value);
                     subRoot = sub.GetComponent<SubRoot>();
                 }
 
-                remotePlayer.Get().SetSubRoot(subRoot);
+                remotePlayer.Value.SetSubRoot(subRoot);
             }
         }
     }

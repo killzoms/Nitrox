@@ -60,7 +60,7 @@ namespace NitroxServer.ConsoleCommands.Processor
 
                 if (player.IsPresent())
                 {
-                    player.Get().SendPacket(new ChatMessage(ChatMessage.SERVER_ID, errorMessage));
+                    player.Value.SendPacket(new ChatMessage(ChatMessage.SERVER_ID, errorMessage));
                 }
 
                 return;

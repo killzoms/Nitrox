@@ -20,7 +20,7 @@ namespace NitroxClient.GameLogic.Spawning
 
             if(reefback.IsPresent())
             {
-                ReefbackLife life = reefback.Get().GetComponent<ReefbackLife>();
+                ReefbackLife life = reefback.Value.GetComponent<ReefbackLife>();
                 life.initialized = true;
                 life.ReflectionCall("SpawnPlants");
 
@@ -30,7 +30,7 @@ namespace NitroxClient.GameLogic.Spawning
 
                     if (child.IsPresent())
                     {
-                        child.Get().AddComponent<ReefbackCreature>();
+                        child.Value.AddComponent<ReefbackCreature>();
                     }
                 }
             }

@@ -70,13 +70,13 @@ namespace NitroxClient.GameLogic
         {
             EntityCell entityCell;
 
-            if (!entityCells.TryGetValue(entity.AbsoluteEntityCell, out entityCell) && liveRoot.IsPresent() && liveRoot.Get().GetComponent<LargeWorldEntityCell>())
+            if (!entityCells.TryGetValue(entity.AbsoluteEntityCell, out entityCell) && liveRoot.IsPresent() && liveRoot.Value.GetComponent<LargeWorldEntityCell>())
             {
                 Int3 batchId = ToInt3(entity.AbsoluteEntityCell.BatchId);
                 Int3 cellId = ToInt3(entity.AbsoluteEntityCell.CellId);
                 entityCell = new EntityCell(LargeWorldStreamer.main.cellManager, LargeWorldStreamer.main, batchId, cellId, entity.Level);
                 entityCells.Add(entity.AbsoluteEntityCell, entityCell);
-                entityCell.liveRoot = liveRoot.Get();
+                entityCell.liveRoot = liveRoot.Value;
                 entityCell.liveRoot.name = string.Format("CellRoot {0}, {1}, {2}; Batch {3}, {4}, {5}", cellId.x, cellId.y, cellId.z, batchId.x, batchId.y, batchId.z);
                 entityCell.Initialize();
             }
@@ -97,7 +97,7 @@ namespace NitroxClient.GameLogic
 
             EntityCell cellRoot = EnsureCell(entity, gameObject);
 
-            if (cellRoot != null && gameObject.Get().GetComponent<LargeWorldEntityCell>() != null)
+            if (cellRoot != null && gameObject.Value.GetComponent<LargeWorldEntityCell>() != null)
             {
                 LargeWorldStreamer.main.cellManager.QueueForAwake(cellRoot);
             }
@@ -136,9 +136,9 @@ namespace NitroxClient.GameLogic
 
             if (opGameObject.IsPresent())
             {
-                opGameObject.Get().transform.position = entity.Position;
-                opGameObject.Get().transform.rotation = entity.Rotation;
-                opGameObject.Get().transform.localScale = entity.Scale;
+                opGameObject.Value.transform.position = entity.Position;
+                opGameObject.Value.transform.rotation = entity.Rotation;
+                opGameObject.Value.transform.localScale = entity.Scale;
             }
             else
             {

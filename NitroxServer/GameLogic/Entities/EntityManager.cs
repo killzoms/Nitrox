@@ -41,7 +41,7 @@ namespace NitroxServer.GameLogic.Entities
 
             if(opEntity.IsPresent())
             {
-                Entity entity = opEntity.Get();
+                Entity entity = opEntity.Value;
                 AbsoluteEntityCell oldCell = entity.AbsoluteEntityCell;
 
                 entity.Position = position;

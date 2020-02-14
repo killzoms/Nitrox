@@ -38,7 +38,7 @@ namespace NitroxServer.GameLogic
                 if (escapePodData.PodNotFullYet.AssignedPlayers.Count == PLAYERS_PER_ESCAPEPOD)
                 {
                     newlyCreatedPod = Optional<EscapePodModel>.Of(CreateNewEscapePod());
-                    escapePodData.PodNotFullYet = newlyCreatedPod.Get();
+                    escapePodData.PodNotFullYet = newlyCreatedPod.Value;
                 }
 
                 escapePodData.PodNotFullYet.AssignedPlayers.Add(playerId);

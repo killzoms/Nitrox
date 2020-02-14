@@ -24,7 +24,7 @@ namespace NitroxClient.Communication.Packets.Processors
 
             if (opEquipment.IsPresent())
             {
-                Equipment equipment = opEquipment.Get();
+                Equipment equipment = opEquipment.Value;
 
                 Dictionary<string, InventoryItem> itemsBySlot = (Dictionary<string, InventoryItem>)equipment.ReflectionGet("equipment");
                 InventoryItem inventoryItem = itemsBySlot[packet.Slot];

@@ -22,7 +22,7 @@ namespace NitroxServer.ConsoleCommands
         {
             if (player.IsPresent())
             {
-                List<string> cmdsText = GetHelpText(playerData.GetPermissions(player.Get().Name));
+                List<string> cmdsText = GetHelpText(playerData.GetPermissions(player.Value.Name));
                 cmdsText.ForEach(cmdText => SendServerMessageIfPlayerIsPresent(player, cmdText));
             }
             else

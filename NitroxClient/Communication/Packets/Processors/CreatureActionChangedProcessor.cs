@@ -18,7 +18,7 @@ namespace NitroxClient.Communication.Packets.Processors
 
             if (opGameObject.IsPresent())
             {
-                CreatureAction action = packet.NewAction.GetCreatureAction(opGameObject.Get());
+                CreatureAction action = packet.NewAction.GetCreatureAction(opGameObject.Value);
                 ActionByCreatureId[packet.Id] = action;
             }
         }

@@ -97,13 +97,13 @@ namespace NitroxClient.GameLogic
 
                 if (opGameObject.IsPresent())
                 {
-                    GameObject owner = opGameObject.Get();
+                    GameObject owner = opGameObject.Value;
 
                     Optional<Equipment> opEquipment = EquipmentHelper.GetBasedOnOwnersType(owner);
 
                     if (opEquipment.IsPresent())
                     {
-                        Equipment equipment = opEquipment.Get();
+                        Equipment equipment = opEquipment.Value;
                         InventoryItem inventoryItem = new InventoryItem(pickupable);
                         inventoryItem.container = equipment;
                         inventoryItem.item.Reparent(equipment.tr);

@@ -26,7 +26,7 @@ namespace NitroxServer.ConsoleCommands
         {
             string pass = args[0];
             string message;
-            string playerName = player.Get().Name;
+            string playerName = player.Value.Name;
 
             if (pass == serverConfig.AdminPassword)
             {

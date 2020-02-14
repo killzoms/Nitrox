@@ -104,7 +104,7 @@ namespace NitroxServer.GameLogic.Vehicles
             data.StorageItemRemoved(vehicle.Id);
             if (vehicle.InteractiveChildIdentifiers.IsPresent())
             {
-                foreach (InteractiveChildObjectIdentifier child in vehicle.InteractiveChildIdentifiers.Get())
+                foreach (InteractiveChildObjectIdentifier child in vehicle.InteractiveChildIdentifiers.Value)
                 {
                     data.StorageItemRemoved(child.Id);
                 }

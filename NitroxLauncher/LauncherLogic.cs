@@ -43,7 +43,7 @@ namespace NitroxLauncher
                 throw new Exception($"Please configure your Subnautica location in settings. Errors:\n{string.Join("\n - ", errors)}");
             }
 
-            return new LauncherLogic(installation.Get());
+            return new LauncherLogic(installation.Value);
         }
 
         public event EventHandler<ServerStartEventArgs> ServerStarted;

@@ -37,7 +37,7 @@ namespace NitroxServer.Communication.Packets.Processors
             NitroxId assignedEscapePodId = world.EscapePodManager.AssignPlayerToEscapePod(player.Id, out newlyCreatedEscapePod);
             if (newlyCreatedEscapePod.IsPresent())
             {
-                AddEscapePod addEscapePod = new AddEscapePod(newlyCreatedEscapePod.Get());
+                AddEscapePod addEscapePod = new AddEscapePod(newlyCreatedEscapePod.Value);
                 playerManager.SendPacketToOtherPlayers(addEscapePod, player);
             }
 

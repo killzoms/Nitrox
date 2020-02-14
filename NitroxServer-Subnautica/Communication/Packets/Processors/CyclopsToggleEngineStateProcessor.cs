@@ -30,7 +30,7 @@ namespace NitroxServer_Subnautica.Communication.Packets.Processors
             if (opCyclops.IsPresent())
             {
                 // If someone starts the engine, IsOn will be false, so only isStarting contains the info we need
-                opCyclops.Get().EngineState = packet.IsStarting;
+                opCyclops.Value.EngineState = packet.IsStarting;
             }
             PlayerManager.SendPacketToOtherPlayers(packet, player);
         }

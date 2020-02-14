@@ -186,7 +186,7 @@ namespace NitroxClient.MonoBehaviours.Overrides
 
                 if(rotationMetadata.IsPresent())
                 {
-                    ApplyRotationMetadata(MultiplayerBuilder.ghostModel, rotationMetadata.Get());
+                    ApplyRotationMetadata(MultiplayerBuilder.ghostModel, rotationMetadata.Value);
                 }
                 
                 if (flag)

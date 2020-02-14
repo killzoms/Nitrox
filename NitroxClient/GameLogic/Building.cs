@@ -98,7 +98,7 @@ namespace NitroxClient.GameLogic
 
             if (opConstructedBase.IsPresent())
             {
-                GameObject constructedBase = (GameObject)opConstructedBase.Get();
+                GameObject constructedBase = (GameObject)opConstructedBase.Value;
                 baseId = NitroxEntity.GetId(constructedBase);
             }
             
@@ -107,7 +107,7 @@ namespace NitroxClient.GameLogic
             if(ghost.GetComponent<ConstructableBase>() != null)
             {
                 Optional<object> opBasePiece = TransientLocalObjectManager.Get(TransientObjectType.LATEST_CONSTRUCTED_BASE_PIECE);
-                GameObject finishedPiece = (GameObject)opBasePiece.Get();
+                GameObject finishedPiece = (GameObject)opBasePiece.Value;
                 
                 UnityEngine.Object.Destroy(ghost);
                 NitroxEntity.SetNewId(finishedPiece, id);

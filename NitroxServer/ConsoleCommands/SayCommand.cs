@@ -23,7 +23,7 @@ namespace NitroxServer.ConsoleCommands
 
             if(player.IsPresent())
             {
-                playerManager.SendPacketToAllPlayers(new ChatMessage(player.Get().Id, string.Join(" ", args)));
+                playerManager.SendPacketToAllPlayers(new ChatMessage(player.Value.Id, string.Join(" ", args)));
             }
             else
             {

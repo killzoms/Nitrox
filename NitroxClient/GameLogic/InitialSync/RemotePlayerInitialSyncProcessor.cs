@@ -33,15 +33,15 @@ namespace NitroxClient.GameLogic.InitialSync
 
                 if (playerData.SubRootId.IsPresent())
                 {
-                    Optional<GameObject> sub = NitroxEntity.GetObjectFrom(playerData.SubRootId.Get());
+                    Optional<GameObject> sub = NitroxEntity.GetObjectFrom(playerData.SubRootId.Value);
 
                     if (sub.IsPresent())
                     {
-                        player.SetSubRoot(sub.Get().GetComponent<SubRoot>());
+                        player.SetSubRoot(sub.Value.GetComponent<SubRoot>());
                     }
                     else
                     {
-                        Log.Error("Could not spawn remote player into subroot with id: " + playerData.SubRootId.Get());
+                        Log.Error("Could not spawn remote player into subroot with id: " + playerData.SubRootId.Value);
                     }
                 }
             }

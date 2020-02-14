@@ -58,7 +58,7 @@ namespace NitroxServer.Serialization
                 return;
             }
 
-            string path = Path.Combine(subnauticaPath.Get(), "SNUnmanagedData", "Build18");
+            string path = Path.Combine(subnauticaPath.Value, "SNUnmanagedData", "Build18");
             string fileName = Path.Combine(path, pathPrefix, prefix + "batch-cells-" + batchId.X + "-" + batchId.Y + "-" + batchId.Z + suffix + ".bin");
 
             if (!File.Exists(fileName))

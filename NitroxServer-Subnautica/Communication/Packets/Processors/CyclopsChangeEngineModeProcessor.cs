@@ -28,7 +28,7 @@ namespace NitroxServer_Subnautica.Communication.Packets.Processors
             Optional<CyclopsModel> opCyclops = Vehicles.GetVehicleModel<CyclopsModel>(packet.Id);
             if (opCyclops.IsPresent())
             {
-                opCyclops.Get().EngineMode = packet.Mode;
+                opCyclops.Value.EngineMode = packet.Mode;
             }
             PlayerManager.SendPacketToOtherPlayers(packet, player);
         }

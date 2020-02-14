@@ -22,20 +22,6 @@ namespace NitroxModel.DataStructures.GameLogic
         [ProtoMember(4)]
         public Quaternion Rotation { get; set; }
 
-        [ProtoMember(5)]
-        public List<InteractiveChildObjectIdentifier> SerializableInteractiveChildIdentifiers
-        {
-            get { return (InteractiveChildIdentifiers.IsPresent()) ? InteractiveChildIdentifiers.Get() : null; }
-            set { InteractiveChildIdentifiers = Optional<List<InteractiveChildObjectIdentifier>>.OfNullable(value); }
-        }
-
-        [ProtoMember(6)]
-        public NitroxId SerializableDockingBayId
-        {
-            get { return (DockingBayId.IsPresent()) ? DockingBayId.Get() : null; }
-            set { DockingBayId = Optional<NitroxId>.OfNullable(value); }
-        }
-
         [ProtoMember(7)]
         public string Name { get; set; }
 
@@ -45,10 +31,10 @@ namespace NitroxModel.DataStructures.GameLogic
         [ProtoMember(9)]
         public Vector3[] Colours { get; set; }
 
-        [ProtoIgnore]
+        [ProtoMember(5)]
         public Optional<List<InteractiveChildObjectIdentifier>> InteractiveChildIdentifiers { get; set; }
 
-        [ProtoIgnore]
+        [ProtoMember(6)]
         public Optional<NitroxId> DockingBayId { get; set; }
 
         public VehicleModel()

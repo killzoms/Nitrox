@@ -54,7 +54,7 @@ namespace NitroxServer.Communication.Packets
 
             if (opProcessor.IsPresent())
             {
-                PacketProcessor processor = (PacketProcessor)opProcessor.Get();
+                PacketProcessor processor = (PacketProcessor)opProcessor.Value;
                 processor.ProcessPacket(packet, player);
             }
             else

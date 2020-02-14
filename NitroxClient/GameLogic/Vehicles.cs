@@ -79,7 +79,7 @@ namespace NitroxClient.GameLogic
 
             if (opGameObject.IsPresent())
             {
-                GameObject gameObject = opGameObject.Get();
+                GameObject gameObject = opGameObject.Value;
 
                 vehicle = gameObject.GetComponent<Vehicle>();
                 subRoot = gameObject.GetComponent<SubRoot>();
@@ -123,7 +123,7 @@ namespace NitroxClient.GameLogic
 
             if (player.IsPresent())
             {
-                RemotePlayer playerInstance = player.Get();
+                RemotePlayer playerInstance = player.Value;
                 playerInstance.SetVehicle(vehicle);
                 playerInstance.SetSubRoot(subRoot);
                 playerInstance.SetPilotingChair(subRoot?.GetComponentInChildren<PilotingChair>());
@@ -148,7 +148,7 @@ namespace NitroxClient.GameLogic
                 Vehicle vehicle = gameObject.GetComponent<Vehicle>();
                 if (dockingBayId.IsPresent())
                 {
-                    GameObject dockingBayBase = NitroxEntity.RequireObjectFrom(dockingBayId.Get());
+                    GameObject dockingBayBase = NitroxEntity.RequireObjectFrom(dockingBayId.Value);
                     VehicleDockingBay dockingBay = dockingBayBase.GetComponentInChildren<VehicleDockingBay>();
                     dockingBay.DockVehicle(vehicle);
                 } else if(techType == TechType.Exosuit)
@@ -194,7 +194,7 @@ namespace NitroxClient.GameLogic
             }
             if (interactiveChildIdentifiers.IsPresent())
             {
-                VehicleChildObjectIdentifierHelper.SetInteractiveChildrenIds(gameObject, interactiveChildIdentifiers.Get()); //Copy From ConstructorBeginCraftingProcessor
+                VehicleChildObjectIdentifierHelper.SetInteractiveChildrenIds(gameObject, interactiveChildIdentifiers.Value); //Copy From ConstructorBeginCraftingProcessor
             }            
 
             // Send event after everthing is created            
@@ -218,7 +218,7 @@ namespace NitroxClient.GameLogic
             Optional<GameObject> Object = NitroxEntity.GetObjectFrom(id);
             if (Object.IsPresent())
             {
-                GameObject T = Object.Get();
+                GameObject T = Object.Value;
                 Vehicle vehicle = T.RequireComponent<Vehicle>();
 
                 if (isPiloting) //Check Remote Object Have Player inside
@@ -228,7 +228,7 @@ namespace NitroxClient.GameLogic
 
                     if (remotePilot.IsPresent()) // Get Remote Player Inside == vehicle.pilotId  Remove From Vehicle Before Destroy
                     {
-                        RemotePlayer remotePlayer = remotePilot.Get();
+                        RemotePlayer remotePlayer = remotePilot.Value;
                         remotePlayer.SetVehicle(null);
                         remotePlayer.SetSubRoot(null);
                         remotePlayer.SetPilotingChair(null);
@@ -267,7 +267,7 @@ namespace NitroxClient.GameLogic
             Optional<GameObject> Object = NitroxEntity.GetObjectFrom(id);
             if (Object.IsPresent())
             {
-                GameObject T = Object.Get();
+                GameObject T = Object.Value;
                 VehicleChildObjectIdentifierHelper.SetInteractiveChildrenIds(T, interactiveChildrenGuids);
             }
         }
@@ -299,7 +299,7 @@ namespace NitroxClient.GameLogic
 
                     if (remotePilot.IsPresent())
                     {
-                        RemotePlayer remotePlayer = remotePilot.Get();
+                        RemotePlayer remotePlayer = remotePilot.Value;
                         remotePlayer.SetVehicle(null);
                         remotePlayer.SetSubRoot(null);
                         remotePlayer.SetPilotingChair(null);
@@ -393,7 +393,7 @@ namespace NitroxClient.GameLogic
 
             if (opVehicle.IsPresent())
             {
-                GameObject gameObject = opVehicle.Get();
+                GameObject gameObject = opVehicle.Value;
                 Vehicle vehicle = gameObject.GetComponent<Vehicle>();
 
                 if (vehicle != null)

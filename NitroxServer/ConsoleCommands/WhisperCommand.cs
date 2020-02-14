@@ -29,7 +29,7 @@ namespace NitroxServer.ConsoleCommands
 
                 if (player.IsPresent())
                 {
-                    foundPlayer.SendPacket(new ChatMessage(player.Get().Id, message));
+                    foundPlayer.SendPacket(new ChatMessage(player.Value.Id, message));
                 }
                 else
                 {
