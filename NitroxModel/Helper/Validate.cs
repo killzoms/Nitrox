@@ -20,7 +20,7 @@ namespace NitroxModel.Helper
                 Optional<string> paramName = GetParameterName<T>();
                 if (paramName.IsPresent())
                 {
-                    throw new ArgumentNullException(paramName.Get());
+                    throw new ArgumentNullException(paramName.Value);
                 }
                 else
                 {
@@ -37,7 +37,7 @@ namespace NitroxModel.Helper
                 Optional<string> paramName = GetParameterName<T>();
                 if (paramName.IsPresent())
                 {
-                    throw new ArgumentNullException(paramName.Get(), message);
+                    throw new ArgumentNullException(paramName.Value, message);
                 }
                 else
                 {

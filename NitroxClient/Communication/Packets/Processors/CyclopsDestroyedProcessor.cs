@@ -22,10 +22,10 @@ namespace NitroxClient.Communication.Packets.Processors
             {
                 Log.Debug("[CyclopsDestroyedProcessor Id: " + packet.Id + "]");
 
-                SubRoot subRoot = cyclops.Get().RequireComponent<SubRoot>();
+                SubRoot subRoot = cyclops.Value.RequireComponent<SubRoot>();
 
-                cyclops.Get().RequireComponent<LiveMixin>().ReflectionSet("health", 0f, true, false);
-                cyclops.Get().RequireComponent<LiveMixin>().Kill();
+                cyclops.Value.RequireComponent<LiveMixin>().ReflectionSet("health", 0f, true, false);
+                cyclops.Value.RequireComponent<LiveMixin>().Kill();
 
                 // Copied from SubRoot.OnTakeDamage(DamageInfo info)
                 subRoot.voiceNotificationManager.ClearQueue();

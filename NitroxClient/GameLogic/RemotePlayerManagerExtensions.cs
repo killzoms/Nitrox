@@ -7,7 +7,7 @@ namespace NitroxClient.GameLogic
         public static bool TryFind(this PlayerManager playerManager, ushort playerId, out RemotePlayer remotePlayer)
         {
             Optional<RemotePlayer> optional = playerManager.Find(playerId);
-            remotePlayer = optional.IsPresent() ? optional.Get() : null;
+            remotePlayer = optional.IsPresent() ? optional.Value : null;
 
             return optional.IsPresent();
         }
@@ -15,7 +15,7 @@ namespace NitroxClient.GameLogic
         public static bool TryFindByName(this PlayerManager playerManager, string playerName, out RemotePlayer remotePlayer)
         {
             Optional<RemotePlayer> optional = playerManager.FindByName(playerName);
-            remotePlayer = optional.IsPresent() ? optional.Get() : null;
+            remotePlayer = optional.IsPresent() ? optional.Value : null;
 
             return optional.IsPresent();
         }

@@ -17,7 +17,7 @@ namespace NitroxClient.Communication.Packets.Processors
 
                 if (opGameObject.IsPresent())
                 {
-                    GameObject gameObject = opGameObject.Get();
+                    GameObject gameObject = opGameObject.Value;
 
                     float distance = Vector3.Distance(gameObject.transform.position, entity.Position);
                     SwimBehaviour swimBehaviour = gameObject.GetComponent<SwimBehaviour>();

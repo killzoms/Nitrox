@@ -20,7 +20,7 @@ namespace NitroxClient.Communication.Packets.Processors
             Optional<RemotePlayer> opPlayer = remotePlayerManager.Find(animEvent.PlayerId);
             if (opPlayer.IsPresent())
             {
-                opPlayer.Get().UpdateAnimation((AnimChangeType)animEvent.Type, (AnimChangeState)animEvent.State);
+                opPlayer.Value.UpdateAnimation((AnimChangeType)animEvent.Type, (AnimChangeState)animEvent.State);
             }
         }
     }

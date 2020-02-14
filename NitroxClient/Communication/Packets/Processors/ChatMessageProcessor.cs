@@ -35,7 +35,7 @@ namespace NitroxClient.Communication.Packets.Processors
 
             if (remotePlayer.IsPresent())
             {
-                RemotePlayer remotePlayerInstance = remotePlayer.Get();
+                RemotePlayer remotePlayerInstance = remotePlayer.Value;
                 ChatLogEntry chatLogEntry = new ChatLogEntry(remotePlayerInstance.PlayerName, message.Text, remotePlayerInstance.PlayerSettings.PlayerColor);
                 playerChat.WriteChatLogEntry(chatLogEntry);
                 playerChat.ShowLog();

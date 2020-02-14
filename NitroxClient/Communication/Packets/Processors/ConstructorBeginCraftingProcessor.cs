@@ -37,7 +37,7 @@ namespace NitroxClient.Communication.Packets.Processors
 
             if (opConstructedObject.IsPresent())
             {
-                GameObject constructedObject = (GameObject)opConstructedObject.Get();
+                GameObject constructedObject = (GameObject)opConstructedObject.Value;
                 NitroxEntity.SetNewId(constructedObject, packet.ConstructedItemId);
                 VehicleChildObjectIdentifierHelper.SetInteractiveChildrenIds(constructedObject, packet.InteractiveChildIdentifiers);
             }

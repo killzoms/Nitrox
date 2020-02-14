@@ -127,7 +127,7 @@ namespace NitroxClient.MonoBehaviours
             
             if(basePiece.ParentId.IsPresent())
             {
-                parentBase = NitroxEntity.GetObjectFrom(basePiece.ParentId.Get()).OrElse(null);
+                parentBase = NitroxEntity.GetObjectFrom(basePiece.ParentId.Value).OrElse(null);
             }
             
             Constructable constructable;
@@ -171,7 +171,7 @@ namespace NitroxClient.MonoBehaviours
                 constructableBase.SetState(true, true);
                 
                 Optional<object> opBasePiece = TransientLocalObjectManager.Get(TransientObjectType.LATEST_CONSTRUCTED_BASE_PIECE);
-                GameObject finishedPiece = (GameObject)opBasePiece.Get();
+                GameObject finishedPiece = (GameObject)opBasePiece.Value;
                 UnityEngine.Object.Destroy(constructableBase.gameObject);
                 NitroxEntity.SetNewId(finishedPiece, constructionCompleted.PieceId);
             }
@@ -195,7 +195,7 @@ namespace NitroxClient.MonoBehaviours
 
             if (opNewlyCreatedBase.IsPresent())
             {
-                GameObject newlyCreatedBase = (GameObject)opNewlyCreatedBase.Get();
+                GameObject newlyCreatedBase = (GameObject)opNewlyCreatedBase.Value;
                 NitroxEntity.SetNewId(newlyCreatedBase, newBaseId);
             }
             else
@@ -223,7 +223,7 @@ namespace NitroxClient.MonoBehaviours
 
                 if(opGhost.IsPresent())
                 {
-                    GameObject ghost = (GameObject)opGhost.Get();
+                    GameObject ghost = (GameObject)opGhost.Value;
                     UnityEngine.Object.Destroy(constructing);
                     NitroxEntity.SetNewId(ghost, amountChanged.Id);
                 }

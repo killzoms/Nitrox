@@ -29,7 +29,7 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
                 Optional<RemotePlayer> opPlayer = remotePlayerManager.FindByName(otherPlayerName);
                 if (opPlayer.IsPresent())
                 {
-                    Player.main.SetPosition(opPlayer.Get().Body.transform.position);
+                    Player.main.SetPosition(opPlayer.Value.Body.transform.position);
                     Player.main.OnPlayerPositionCheat();
                 }
             }

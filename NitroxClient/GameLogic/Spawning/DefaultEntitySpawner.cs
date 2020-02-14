@@ -30,7 +30,7 @@ namespace NitroxClient.GameLogic.Spawning
 
             if (parent.IsPresent())
             {
-                gameObject.transform.SetParent(parent.Get().transform, true);
+                gameObject.transform.SetParent(parent.Value.transform, true);
             }
 
             gameObject.SetActive(true);
@@ -38,7 +38,7 @@ namespace NitroxClient.GameLogic.Spawning
             NitroxEntity.SetNewId(gameObject, entity.Id);
             CrafterLogic.NotifyCraftEnd(gameObject, techType);
 
-            if (parent.IsPresent() && parent.Get().GetComponent<LargeWorldEntityCell>())
+            if (parent.IsPresent() && parent.Value.GetComponent<LargeWorldEntityCell>())
             {
                 LargeWorldEntity.Register(gameObject);
             }

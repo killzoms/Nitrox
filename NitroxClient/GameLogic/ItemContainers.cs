@@ -84,11 +84,11 @@ namespace NitroxClient.GameLogic
                 return;
             }
 
-            Optional<ItemsContainer> opContainer = InventoryContainerHelper.GetBasedOnOwnersType(owner.Get());
+            Optional<ItemsContainer> opContainer = InventoryContainerHelper.GetBasedOnOwnersType(owner.Value);
 
             if (opContainer.IsPresent())
             {
-                ItemsContainer container = opContainer.Get();
+                ItemsContainer container = opContainer.Value;
                 Pickupable pickupable = item.RequireComponent<Pickupable>();
 
                 using (packetSender.Suppress<ItemContainerAdd>())
@@ -98,7 +98,7 @@ namespace NitroxClient.GameLogic
             }
             else
             {
-                Log.Error("Could not find container field on object " + owner.Get().name);
+                Log.Error("Could not find container field on object " + owner.Value.name);
             }
         }
         
@@ -110,7 +110,7 @@ namespace NitroxClient.GameLogic
 
             if (opContainer.IsPresent())
             {
-                ItemsContainer container = opContainer.Get();
+                ItemsContainer container = opContainer.Value;
                 Pickupable pickupable = item.RequireComponent<Pickupable>();
 
                 using (packetSender.Suppress<ItemContainerRemove>())

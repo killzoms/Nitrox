@@ -52,7 +52,7 @@ namespace NitroxClient.GameLogic
             Optional<EnergyMixin> opEnergy = Optional<EnergyMixin>.OfNullable(owner.GetComponent<EnergyMixin>());
             if (opEnergy.IsPresent())
             {
-                EnergyMixin mixin = opEnergy.Get();
+                EnergyMixin mixin = opEnergy.Value;
                 StorageSlot slot = (StorageSlot)mixin.ReflectionGet("batterySlot");                
 
                 Pickupable pickupable = item.RequireComponent<Pickupable>();
@@ -87,7 +87,7 @@ namespace NitroxClient.GameLogic
             
             if (opMixin.IsPresent())
             {
-                EnergyMixin mixin = opMixin.Get();
+                EnergyMixin mixin = opMixin.Value;
                 StorageSlot slot = (StorageSlot)mixin.ReflectionGet("batterySlot");
 
                 // Suppress sound when silent is active

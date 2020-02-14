@@ -17,7 +17,7 @@ namespace NitroxClient.GameLogic.Spawning
         {
             if (parent.IsPresent())
             {
-                CrashHome crashHome = parent.Get().GetComponent<CrashHome>();
+                CrashHome crashHome = parent.Value.GetComponent<CrashHome>();
 
                 GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(crashHome.crashPrefab, Vector3.zero, Quaternion.Euler(-90f, 0f, 0f));
                 gameObject.transform.SetParent(crashHome.transform, false);

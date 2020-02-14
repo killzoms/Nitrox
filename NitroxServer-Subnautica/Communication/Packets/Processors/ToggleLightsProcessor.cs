@@ -26,9 +26,9 @@ namespace NitroxServer_Subnautica.Communication.Packets.Processors
         public override void Process(NitroxModel.Packets.ToggleLights packet, NitroxServer.Player player)
         {
             Optional<SeamothModel> opSeamoth = Vehicles.GetVehicleModel<SeamothModel>(packet.Id);
-            if (opSeamoth.IsPresent() && opSeamoth.Get().GetType() == typeof(SeamothModel))
+            if (opSeamoth.IsPresent() && opSeamoth.Value.GetType() == typeof(SeamothModel))
             {
-                opSeamoth.Get().LightOn = packet.IsOn;
+                opSeamoth.Value.LightOn = packet.IsOn;
             }
             PlayerManager.SendPacketToOtherPlayers(packet, player);
         }

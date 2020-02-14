@@ -31,11 +31,11 @@ namespace NitroxClient.GameLogic.InitialSync
 
             if (subRootId.IsPresent())
             {
-                Optional<GameObject> sub = NitroxEntity.GetObjectFrom(subRootId.Get());
+                Optional<GameObject> sub = NitroxEntity.GetObjectFrom(subRootId.Value);
 
                 if (sub.IsPresent())
                 {
-                    SubRoot root = sub.Get().GetComponent<SubRoot>();
+                    SubRoot root = sub.Value.GetComponent<SubRoot>();
                     // Player position is relative to a subroot if in a subroot
                     if (root != null && !root.isBase)
                     {                        
@@ -47,12 +47,12 @@ namespace NitroxClient.GameLogic.InitialSync
                     }
                     else
                     {
-                        Log.Error("Could not find subroot for player for subroot with id: " + subRootId.Get());
+                        Log.Error("Could not find subroot for player for subroot with id: " + subRootId.Value);
                     }
                 }
                 else
                 {
-                    Log.Error("Could not spawn player into subroot with id: " + subRootId.Get());
+                    Log.Error("Could not spawn player into subroot with id: " + subRootId.Value);
                 }
             }
         }

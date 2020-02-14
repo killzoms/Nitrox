@@ -21,7 +21,7 @@ namespace NitroxClient.Communication.Packets.Processors
             if (remotePlayer.IsPresent())
             {
                 remotePlayer
-                    .Get()
+                    .Value
                     .UpdatePosition(movement.Position,
                         movement.Velocity,
                         movement.BodyRotation,

@@ -69,7 +69,7 @@ namespace NitroxServer.ConsoleCommands.Abstract
         {
             if (player.IsPresent())
             {
-                player.Get().SendPacket(new ChatMessage(ChatMessage.SERVER_ID, message));
+                player.Value.SendPacket(new ChatMessage(ChatMessage.SERVER_ID, message));
             }
         }
     }

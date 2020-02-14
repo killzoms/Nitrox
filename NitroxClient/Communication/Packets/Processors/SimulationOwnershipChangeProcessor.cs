@@ -59,7 +59,7 @@ namespace NitroxClient.Communication.Packets.Processors
 
             if (gameObject.IsPresent())
             {
-                EntityPositionBroadcaster.WatchEntity(id, gameObject.Get());
+                EntityPositionBroadcaster.WatchEntity(id, gameObject.Value);
             }
             else
             {

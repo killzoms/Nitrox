@@ -10,7 +10,7 @@ namespace NitroxTest.Model
         public void OptionalGet()
         {
             Optional<string> op = Optional<string>.Of("test");
-            Assert.AreEqual("test", op.Get());
+            Assert.AreEqual("test", op.Value);
         }
 
         [TestMethod]
@@ -54,7 +54,7 @@ namespace NitroxTest.Model
         public void OptionalValueTypeGet()
         {
             Optional<int> op = Optional<int>.Of(1);
-            Assert.AreEqual(1, op.Get());
+            Assert.AreEqual(1, op.Value);
         }
 
         [TestMethod]

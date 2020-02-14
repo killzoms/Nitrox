@@ -28,7 +28,7 @@ namespace NitroxClient.Communication.Packets.Processors
                 Log.Error("Could not find exosuit arm");
                 return;
             }
-            GameObject gameObject = opGameObject.Get();
+            GameObject gameObject = opGameObject.Value;
             switch (packet.TechType)
             {
 

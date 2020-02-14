@@ -122,9 +122,9 @@ namespace NitroxServer_Subnautica.Serialization.Resources
                 Log.Info($"Could not locate Subnautica installation directory: {Environment.NewLine}{string.Join(Environment.NewLine, errors)}");
             }
             
-            if (File.Exists(Path.Combine(subnauticaPath.Get(), "Subnautica_Data", "resources.assets")))
+            if (File.Exists(Path.Combine(subnauticaPath.Value, "Subnautica_Data", "resources.assets")))
             {
-                return Path.Combine(subnauticaPath.Get(), "Subnautica_Data");
+                return Path.Combine(subnauticaPath.Value, "Subnautica_Data");
             }
             else if (File.Exists(Path.Combine("..", "resources.assets")))   //  SubServer => Subnautica/Subnautica_Data/SubServer
             {
