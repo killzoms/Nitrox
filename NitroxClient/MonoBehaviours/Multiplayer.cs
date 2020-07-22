@@ -112,7 +112,7 @@ namespace NitroxClient.MonoBehaviours
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, $"Error processing packet {packet}");
+                    Log.Error($"Error processing packet {packet}\n{ex.Message}\n{ex.StackTrace}");
                 }
             }
         }

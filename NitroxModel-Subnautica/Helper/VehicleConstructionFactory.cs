@@ -14,8 +14,8 @@ namespace NitroxModel_Subnautica.Helper
                     vehicleModel.TechType,
                     duration,
                     vehicleModel.InteractiveChildIdentifiers.ToList(),
-                    vehicleModel.Position,
-                    vehicleModel.Rotation,
+                    vehicleModel.Transform.Position,
+                    vehicleModel.Transform.Rotation,
                     vehicleModel.Name,
                     vehicleModel.HSB,
                     vehicleModel.Health

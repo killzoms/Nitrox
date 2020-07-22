@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NitroxModel.DataStructures.GameLogic;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
 using NitroxServer.GameLogic;
@@ -46,7 +45,7 @@ namespace NitroxServer.Communication.Packets.Processors
         {
             foreach (EntityTransformUpdate update in updates)
             {
-                Optional<AbsoluteEntityCell> currentCell = entityManager.UpdateEntityPosition(update.Id, update.Position, update.Rotation);
+                AbsoluteEntityCell? currentCell = entityManager.UpdateEntityPosition(update.Id, update.Position, update.Rotation);
 
                 if (!currentCell.HasValue)
                 {
