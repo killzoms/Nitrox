@@ -72,12 +72,12 @@ namespace NitroxClient.GameLogic
         /// </summary>
         private void SpawnItem(GameObject gameObject)
         {
-            Optional<Pickupable> opitem = Optional.OfNullable(gameObject.GetComponent<Pickupable>());
+            Optional<Pickupable> opItem = Optional.OfNullable(gameObject.GetComponent<Pickupable>());
 
-            if (opitem.HasValue)
+            if (opItem.HasValue)
             {
-                Log.Debug($"Spawning item {opitem.Value.GetTechName()} at {gameObject.transform.position}");
-                item.Dropped(gameObject, opitem.Value.GetTechType(), gameObject.transform.position);
+                Log.Debug($"Spawning item {opItem.Value.GetTechName()} at {gameObject.transform.position}");
+                item.Dropped(gameObject, opItem.Value.GetTechType(), gameObject.transform.position);
             }
         }
     }
