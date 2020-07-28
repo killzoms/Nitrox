@@ -14,13 +14,15 @@ namespace NitroxPatcher.Patches.Dynamic
         {
             //Try to figure out if the default battery is spawned from a vehicle or cyclops
             GameObject gameObject = __instance.gameObject;
-            if(gameObject.GetComponent<Vehicle>() != null)
+            if (gameObject.GetComponent<Vehicle>() != null)
             {
                 return false;
-            } else if(gameObject.GetComponentInParent<Vehicle>() != null)
+            }
+            else if (gameObject.GetComponentInParent<Vehicle>() != null)
             {
                 return false;
-            } else if (gameObject.GetComponentInParent<SubRoot>() != null)
+            }
+            else if (gameObject.GetComponentInParent<SubRoot>() != null)
             {
                 return false;
             }

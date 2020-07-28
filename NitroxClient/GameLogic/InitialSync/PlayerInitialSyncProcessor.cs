@@ -80,7 +80,7 @@ namespace NitroxClient.GameLogic.InitialSync
                 }
             }
         }
-        
+
         private void SetPlayerGameMode(GameModeOption gameMode)
         {
             Log.Info("Recieved initial sync packet with game mode " + gameMode);

@@ -14,14 +14,14 @@ namespace NitroxClient.Communication.Packets.Processors
             this.vitalsManager = vitalsManager;
         }
 
-        public override void Process(PlayerStats playerStats)
+        public override void Process(PlayerStats packet)
         {
-            RemotePlayerVitals vitals = vitalsManager.CreateForPlayer(playerStats.PlayerId);
+            RemotePlayerVitals vitals = vitalsManager.CreateForPlayer(packet.PlayerId);
 
-            vitals.SetOxygen(playerStats.Oxygen, playerStats.MaxOxygen);
-            vitals.SetHealth(playerStats.Health);
-            vitals.SetFood(playerStats.Food);
-            vitals.SetWater(playerStats.Water);
+            vitals.SetOxygen(packet.Oxygen, packet.MaxOxygen);
+            vitals.SetHealth(packet.Health);
+            vitals.SetFood(packet.Food);
+            vitals.SetWater(packet.Water);
         }
     }
 }

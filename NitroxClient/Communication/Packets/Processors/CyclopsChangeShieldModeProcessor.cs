@@ -1,5 +1,4 @@
-﻿using NitroxClient.Communication.Abstract;
-using NitroxClient.Communication.Packets.Processors.Abstract;
+﻿using NitroxClient.Communication.Packets.Processors.Abstract;
 using NitroxClient.GameLogic;
 using NitroxModel_Subnautica.Packets;
 
@@ -7,18 +6,16 @@ namespace NitroxClient.Communication.Packets.Processors
 {
     public class CyclopsChangeShieldModeProcessor : ClientPacketProcessor<CyclopsChangeShieldMode>
     {
-        private readonly IPacketSender packetSender;
         private readonly Cyclops cyclops;
 
-        public CyclopsChangeShieldModeProcessor(IPacketSender packetSender, Cyclops cyclops)
+        public CyclopsChangeShieldModeProcessor(Cyclops cyclops)
         {
-            this.packetSender = packetSender;
             this.cyclops = cyclops;
         }
 
-        public override void Process(CyclopsChangeShieldMode shieldPacket)
+        public override void Process(CyclopsChangeShieldMode packet)
         {
-            cyclops.ChangeShieldMode(shieldPacket.Id, shieldPacket.IsOn);
+            cyclops.ChangeShieldMode(packet.Id, packet.IsOn);
         }
     }
 }

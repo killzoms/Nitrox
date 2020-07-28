@@ -10,14 +10,14 @@ namespace NitroxClient.Communication.Packets.Processors
 {
     public class EntityMetadataUpdateProcessor : ClientPacketProcessor<EntityMetadataUpdate>
     {
-        public override void Process(EntityMetadataUpdate update)
+        public override void Process(EntityMetadataUpdate packet)
         {
-            GameObject gameObject = NitroxEntity.RequireObjectFrom(update.Id);
+            GameObject gameObject = NitroxEntity.RequireObjectFrom(packet.Id);
 
-            Optional<EntityMetadataProcessor> metadataProcessor = EntityMetadataProcessor.FromMetaData(update.NewValue);
-            Validate.IsTrue(metadataProcessor.HasValue, $"No processor found for EntityMetadata of type {update.NewValue.GetType()}");
-            
-            metadataProcessor.Value.ProcessMetadata(gameObject, update.NewValue);
+            Optional<EntityMetadataProcessor> metadataProcessor = EntityMetadataProcessor.FromMetaData(packet.NewValue);
+            Validate.IsTrue(metadataProcessor.HasValue, $"No processor found for EntityMetadata of type {packet.NewValue.GetType()}");
+
+            metadataProcessor.Value.ProcessMetadata(gameObject, packet.NewValue);
         }
     }
 }

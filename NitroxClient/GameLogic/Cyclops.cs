@@ -18,13 +18,11 @@ namespace NitroxClient.GameLogic
     public class Cyclops
     {
         private readonly IPacketSender packetSender;
-        private readonly SimulationOwnership simulationOwnershipManager;
         private readonly Vehicles vehicles;
 
-        public Cyclops(IPacketSender packetSender, SimulationOwnership simulationOwnershipManager, Vehicles vehicles)
+        public Cyclops(IPacketSender packetSender, Vehicles vehicles)
         {
             this.packetSender = packetSender;
-            this.simulationOwnershipManager = simulationOwnershipManager;
             this.vehicles = vehicles;
         }
 
@@ -140,26 +138,22 @@ namespace NitroxClient.GameLogic
         {
             GameObject cyclops = NitroxEntity.RequireObjectFrom(id);
             CyclopsEngineChangeState engineState = cyclops.RequireComponentInChildren<CyclopsEngineChangeState>();
-            CyclopsMotorMode motorMode = cyclops.RequireComponentInChildren<CyclopsMotorMode>();
 
-            if (isOn == engineState.motorMode.engineOn)
+            if (isOn == engineState.motorMode.engineOn && (isStarting != (bool)engineState.ReflectionGet("startEngine")) != isOn)
             {
-                if ((isStarting != (bool)engineState.ReflectionGet("startEngine")) != isOn)
+                if (Player.main.currentSub != engineState.subRoot || silent)
                 {
-                    if (Player.main.currentSub != engineState.subRoot || silent)
+                    engineState.ReflectionSet("startEngine", !isOn);
+                    engineState.ReflectionSet("invalidButton", true);
+                    engineState.Invoke("ResetInvalidButton", 2.5f);
+                    engineState.subRoot.BroadcastMessage("InvokeChangeEngineState", !isOn, SendMessageOptions.RequireReceiver);
+                }
+                else
+                {
+                    engineState.ReflectionSet("invalidButton", false);
+                    using (packetSender.Suppress<CyclopsToggleInternalLighting>())
                     {
-                        engineState.ReflectionSet("startEngine", !isOn);
-                        engineState.ReflectionSet("invalidButton", true);
-                        engineState.Invoke("ResetInvalidButton", 2.5f);
-                        engineState.subRoot.BroadcastMessage("InvokeChangeEngineState", !isOn, SendMessageOptions.RequireReceiver);
-                    }
-                    else
-                    {
-                        engineState.ReflectionSet("invalidButton", false);
-                        using (packetSender.Suppress<CyclopsToggleInternalLighting>())
-                        {
-                            engineState.OnClick();
-                        }
+                        engineState.OnClick();
                     }
                 }
             }
@@ -306,7 +300,6 @@ namespace NitroxClient.GameLogic
             fire.Invoke("CancelFireSuppression", fire.fireSuppressionSystemDuration);
             float doorCloseDuration = 30f;
             fire.gameObject.BroadcastMessage("TemporaryLock", doorCloseDuration, SendMessageOptions.DontRequireReceiver);
-            yield break;
         }
 
 

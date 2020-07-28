@@ -276,7 +276,7 @@ namespace NitroxModel.DataStructures
         public T Find(Func<T, bool> predicate)
         {
             Validate.NotNull(predicate);
-            
+
             lock (locker)
             {
                 foreach (T item in collection)

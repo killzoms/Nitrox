@@ -6,18 +6,16 @@ namespace NitroxClient.Communication.Packets.Processors
 {
     public class VehicleChildUpdateProcessor : ClientPacketProcessor<VehicleChildUpdate>
     {
-        private readonly PlayerManager remotePlayerManager;
         private readonly Vehicles vehicles;
 
-        public VehicleChildUpdateProcessor(PlayerManager remotePlayerManager, Vehicles vehicles)
+        public VehicleChildUpdateProcessor(Vehicles vehicles)
         {
-            this.remotePlayerManager = remotePlayerManager;
             this.vehicles = vehicles;
         }
 
-        public override void Process(VehicleChildUpdate vehicleChildUpdate)
+        public override void Process(VehicleChildUpdate packet)
         {
-            vehicles.UpdateVehicleChildren(vehicleChildUpdate.VehicleId, vehicleChildUpdate.InteractiveChildIdentifiers);
+            vehicles.UpdateVehicleChildren(packet.VehicleId, packet.InteractiveChildIdentifiers);
         }
     }
 }

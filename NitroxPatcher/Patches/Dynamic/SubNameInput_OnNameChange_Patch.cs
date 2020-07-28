@@ -24,7 +24,7 @@ namespace NitroxPatcher.Patches.Dynamic
                 GameObject parentVehicle;
                 Vehicle vehicle = subname.GetComponentInParent<Vehicle>();
                 SubRoot subRoot = subname.GetComponentInParent<SubRoot>();
-                if(vehicle)
+                if (vehicle)
                 {
                     parentVehicle = vehicle.gameObject;
                 }
@@ -32,7 +32,7 @@ namespace NitroxPatcher.Patches.Dynamic
                 {
                     parentVehicle = subRoot.gameObject;
                 }
-                
+
                 NitroxId id = NitroxEntity.GetId(parentVehicle);
                 VehicleNameChange packet = new VehicleNameChange(id, subname.GetName());
                 NitroxServiceLocator.LocateService<IPacketSender>().Send(packet);

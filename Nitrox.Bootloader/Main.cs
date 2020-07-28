@@ -44,7 +44,7 @@ namespace Nitrox.Bootloader
             }
             return null;
         });
-        
+
         public static void Execute()
         {
             string error = ValidateNitroxSetup();
@@ -61,7 +61,7 @@ namespace Nitrox.Bootloader
 
             BootstrapNitrox();
         }
-        
+
         private static void BootstrapNitrox()
         {
             Assembly core = Assembly.Load(new AssemblyName("NitroxPatcher"));
@@ -69,7 +69,7 @@ namespace Nitrox.Bootloader
             mainType.InvokeMember("Execute", BindingFlags.Public | BindingFlags.Static | BindingFlags.InvokeMethod, null, null, null);
         }
 
-        
+
         private static string ValidateNitroxSetup()
         {
             if (nitroxLauncherDir.Value == null)
@@ -98,7 +98,7 @@ namespace Nitrox.Bootloader
             {
                 dllPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), dllFileName);
             }
-            
+
             if (!File.Exists(dllPath))
             {
                 Console.WriteLine($"Nitrox dll missing: {dllPath}");

@@ -15,12 +15,12 @@ namespace NitroxClient.Communication.Packets.Processors
             this.remotePlayerManager = remotePlayerManager;
         }
 
-        public override void Process(AnimationChangeEvent animEvent)
+        public override void Process(AnimationChangeEvent packet)
         {
-            Optional<RemotePlayer> opPlayer = remotePlayerManager.Find(animEvent.PlayerId);
+            Optional<RemotePlayer> opPlayer = remotePlayerManager.Find(packet.PlayerId);
             if (opPlayer.HasValue)
             {
-                opPlayer.Value.UpdateAnimation((AnimChangeType)animEvent.Type, (AnimChangeState)animEvent.State);
+                opPlayer.Value.UpdateAnimation((AnimChangeType)packet.Type, (AnimChangeState)packet.State);
             }
         }
     }

@@ -58,7 +58,7 @@ namespace NitroxClient.GameLogic.ChatUI
                 playerChat.Select();
                 return;
             }
-            
+
             string trimmedInput = playerChat.InputText.Trim();
             if (trimmedInput[0] == SERVER_COMMAND_PREFIX)
             {
@@ -68,7 +68,7 @@ namespace NitroxClient.GameLogic.ChatUI
                 playerChat.Select();
                 return;
             }
-            
+
             // Chat message
             multiplayerSession.Send(new ChatMessage(multiplayerSession.Reservation.PlayerId, trimmedInput));
             playerChat.WriteLogEntry(multiplayerSession.AuthenticationContext.Username, playerChat.InputText, multiplayerSession.PlayerSettings.PlayerColor.ToUnity());

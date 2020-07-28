@@ -16,7 +16,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public static bool Prefix(SeaMoth __instance, TechType techType, int slotID, PacketSuppressor<ItemContainerRemove> __state)
         {
-            
+
             if (techType == TechType.SeamothElectricalDefense)
             {
                 NitroxServiceLocator.LocateService<SeamothModulesEvent>().BroadcastElectricalDefense(techType, slotID, __instance);

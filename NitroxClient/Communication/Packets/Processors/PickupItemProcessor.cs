@@ -16,13 +16,13 @@ namespace NitroxClient.Communication.Packets.Processors
             this.entities = entities;
         }
 
-        public override void Process(PickupItem pickup)
+        public override void Process(PickupItem packet)
         {
-            Optional<GameObject> opGameObject = NitroxEntity.GetObjectFrom(pickup.Id);
+            Optional<GameObject> opGameObject = NitroxEntity.GetObjectFrom(packet.Id);
             if (opGameObject.HasValue)
             {
                 Object.Destroy(opGameObject.Value);
-                entities.RemoveEntity(pickup.Id);
+                entities.RemoveEntity(packet.Id);
             }
         }
     }

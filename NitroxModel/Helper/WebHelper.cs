@@ -44,6 +44,7 @@ namespace NitroxModel.Helper
             }
             catch
             {
+                // Catch all
             }
 
             return version;

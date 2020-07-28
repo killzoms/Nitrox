@@ -12,13 +12,13 @@ namespace NitroxClient.Communication.Packets.Processors
     {
         private const float ITEM_TRANSFORM_SMOOTH_PERIOD = 0.25f;
 
-        public override void Process(ItemPosition drop)
+        public override void Process(ItemPosition packet)
         {
-            Optional<GameObject> opItem = NitroxEntity.GetObjectFrom(drop.Id);
+            Optional<GameObject> opItem = NitroxEntity.GetObjectFrom(packet.Id);
 
             if (opItem.HasValue)
             {
-                MovementHelper.MoveRotateGameObject(opItem.Value, drop.Position.ToUnity(), drop.Rotation.ToUnity(), ITEM_TRANSFORM_SMOOTH_PERIOD);
+                MovementHelper.MoveRotateGameObject(opItem.Value, packet.Position.ToUnity(), packet.Rotation.ToUnity(), ITEM_TRANSFORM_SMOOTH_PERIOD);
             }
         }
     }

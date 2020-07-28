@@ -53,7 +53,7 @@ namespace NitroxClient
                             .As<BaseDebugger>()
                             .AsSelf()
                             .SingleInstance();
-            
+
             containerBuilder.Register(c => new NitroxProtobufSerializer($"{nameof(NitroxModel)}.dll"));
 
             containerBuilder.RegisterType<UnityPreferenceStateProvider>()
@@ -104,7 +104,7 @@ namespace NitroxClient
             containerBuilder.RegisterType<Interior>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<MobileVehicleBay>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<NitroxConsole>().InstancePerLifetimeScope();
-            containerBuilder.RegisterType<Terrain>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<VisibleCellManager>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<BuildThrottlingQueue>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<Vehicles>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<KnownTechEntry>().InstancePerLifetimeScope();

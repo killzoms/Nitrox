@@ -6,10 +6,10 @@ namespace NitroxClient.Communication.Packets.Processors
 {
     class PlayerDeathProcessor : ClientPacketProcessor<PlayerDeathEvent>
     {
-        public override void Process(PlayerDeathEvent playerDeath)
+        public override void Process(PlayerDeathEvent packet)
         {
             // TODO: Add any death related triggers (i.e. scoreboard updates, rewards, etc.)
-            Log.InGame(playerDeath.PlayerName + " died");
+            Log.InGame(packet.PlayerName + " died");
         }
     }
 }

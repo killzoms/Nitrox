@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using AssetsTools.NET;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.Discovery;
-using NitroxModel.Logger;
+using NitroxServer.Serialization.Resources.Datastructures;
 using NitroxServer_Subnautica.Serialization.Resources.Parsers;
 using NitroxServer_Subnautica.Serialization.Resources.Processing;
-using NitroxServer.Serialization.Resources.Datastructures;
 
 namespace NitroxServer_Subnautica.Serialization.Resources
 {

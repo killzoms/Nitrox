@@ -174,12 +174,9 @@ namespace NitroxModel.Server
             }
         }
 
-        public ServerGameMode GameModeEnum
+        public void SetGameModeEnum(ServerGameMode value)
         {
-            set
-            {
-                GameMode = value.GetAttribute<DescriptionAttribute>().Description.ToString();
-            }
+            GameMode = value.GetAttribute<DescriptionAttribute>().Description.ToString();
         }
 
         public ServerSerializerMode SerializerModeEnum

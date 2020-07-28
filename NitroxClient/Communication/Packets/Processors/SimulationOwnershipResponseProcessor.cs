@@ -20,7 +20,7 @@ namespace NitroxClient.Communication.Packets.Processors
             this.simulationOwnershipManager = simulationOwnershipManager;
         }
 
-        public override void Process(SimulationOwnershipResponse response)
+        public override void Process(SimulationOwnershipResponse packet)
         {
             /*
              * For now, we expect the simulation lock callback to setup entity broadcasting as
@@ -31,11 +31,11 @@ namespace NitroxClient.Communication.Packets.Processors
              * EntityPositionBroadcaster.WatchEntity(simulatedEntity.Id, gameObject.Value);
              * 
              */
-            simulationOwnershipManager.ReceivedSimulationLockResponse(response.Id, response.LockAquired, response.LockType);
+            simulationOwnershipManager.ReceivedSimulationLockResponse(packet.Id, packet.LockAquired, packet.LockType);
 
-            if (response.LockAquired)
+            if (packet.LockAquired)
             {
-                RemoveRemoteController(response.Id);
+                RemoveRemoteController(packet.Id);
             }
         }
 

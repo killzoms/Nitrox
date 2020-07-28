@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -205,11 +204,11 @@ namespace NitroxLauncher
             string nitroxAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Nitrox");
             Directory.CreateDirectory(nitroxAppData);
             File.WriteAllText(Path.Combine(nitroxAppData, "launcherpath.txt"), Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-            
+
             // TODO: The launcher should override FileRead win32 API for the Subnautica process to give it the modified Assembly-CSharp from memory 
             string bootloaderName = "Nitrox.Bootloader.dll";
             File.Copy(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), bootloaderName), Path.Combine(subnauticaPath, "Subnautica_Data", "Managed", bootloaderName), true);
-            
+
             nitroxEntryPatch.Remove(); // Remove any previous instances first.
             nitroxEntryPatch.Apply();
 

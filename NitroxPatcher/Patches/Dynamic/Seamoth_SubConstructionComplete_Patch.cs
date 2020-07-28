@@ -22,7 +22,7 @@ namespace NitroxPatcher.Patches.Dynamic
             GameObject gameObject = __instance.gameObject;
             NitroxId id = NitroxEntity.GetId(gameObject);
             SeamothModel model = NitroxServiceLocator.LocateService<Vehicles>().GetVehicles<SeamothModel>(id);
-            
+
             // Set lights of seamoth            
             ToggleLights toggleLights = gameObject.RequireComponentInChildren<ToggleLights>();
             toggleLights.lightsActive = model.LightOn;

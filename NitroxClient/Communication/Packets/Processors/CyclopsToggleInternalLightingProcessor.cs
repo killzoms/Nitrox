@@ -1,5 +1,4 @@
-﻿using NitroxClient.Communication.Abstract;
-using NitroxClient.Communication.Packets.Processors.Abstract;
+﻿using NitroxClient.Communication.Packets.Processors.Abstract;
 using NitroxClient.GameLogic;
 using NitroxModel_Subnautica.Packets;
 
@@ -7,18 +6,16 @@ namespace NitroxClient.Communication.Packets.Processors
 {
     public class CyclopsToggleInternalLightingProcessor : ClientPacketProcessor<CyclopsToggleInternalLighting>
     {
-        private readonly IPacketSender packetSender;
         private readonly Cyclops cyclops;
 
-        public CyclopsToggleInternalLightingProcessor(IPacketSender packetSender, Cyclops cyclops)
+        public CyclopsToggleInternalLightingProcessor(Cyclops cyclops)
         {
-            this.packetSender = packetSender;
             this.cyclops = cyclops;
         }
 
-        public override void Process(CyclopsToggleInternalLighting lightingPacket)
+        public override void Process(CyclopsToggleInternalLighting packet)
         {
-            cyclops.SetInternalLighting(lightingPacket.Id, lightingPacket.IsOn);
+            cyclops.SetInternalLighting(packet.Id, packet.IsOn);
         }
     }
 }

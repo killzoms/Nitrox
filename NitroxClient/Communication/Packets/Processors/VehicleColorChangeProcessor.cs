@@ -18,20 +18,20 @@ namespace NitroxClient.Communication.Packets.Processors
             this.packetSender = packetSender;
         }
 
-        public override void Process(VehicleColorChange colorPacket)
+        public override void Process(VehicleColorChange packet)
         {
-            GameObject target = NitroxEntity.RequireObjectFrom(colorPacket.Id);
+            GameObject target = NitroxEntity.RequireObjectFrom(packet.Id);
             SubNameInput subNameInput = target.RequireComponentInChildren<SubNameInput>();
             SubName subNameTarget = (SubName)subNameInput.ReflectionGet("target");
 
             using (packetSender.Suppress<VehicleColorChange>())
             {
                 // Switch to the currently selected tab:
-                subNameInput.SetSelected(colorPacket.Index);
+                subNameInput.SetSelected(packet.Index);
 
                 // OnColorChange calls these two methods, in order to update the vehicle color and the color+text on the ingame panel, respectively:
-                subNameTarget.SetColor(colorPacket.Index, colorPacket.HSB.ToUnity(), colorPacket.Color.ToUnity());
-                subNameInput.ReflectionCall("SetColor", args: new object[] { colorPacket.Index, colorPacket.Color });
+                subNameTarget.SetColor(packet.Index, packet.HSB.ToUnity(), packet.Color.ToUnity());
+                subNameInput.ReflectionCall("SetColor", args: new object[] { packet.Index, packet.Color });
             }
         }
     }

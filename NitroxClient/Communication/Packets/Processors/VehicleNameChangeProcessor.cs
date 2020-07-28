@@ -16,14 +16,14 @@ namespace NitroxClient.Communication.Packets.Processors
             this.packetSender = packetSender;
         }
 
-        public override void Process(VehicleNameChange namePacket)
+        public override void Process(VehicleNameChange packet)
         {
-            GameObject target = NitroxEntity.RequireObjectFrom(namePacket.Id);
+            GameObject target = NitroxEntity.RequireObjectFrom(packet.Id);
             SubNameInput subNameInput = target.RequireComponentInChildren<SubNameInput>();
 
             using (packetSender.Suppress<VehicleNameChange>())
             {
-                subNameInput.OnNameChange(namePacket.Name);
+                subNameInput.OnNameChange(packet.Name);
             }
         }
     }

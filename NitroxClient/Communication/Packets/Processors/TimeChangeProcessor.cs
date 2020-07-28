@@ -5,9 +5,9 @@ namespace NitroxClient.Communication.Packets.Processors
 {
     public class TimeChangeProcessor : ClientPacketProcessor<TimeChange>
     {
-        public override void Process(TimeChange timeChangePacket)
+        public override void Process(TimeChange packet)
         {
-            DayNightCycle.main.timePassedAsDouble = timeChangePacket.CurrentTime; //TODO: account for player latency
+            DayNightCycle.main.timePassedAsDouble = packet.CurrentTime; //TODO: account for player latency
         }
     }
 }

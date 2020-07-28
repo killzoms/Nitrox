@@ -21,8 +21,8 @@ namespace NitroxPatcher.Patches.Dynamic
                 if (gameObject.GetComponent<Vehicle>() != null || gameObject.GetComponentInParent<Vehicle>() != null || gameObject.GetComponentInParent<SubRoot>() != null)
                 {
                     NitroxServiceLocator.LocateService<StorageSlots>().BroadcastItemAdd(item, __instance.gameObject);
-                }               
-                
+                }
+
             }
         }
 

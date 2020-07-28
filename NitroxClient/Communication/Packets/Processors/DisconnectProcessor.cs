@@ -18,16 +18,16 @@ namespace NitroxClient.Communication.Packets.Processors
             this.vitalsManager = vitalsManager;
         }
 
-        public override void Process(Disconnect disconnect)
+        public override void Process(Disconnect packet)
         {
             // TODO: don't remove right away... maybe grey out and start
             //      a coroutine to finally remove.
-            vitalsManager.RemoveForPlayer(disconnect.PlayerId);
+            vitalsManager.RemoveForPlayer(packet.PlayerId);
 
-            Optional<RemotePlayer> remotePlayer = remotePlayerManager.Find(disconnect.PlayerId);
+            Optional<RemotePlayer> remotePlayer = remotePlayerManager.Find(packet.PlayerId);
             if (remotePlayer.HasValue)
             {
-                remotePlayerManager.RemovePlayer(disconnect.PlayerId);
+                remotePlayerManager.RemovePlayer(packet.PlayerId);
                 Log.InGame(remotePlayer.Value.PlayerName + " disconnected");
             }
         }

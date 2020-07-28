@@ -96,7 +96,7 @@ namespace NitroxClient.GameLogic
             {
                 Fire existingFire = transform2.GetComponentInChildren<Fire>();
 
-                if (NitroxEntity.GetId(existingFire.gameObject) != fireData.CyclopsId)
+                if (!NitroxEntity.GetId(existingFire.gameObject).Equals(fireData.CyclopsId))
                 {
                     Log.Error("[Fires.Create Fire already exists at node index " + fireData.NodeIndex
                         + "! Replacing existing Fire Id " + NitroxEntity.GetId(existingFire.gameObject)

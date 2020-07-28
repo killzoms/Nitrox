@@ -15,18 +15,18 @@ namespace NitroxClient.Communication.Packets.Processors
             this.remotePlayerManager = remotePlayerManager;
         }
 
-        public override void Process(Movement movement)
+        public override void Process(Movement packet)
         {
-            Optional<RemotePlayer> remotePlayer = remotePlayerManager.Find(movement.PlayerId);
+            Optional<RemotePlayer> remotePlayer = remotePlayerManager.Find(packet.PlayerId);
 
             if (remotePlayer.HasValue)
             {
                 remotePlayer
                     .Value
-                    .UpdatePosition(movement.Position.ToUnity(),
-                        movement.Velocity.ToUnity(),
-                        movement.BodyRotation.ToUnity(),
-                        movement.AimingRotation.ToUnity());
+                    .UpdatePosition(packet.Position.ToUnity(),
+                        packet.Velocity.ToUnity(),
+                        packet.BodyRotation.ToUnity(),
+                        packet.AimingRotation.ToUnity());
             }
         }
     }

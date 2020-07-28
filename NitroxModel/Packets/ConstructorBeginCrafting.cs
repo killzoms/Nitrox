@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using NitroxModel.DataStructures.GameLogic;
-using NitroxModel.DataStructures;
 using System.Text;
+using NitroxModel.DataStructures;
+using NitroxModel.DataStructures.GameLogic;
 
 namespace NitroxModel.Packets
 {
@@ -20,7 +20,7 @@ namespace NitroxModel.Packets
         public NitroxVector3[] HSB { get; }
         public float Health { get; }
 
-        public ConstructorBeginCrafting(NitroxId constructorId, NitroxId constructeditemId, NitroxTechType techType, float duration, List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, NitroxVector3 position, NitroxQuaternion rotation, 
+        public ConstructorBeginCrafting(NitroxId constructorId, NitroxId constructeditemId, NitroxTechType techType, float duration, List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, NitroxVector3 position, NitroxQuaternion rotation,
             string name, NitroxVector3[] hsb, float health)
         {
             ConstructorId = constructorId;

@@ -17,10 +17,10 @@ namespace NitroxClient.Communication.Packets.Processors
             this.vehicles = vehicles;
         }
 
-        public override void Process(VehicleMovement vehicleMovement)
+        public override void Process(VehicleMovement packet)
         {
-            VehicleMovementData vehicleModel = vehicleMovement.Vehicle;
-            Optional<RemotePlayer> player = remotePlayerManager.Find(vehicleMovement.PlayerId);
+            VehicleMovementData vehicleModel = packet.Vehicle;
+            Optional<RemotePlayer> player = remotePlayerManager.Find(packet.PlayerId);
             vehicles.UpdateVehiclePosition(vehicleModel, player);
         }
     }

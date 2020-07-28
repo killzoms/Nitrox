@@ -1,24 +1,21 @@
-﻿using NitroxClient.Communication.Abstract;
-using NitroxClient.Communication.Packets.Processors.Abstract;
-using NitroxModel_Subnautica.Packets;
+﻿using NitroxClient.Communication.Packets.Processors.Abstract;
 using NitroxClient.GameLogic;
+using NitroxModel_Subnautica.Packets;
 
 namespace NitroxClient.Communication.Packets.Processors
 {
     public class CyclopsChangeSonarModeProcessor : ClientPacketProcessor<CyclopsChangeSonarMode>
     {
-        private readonly IPacketSender packetSender;
         private readonly Cyclops cyclops;
 
-        public CyclopsChangeSonarModeProcessor(IPacketSender packetSender, Cyclops cyclops)
+        public CyclopsChangeSonarModeProcessor(Cyclops cyclops)
         {
-            this.packetSender = packetSender;
             this.cyclops = cyclops;
         }
 
-        public override void Process(CyclopsChangeSonarMode sonarPacket)
+        public override void Process(CyclopsChangeSonarMode packet)
         {
-            cyclops.ChangeSonarMode(sonarPacket.Id, sonarPacket.IsOn);
+            cyclops.ChangeSonarMode(packet.Id, packet.IsOn);
         }
     }
 }
