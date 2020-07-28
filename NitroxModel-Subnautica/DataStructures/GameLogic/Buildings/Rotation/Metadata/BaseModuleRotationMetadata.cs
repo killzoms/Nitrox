@@ -1,7 +1,8 @@
-﻿using ProtoBufNet;
-using System;
+﻿using System;
 using NitroxModel.DataStructures.GameLogic.Buildings.Rotation;
 using NitroxModel.DataStructures;
+using NitroxModel_Subnautica.Helper.Int3;
+using ProtoBufNet;
 
 namespace NitroxModel_Subnautica.DataStructures.GameLogic.Buildings.Rotation
 {

@@ -112,7 +112,7 @@ namespace NitroxServer.Serialization
         {
             foreach (MemberInfo property in info)
             {
-                if (!(property.DeclaringType != type))
+                if (property.DeclaringType == type)
                 {
                     foreach (object customAttribute in property.GetCustomAttributes(false))
                     {

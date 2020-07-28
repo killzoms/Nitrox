@@ -13,6 +13,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <CodeAnalysisRuleSet>..\.sonarlint\subnauticanitroxcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -21,6 +22,7 @@
     <Optimize>false</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\.sonarlint\subnauticanitroxcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -28,6 +30,7 @@
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\.sonarlint\subnauticanitroxcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -179,6 +182,9 @@
     <Resource Include="Fonts\OpenSans-Regular.ttf" />
     <Resource Include="Fonts\OpenSans-Semibold.ttf" />
     <Resource Include="Fonts\OpenSans-SemiboldItalic.ttf" />
+    <None Include="..\.sonarlint\subnauticanitroxcsharp.ruleset">
+      <Link>subnauticanitroxcsharp.ruleset</Link>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -278,6 +284,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\serverIllustration.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\.sonarlint\subnauticanitrox\CSharp\SonarLint.xml">
+      <Link>SonarLint.xml</Link>
+    </AdditionalFiles>
   </ItemGroup>
   <!-- Move assets from Subnautica assets to launcher.
        TODO: Try fix this as a project reference to Nitrox.Subnautica.Assets that will copy the files on build automatically. -->

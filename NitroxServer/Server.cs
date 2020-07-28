@@ -1,11 +1,11 @@
-﻿using System.Timers;
+﻿using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Timers;
 using NitroxModel.Logger;
 using NitroxModel.Server;
 using NitroxServer.Serialization.World;
-using System.Configuration;
-using System.IO;
-using System.Text;
-using System.Linq;
 
 namespace NitroxServer
 {
@@ -39,7 +39,8 @@ namespace NitroxServer
             saveTimer = new Timer();
             saveTimer.Interval = serverConfig.SaveInterval;
             saveTimer.AutoReset = true;
-            saveTimer.Elapsed += delegate { Save(); };
+            saveTimer.Elapsed += delegate
+            { Save(); };
         }
 
         public string SaveSummary
