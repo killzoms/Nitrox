@@ -4,7 +4,6 @@ using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Util;
 using ProtoBufNet;
-using UnityEngine;
 
 namespace NitroxModel_Subnautica.DataStructures.GameLogic
 {
@@ -38,7 +37,7 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic
             // Constructor for serialization. Has to be "protected" for json serialization.
         }
 
-        public CyclopsModel(NitroxModel.DataStructures.GameLogic.NitroxTechType techType, NitroxId id, NitroxVector3 position, NitroxQuaternion rotation, List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, Optional<NitroxId> dockingBayId, string name, NitroxVector3[] hsb, float health) : base(techType, id, position, rotation, interactiveChildIdentifiers, dockingBayId, name, hsb, health)
+        public CyclopsModel(NitroxModel.DataStructures.GameLogic.NitroxTechType techType, List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, Optional<NitroxId> dockingBayId, string name, NitroxVector3[] hsb, float health) : base(techType, interactiveChildIdentifiers, dockingBayId, name, hsb, health)
         {
             FloodLightsOn = true;
             InternalLightsOn = true;

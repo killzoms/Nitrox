@@ -9,6 +9,7 @@ using NitroxModel.Discovery;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxServer.GameLogic.Entities.Spawning;
+using NitroxServer.Serialization.Resources.Datastructures;
 using NitroxServer.UnityStubs;
 using ProtoBufNet;
 
@@ -32,7 +33,7 @@ namespace NitroxServer.Serialization
             this.entitySpawnPointFactory = entitySpawnPointFactory;
             this.serializer = serializer;
 
-            surrogateTypes.Add("UnityEngine.Transform", typeof(NitroxTransform));
+            surrogateTypes.Add("UnityEngine.Transform", typeof(TransformAsset));
             surrogateTypes.Add("UnityEngine.Vector3", typeof(NitroxVector3));
             surrogateTypes.Add("UnityEngine.Quaternion", typeof(NitroxQuaternion));
         }
@@ -138,9 +139,8 @@ namespace NitroxServer.Serialization
 
                 if (gameObject.TotalComponents > 0)
                 {
-
                     AbsoluteEntityCell absoluteEntityCell = new AbsoluteEntityCell(batchId, cellId, level);
-                    NitroxTransform transform = gameObject.GetComponent<NitroxTransform>();
+                    TransformAsset transform = gameObject.GetComponent<TransformAsset>();
                     spawnPoints.AddRange(entitySpawnPointFactory.From(absoluteEntityCell, transform, gameObject));
                 }
             }
