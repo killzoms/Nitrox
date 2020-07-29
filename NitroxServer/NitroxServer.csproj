@@ -35,7 +35,8 @@
     <Optimize>false</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\.sonarlint\subnauticanitroxcsharp.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,7 +44,8 @@
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\.sonarlint\subnauticanitroxcsharp.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -229,9 +231,6 @@
     <Compile Include="UnityStubs\GameObject.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\.sonarlint\subnauticanitroxcsharp.ruleset">
-      <Link>subnauticanitroxcsharp.ruleset</Link>
-    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
