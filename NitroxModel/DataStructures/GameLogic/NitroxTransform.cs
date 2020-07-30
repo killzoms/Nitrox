@@ -93,7 +93,7 @@ namespace NitroxModel.DataStructures.GameLogic
         }
 
         private NitroxTransform()
-        {}
+        { }
 
         /// <summary>
         /// NitroxTransform is always attached to an Object
