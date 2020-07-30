@@ -45,6 +45,7 @@ namespace NitroxModel.DataStructures.GameLogic
         public AbsoluteEntityCell(NitroxVector3 worldSpace, int level)
         {
             Level = level;
+            CellId = null;
 
             NitroxVector3 localPosition = (worldSpace + Map.Main.BatchDimensionCenter) / Map.Main.BatchSize;
             BatchId = NitroxInt3.Floor(localPosition);
@@ -139,7 +140,6 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public bool Equals(AbsoluteEntityCell x, AbsoluteEntityCell y)
         {
-
             return
             x.BatchId.Equals(y.BatchId) &&
             x.CellId.Equals(y.CellId) &&

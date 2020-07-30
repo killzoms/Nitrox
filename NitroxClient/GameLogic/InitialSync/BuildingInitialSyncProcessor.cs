@@ -42,7 +42,7 @@ namespace NitroxClient.GameLogic.InitialSync
             else
             {
                 QueueUpPieces(packet.BasePieces);
-                ThrottledBuilder.main.QueueDrained += FinishedCompletedBuildings;
+                ThrottledBuilder.Instance.QueueDrained += FinishedCompletedBuildings;
             }
 
             yield return new WaitUntil(() => completed);
@@ -72,7 +72,7 @@ namespace NitroxClient.GameLogic.InitialSync
 
         private void FinishedCompletedBuildings(object sender, EventArgs eventArgs)
         {
-            ThrottledBuilder.main.QueueDrained -= FinishedCompletedBuildings;
+            ThrottledBuilder.Instance.QueueDrained -= FinishedCompletedBuildings;
             completed = true;
         }
     }
