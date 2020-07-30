@@ -90,8 +90,7 @@ namespace NitroxClient.MonoBehaviours
             StackFrame stackFrame = new StackFrame(5, true);
             MethodBase method = stackFrame.GetMethod();
 
-            bool isMethodActive;
-            if (isActiveFlagByWhiteListedEnergyInterfaceCallers.TryGetValue(method, out isMethodActive))
+            if (isActiveFlagByWhiteListedEnergyInterfaceCallers.TryGetValue(method, out bool isMethodActive))
             {
                 return isMethodActive;
             }
