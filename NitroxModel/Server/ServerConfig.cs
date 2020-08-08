@@ -14,30 +14,30 @@ namespace NitroxModel.Server
 
         public ServerConfig() : this(
                port: 1100,
-               saveinterval: 120000,
-               maxconnection: 100,
-               disableconsole: false,
-               disableautosave: false,
-               savename: "world",
-               serverpassword: string.Empty,
-               adminpassword: StringHelper.GenerateRandomString(12),
-               gamemodeSetting: ServerGameMode.SURVIVAL,
-               serverserializermode: ServerSerializerMode.PROTOBUF
+               saveInterval: 120000,
+               maxConnection: 100,
+               disableConsole: false,
+               disableAutoSave: false,
+               saveName: "world",
+               serverPassword: string.Empty,
+               adminPassword: StringHelper.GenerateRandomString(12),
+               gameModeSetting: ServerGameMode.SURVIVAL,
+               serverSerializerMode: ServerSerializerMode.PROTOBUF
         )
         { }
 
-        public ServerConfig(int port, int saveinterval, int maxconnection, bool disableconsole, bool disableautosave, string savename, string serverpassword, string adminpassword, ServerGameMode gamemodeSetting, ServerSerializerMode serverserializermode)
+        public ServerConfig(int port, int saveInterval, int maxConnection, bool disableConsole, bool disableAutoSave, string saveName, string serverPassword, string adminPassword, ServerGameMode gameModeSetting, ServerSerializerMode serverSerializerMode)
         {
             portSetting = new ServerConfigItem<int>("Port", port);
-            saveIntervalSetting = new ServerConfigItem<int>("SaveInterval", saveinterval);
-            maxConnectionsSetting = new ServerConfigItem<int>("MaxConnections", maxconnection);
-            disableConsoleSetting = new ServerConfigItem<bool>("DisableConsole", disableconsole);
-            disableAutoSaveSetting = new ServerConfigItem<bool>("DisableAutoSave", disableautosave);
-            saveNameSetting = new ServerConfigItem<string>("SaveName", savename);
-            serverPasswordSetting = new ServerConfigItem<string>("ServerPassword", serverpassword);
-            adminPasswordSetting = new ServerConfigItem<string>("AdminPassword", adminpassword);
-            gameModeSetting = new ServerConfigItem<string>("GameMode", gamemodeSetting.GetAttribute<DescriptionAttribute>().Description);
-            serverSerializerMode = new ServerConfigItem<string>("ServerSerializerMode", serverserializermode.ToString());
+            saveIntervalSetting = new ServerConfigItem<int>("SaveInterval", saveInterval);
+            maxConnectionsSetting = new ServerConfigItem<int>("MaxConnections", maxConnection);
+            disableConsoleSetting = new ServerConfigItem<bool>("DisableConsole", disableConsole);
+            disableAutoSaveSetting = new ServerConfigItem<bool>("DisableAutoSave", disableAutoSave);
+            saveNameSetting = new ServerConfigItem<string>("SaveName", saveName);
+            serverPasswordSetting = new ServerConfigItem<string>("ServerPassword", serverPassword);
+            adminPasswordSetting = new ServerConfigItem<string>("AdminPassword", adminPassword);
+            this.gameModeSetting = new ServerConfigItem<string>("GameMode", gameModeSetting.GetAttribute<DescriptionAttribute>().Description);
+            this.serverSerializerMode = new ServerConfigItem<string>("ServerSerializerMode", serverSerializerMode.ToString());
 
             //We don't want to custom those values for now
             oxygenSetting = new ServerConfigItem<float>("StartOxygen", 45);
@@ -51,10 +51,7 @@ namespace NitroxModel.Server
         #region Properties
         public int ServerPort
         {
-            get
-            {
-                return portSetting.Value;
-            }
+            get => portSetting.Value;
 
             set
             {
@@ -65,10 +62,7 @@ namespace NitroxModel.Server
 
         public int SaveInterval
         {
-            get
-            {
-                return saveIntervalSetting.Value;
-            }
+            get => saveIntervalSetting.Value;
 
             set
             {
@@ -79,10 +73,7 @@ namespace NitroxModel.Server
 
         public int MaxConnections
         {
-            get
-            {
-                return maxConnectionsSetting.Value;
-            }
+            get => maxConnectionsSetting.Value;
 
             set
             {
@@ -93,36 +84,21 @@ namespace NitroxModel.Server
 
         public bool DisableConsole
         {
-            get
-            {
-                return disableConsoleSetting.Value;
-            }
+            get => disableConsoleSetting.Value;
 
-            set
-            {
-                disableConsoleSetting.Value = value;
-            }
+            set => disableConsoleSetting.Value = value;
         }
 
         public bool DisableAutoSave
         {
-            get
-            {
-                return disableAutoSaveSetting.Value;
-            }
+            get => disableAutoSaveSetting.Value;
 
-            set
-            {
-                disableAutoSaveSetting.Value = value;
-            }
+            set => disableAutoSaveSetting.Value = value;
         }
 
         public string SaveName
         {
-            get
-            {
-                return saveNameSetting.Value;
-            }
+            get => saveNameSetting.Value;
 
             set
             {
@@ -133,10 +109,7 @@ namespace NitroxModel.Server
 
         public string ServerPassword
         {
-            get
-            {
-                return serverPasswordSetting.Value;
-            }
+            get => serverPasswordSetting.Value;
 
             set
             {
@@ -147,10 +120,7 @@ namespace NitroxModel.Server
 
         public string AdminPassword
         {
-            get
-            {
-                return adminPasswordSetting.Value;
-            }
+            get => adminPasswordSetting.Value;
 
             set
             {
@@ -161,22 +131,19 @@ namespace NitroxModel.Server
 
         public string GameMode
         {
-            get
-            {
-                return gameModeSetting.Value;
-            }
+            get => gameModeSetting.Value;
 
-            set
+            private set
             {
-                Validate.IsFalse(string.IsNullOrWhiteSpace(value), "Gamemode can't be an empty string");
-                Validate.IsTrue(Enum.IsDefined(typeof(ServerGameMode), value.ToUpper()), "Gamemode doesn't exists");
+                Validate.IsFalse(string.IsNullOrWhiteSpace(value), "GameMode can't be an empty string");
+                Validate.IsTrue(Enum.IsDefined(typeof(ServerGameMode), value.ToUpper()), "GameMode doesn't exists");
                 gameModeSetting.Value = value;
             }
         }
 
         public void SetGameModeEnum(ServerGameMode value)
         {
-            GameMode = value.GetAttribute<DescriptionAttribute>().Description.ToString();
+            GameMode = value.GetAttribute<DescriptionAttribute>().Description;
         }
 
         public ServerSerializerMode SerializerModeEnum
@@ -188,18 +155,15 @@ namespace NitroxModel.Server
                 return mode;
             }
 
-            set
-            {
-                serverSerializerMode.Value = value.ToString();
-            }
+            set => serverSerializerMode.Value = value.ToString();
         }
 
         public PlayerStatsData DefaultPlayerStats => new PlayerStatsData(oxygenSetting.Value, maxOxygenSetting.Value, healthSetting.Value, foodSetting.Value, waterSetting.Value, infectionSetting.Value);
         #endregion
 
-        public bool IsGameMode(string gamemode)
+        public bool IsGameMode(string gameMode)
         {
-            return GameMode == gamemode;
+            return GameMode == gameMode;
         }
     }
 }

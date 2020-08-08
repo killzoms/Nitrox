@@ -24,7 +24,7 @@ namespace NitroxModel.DataStructures.GameLogic
         {
             get
             {
-                NitroxMatrix4x4 matrix = Parent != null ? Parent.localToWorldMatrix : NitroxMatrix4x4.Identity;
+                NitroxMatrix4x4 matrix = Parent?.localToWorldMatrix ?? NitroxMatrix4x4.Identity;
                 return matrix.MultiplyPoint(LocalPosition);
             }
             set
@@ -38,7 +38,7 @@ namespace NitroxModel.DataStructures.GameLogic
         {
             get
             {
-                NitroxMatrix4x4 matrix = Parent != null ? Parent.localToWorldMatrix : NitroxMatrix4x4.Identity;
+                NitroxMatrix4x4 matrix = Parent?.localToWorldMatrix ?? NitroxMatrix4x4.Identity;
                 NitroxMatrix4x4.ExtractScale(ref matrix); // This is to just get the scale out of the matrix so the rotation is accurate
                 NitroxQuaternion rotation = NitroxMatrix4x4.ExtractRotation(ref matrix) * LocalRotation;
                 return rotation;
@@ -70,13 +70,13 @@ namespace NitroxModel.DataStructures.GameLogic
 
             if (Parent != null)
             {
-                parent.NitroxObject.Children.Remove(NitroxObject);
+                parent.NitroxObject.children.Remove(NitroxObject);
             }
 
             Parent = parent;
             ParentId = parent.Id;
 
-            parent.NitroxObject.Children.Add(NitroxObject);
+            parent.NitroxObject.children.Add(NitroxObject);
 
         }
 
@@ -128,7 +128,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return string.Format("(Position: {0}, LocalPosition: {1}, Rotation: {2}, LocalRotation: {3}, LocalScale: {4})", Position, LocalPosition, Rotation, LocalRotation, LocalScale);
+            return $"(Position: {Position}, LocalPosition: {LocalPosition}, Rotation: {Rotation}, LocalRotation: {LocalRotation}, LocalScale: {LocalScale})";
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

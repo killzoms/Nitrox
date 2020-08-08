@@ -58,7 +58,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[TechType: {TechType}, Id: {Id}, Position: {Position}, Rotation: {Rotation}, Velocity: {Velocity}, AngularVelocity: {AngularVelocity}, SteeringWheelYaw: {SteeringWheelYaw}, SteeringWheelPitch: {SteeringWheelPitch}, AppliedThrottle: {AppliedThrottle}, Health: {Health}]";
+            return $"[VehicleMovementData - TechType: {TechType} Id: {Id} Position: {Position} Rotation: {Rotation} Velocity: {Velocity} AngularVelocity: {AngularVelocity} SteeringWheelYaw: {SteeringWheelYaw} SteeringWheelPitch: {SteeringWheelPitch} AppliedThrottle: {AppliedThrottle} Health: {Health}]";
         }
     }
 }

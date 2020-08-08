@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using ProtoBufNet;
 
@@ -12,11 +11,10 @@ namespace NitroxModel.DataStructures.GameLogic
     public sealed class NitroxObject : ISerializable, IEquatable<NitroxObject>, IEqualityComparer<NitroxObject>, IDisposable
     {
         private static readonly Dictionary<NitroxId, NitroxObject> nitroxObjectsById = new Dictionary<NitroxId, NitroxObject>();
+        private readonly Dictionary<Type, HashSet<NitroxBehavior>> behaviors = new Dictionary<Type, HashSet<NitroxBehavior>>();
 
         [ProtoMember(1)]
         public NitroxTransform Transform => (NitroxTransform)behaviors[typeof(NitroxTransform)].First();
-
-        private readonly Dictionary<Type, HashSet<NitroxBehavior>> behaviors = new Dictionary<Type, HashSet<NitroxBehavior>>();
 
         [ProtoMember(2)]
         private List<NitroxBehavior> serializableBehaviors;
@@ -29,10 +27,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public NitroxId Id
         {
-            get
-            {
-                return id;
-            }
+            get => id;
             set
             {
                 if (id != null)
@@ -45,7 +40,7 @@ namespace NitroxModel.DataStructures.GameLogic
             }
         }
 
-        internal HashSet<NitroxObject> Children = new HashSet<NitroxObject>();
+        internal HashSet<NitroxObject> children = new HashSet<NitroxObject>();
 
 
         public NitroxObject()
@@ -72,7 +67,7 @@ namespace NitroxModel.DataStructures.GameLogic
         {
             Id = (NitroxId)info.GetValue("id", typeof(NitroxId));
             exists = info.GetBoolean("exists"); // honestly should always exist if its getting serialized but just in case
-            
+
             int count = info.GetInt32("behaviorsCount");
             for (int i = 0; i < count; i++)
             {
@@ -84,13 +79,13 @@ namespace NitroxModel.DataStructures.GameLogic
             {
                 NitroxObject child = (NitroxObject)info.GetValue($"child {i}", typeof(NitroxObject));
                 child.Transform.SetParent(Transform);
-                Children.Add(child);
+                children.Add(child);
             }
         }
 
         public List<NitroxObject> GetChildren()
         {
-            return Children.ToList();
+            return children.ToList();
         }
 
         /// <summary>
@@ -108,11 +103,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public List<NitroxBehavior> GetBehaviors<T>() where T : NitroxBehavior
         {
-            if (behaviors.TryGetValue(typeof(T), out HashSet<NitroxBehavior> val))
-            {
-                return val.ToList();
-            }
-            return new List<NitroxBehavior>();
+            return behaviors.TryGetValue(typeof(T), out HashSet<NitroxBehavior> val) ? val.ToList() : new List<NitroxBehavior>();
         }
 
         public T AddBehavior<T>() where T : NitroxBehavior
@@ -163,7 +154,7 @@ namespace NitroxModel.DataStructures.GameLogic
         }
 
         [ProtoBeforeSerialization]
-        private void BeforeProtoSerializaition()
+        private void BeforeProtoSerialization()
         {
             serializableBehaviors = behaviors.Values.SelectMany(s => s).ToList();
         }
@@ -183,10 +174,8 @@ namespace NitroxModel.DataStructures.GameLogic
             {
                 return true;
             }
-            else if (!(lh is null) && lh.exists && rh is object && rh is NitroxObject)
+            else if (!(lh is null) && lh.exists && rh is object && rh is NitroxObject rhObject)
             {
-                NitroxObject rhObject = rh as NitroxObject;
-
                 return rhObject.exists && lh.Equals(rhObject);
             }
 
@@ -236,7 +225,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[ NitroxObject: Id: {Id}, Transform: {Transform}, Children: {string.Join(", ", Children)}";
+            return $"[NitroxObject: Id: {Id}, Transform: {Transform}, Children: {string.Join(", ", children)}]";
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -252,9 +241,9 @@ namespace NitroxModel.DataStructures.GameLogic
                 info.AddValue($"behavior {i}", behaviorsSerializing[i]);
             }
 
-            count = Children.Count;
+            count = children.Count;
             info.AddValue("childrenCount", count);
-            List<NitroxObject> childrenSerializing = Children.ToList();
+            List<NitroxObject> childrenSerializing = children.ToList();
             for (int i = 0; i < count; i++)
             {
                 info.AddValue($"child {i}", childrenSerializing[i]);

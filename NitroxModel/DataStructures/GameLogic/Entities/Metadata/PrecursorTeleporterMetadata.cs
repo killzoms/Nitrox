@@ -10,9 +10,9 @@ namespace NitroxModel.DataStructures.GameLogic.Entities.Metadata
         [ProtoMember(1)]
         public bool IsOpen { get; }
 
-        public PrecursorTeleporterMetadata()
+        protected PrecursorTeleporterMetadata()
         {
-            // Constructor for serialization
+            //Constructor for serialization. Has to be "protected" for json serialization.
         }
 
         public PrecursorTeleporterMetadata(bool isOpen)
@@ -22,7 +22,7 @@ namespace NitroxModel.DataStructures.GameLogic.Entities.Metadata
 
         public override string ToString()
         {
-            return "[PrecursorTeleporterMetadata isOpen: " + IsOpen + "]";
+            return $"[PrecursorTeleporterMetadata - IsOpen: {IsOpen}]";
         }
     }
 }

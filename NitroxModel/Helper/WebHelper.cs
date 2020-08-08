@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
+using NitroxModel.Logger;
 
 namespace NitroxModel.Helper
 {
@@ -8,6 +10,7 @@ namespace NitroxModel.Helper
     {
         //"Hacky way" to get the public IP
         //Should definitely be reworked.
+
         public static string GetPublicIP()
         {
             WebRequest req = WebRequest.Create("http://checkip.dyndns.org");
@@ -42,9 +45,9 @@ namespace NitroxModel.Helper
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // Catch all
+                Log.Error(ex, "Error while getting Nitrox version from github.");
             }
 
             return version;

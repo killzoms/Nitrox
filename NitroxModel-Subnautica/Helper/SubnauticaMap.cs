@@ -10,7 +10,7 @@ namespace NitroxModel_Subnautica.Helper
         private const int BATCH_SIZE = 160;
         private const int SKYBOX_METERS_ABOVE_WATER = 160;
 
-        public static readonly List<NitroxTechType> GLOBAL_ROOT_TECH_TYPES = new List<NitroxTechType>()
+        private static readonly List<NitroxTechType> GLOBAL_ROOT_TECH_TYPES = new List<NitroxTechType>()
         {
             new NitroxTechType(TechType.Pipe.ToString()),
             new NitroxTechType(TechType.Constructor.ToString()),

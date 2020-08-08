@@ -11,29 +11,29 @@ namespace NitroxModel.DataStructures.GameLogic
     {
         public const int PLAYERS_PER_ESCAPEPOD = 50;
 
-        [ProtoMember(3)]
+        [ProtoMember(1)]
         public NitroxId FabricatorId { get; set; }
 
-        [ProtoMember(4)]
+        [ProtoMember(2)]
         public NitroxId MedicalFabricatorId { get; set; }
 
-        [ProtoMember(5)]
+        [ProtoMember(3)]
         public NitroxId StorageContainerId { get; set; }
 
-        [ProtoMember(6)]
+        [ProtoMember(4)]
         public NitroxId RadioId { get; set; }
 
-        [ProtoMember(7)]
+        [ProtoMember(5)]
         public List<ushort> AssignedPlayers { get; set; } = new List<ushort>();
 
-        [ProtoMember(8)]
+        [ProtoMember(6)]
         public bool Damaged { get; set; }
 
-        [ProtoMember(9)]
+        [ProtoMember(7)]
         public bool RadioDamaged { get; set; }
 
         public EscapePodModel() // Protobuf
-        {}
+        { }
 
         protected EscapePodModel(SerializationInfo info, StreamingContext context) : base(info, context)
         {
@@ -76,14 +76,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public override string ToString()
         {
-            string toString = "[EscapePodModel - Id: " + Id + " FabricatorId: " + FabricatorId + " MedicalFabricatorGuid: " + MedicalFabricatorId + " StorageContainerGuid: " + StorageContainerId + " RadioGuid: " + RadioId + " AssignedPlayers: {";
-
-            foreach (ushort playerId in AssignedPlayers)
-            {
-                toString += playerId + " ";
-            }
-
-            return toString + "} Damaged: " + Damaged + " RadioDamaged: " + RadioDamaged + "]";
+            return $"[EscapePodModel - Id: {Id} FabricatorId: {FabricatorId} MedicalFabricatorGuid: {MedicalFabricatorId} StorageContainerGuid: {StorageContainerId} RadioGuid: {RadioId} AssignedPlayers: {string.Join(", ", AssignedPlayers)} Damaged: {Damaged} RadioDamaged: {RadioDamaged}]";
         }
     }
 }

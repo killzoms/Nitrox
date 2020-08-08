@@ -37,7 +37,7 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic
             // Constructor for serialization. Has to be "protected" for json serialization.
         }
 
-        public CyclopsModel(NitroxModel.DataStructures.GameLogic.NitroxTechType techType, List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, Optional<NitroxId> dockingBayId, string name, NitroxVector3[] hsb, float health) : base(techType, interactiveChildIdentifiers, dockingBayId, name, hsb, health)
+        public CyclopsModel(NitroxTechType techType, List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, Optional<NitroxId> dockingBayId, string name, NitroxVector3[] hsb, float health) : base(techType, interactiveChildIdentifiers, dockingBayId, name, hsb, health)
         {
             FloodLightsOn = true;
             InternalLightsOn = true;
@@ -46,6 +46,11 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic
             SonarOn = false;
             EngineState = false;
             EngineMode = CyclopsMotorMode.CyclopsMotorModes.Standard;
+        }
+
+        public override string ToString()
+        {
+            return $"[CyclopsModel - FloodLightsOn: {FloodLightsOn} InternalLightsOn: {InternalLightsOn} SilentRunningOn: {SilentRunningOn} ShieldOn: {ShieldOn} SonarOn: {SonarOn} EngineState: {EngineState} EngineMode: {EngineMode} \n{base.ToString()}]";
         }
     }
 }

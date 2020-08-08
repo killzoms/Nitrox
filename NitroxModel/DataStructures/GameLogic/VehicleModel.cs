@@ -47,7 +47,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[TechType: {TechType}, Id: {Id}, Position: {Transform.Position}, Rotation: {Transform.Rotation}, Name: {Name}, Health: {Health}, DockingBayId: {DockingBayId}";
+            return $"[VehicleModel - Id: {Id} TechType: {TechType} Transform: {Transform} Name: {Name} Health: {Health} DockingBayId: {DockingBayId}";
         }
     }
 }

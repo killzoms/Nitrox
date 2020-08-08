@@ -109,7 +109,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return "[Entity Transform: " + Transform + " TechType: " + TechType + " Id: " + Id + " Level: " + Level + " classId: " + ClassId + " SpawnedByServer: " + SpawnedByServer + " ExistingGameObjectChildIndex: " + ExistingGameObjectChildIndex + "]";
+            return $"[Entity - Transform: {Transform} TechType: {TechType} Id: {Id} Level: {Level} classId: {ClassId} SpawnedByServer: {SpawnedByServer} ExistingGameObjectChildIndex: {ExistingGameObjectChildIndex}]";
         }
     }
 }
