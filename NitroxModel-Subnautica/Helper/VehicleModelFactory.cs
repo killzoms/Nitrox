@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Util;
 using NitroxModel_Subnautica.DataStructures;
 using NitroxModel_Subnautica.DataStructures.GameLogic;
-using UnityEngine;
 
 namespace NitroxModel_Subnautica.Helper
 {
@@ -14,7 +12,13 @@ namespace NitroxModel_Subnautica.Helper
     {
         public static VehicleModel BuildFrom(NitroxTechType techType, NitroxId constructedItemId, NitroxVector3 position, NitroxQuaternion rotation, List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, Optional<NitroxId> dockingBayId, string name, NitroxVector3[] hsb, float health)
         {
-            NitroxObject obj = new NitroxObject(constructedItemId);
+            return BuildFrom(packet.TechType, packet.ConstructedItemId, packet.Position, packet.Rotation, packet.InteractiveChildIdentifiers, packet.Name, packet.HSB, packet.Health);
+        }
+
+        public static VehicleModel BuildFrom(NitroxTechType techType, NitroxId objectId, NitroxVector3 position, NitroxQuaternion rotation,
+                                             List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, string name, NitroxVector3[] hsb, float health)
+        {
+            NitroxObject obj = new NitroxObject(objectId);
             obj.Transform.Position = position;
             obj.Transform.Rotation = rotation;
 
@@ -37,7 +41,7 @@ namespace NitroxModel_Subnautica.Helper
                     obj.AddBehavior(neptuneRocketModel);
                     return neptuneRocketModel;
                 default:
-                    throw new NotSupportedException($"Could not build from: {techType}");
+                    throw new NotSupportedException($"Could not build model from: {techType}");
             }
         }
     }

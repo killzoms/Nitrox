@@ -48,7 +48,7 @@ namespace NitroxClient.GameLogic
                 Optional<Vehicle> opVehicle = Optional.OfNullable(gameObject.GetComponent<Vehicle>());
 
                 NitroxId constructedObjectId = NitroxEntity.GetId(gameObject);
-                NitroxVector3[] hsb = VehicleHelper.GetPrimalDefaultColours();
+                NitroxVector3[] hsb = VehicleHelper.GetPrimalDefaultColors();
                 string name = string.Empty;
                 float health = 200f;
 
@@ -114,9 +114,8 @@ namespace NitroxClient.GameLogic
                     gameObject.transform.position.ToDto(),
                     gameObject.transform.rotation.ToDto(),
                     childIdentifiers,
-                    Optional.Empty,
                     name,
-                    hsb ?? VehicleHelper.GetDefaultColours(techType), //Shouldn't be null now, but just in case
+                    hsb ?? VehicleHelper.GetDefaultColors(techType), //Shouldn't be null now, but just in case
                     health
                 );
             }
