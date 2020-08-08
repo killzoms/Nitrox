@@ -45,7 +45,6 @@ namespace NitroxModel.DataStructures.GameLogic
         public AbsoluteEntityCell(NitroxVector3 worldSpace, int level)
         {
             Level = level;
-            CellId = null;
 
             NitroxVector3 localPosition = (worldSpace + Map.Main.BatchDimensionCenter) / Map.Main.BatchSize;
             BatchId = NitroxInt3.Floor(localPosition);
@@ -153,6 +152,11 @@ namespace NitroxModel.DataStructures.GameLogic
             hashCode = hashCode * -1521134295 + EqualityComparer<Int3>.Default.GetHashCode(obj.CellId);
             hashCode = hashCode * -1521134295 + obj.Level.GetHashCode();
             return hashCode;
+        }
+
+        public override string ToString()
+        {
+            return $"[AbsoluteEntityCell - Position: {Position} BatchId: {BatchId} CellId: {CellId} Level: {Level} ]";
         }
     }
 }

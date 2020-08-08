@@ -14,7 +14,7 @@ using NitroxModel.Helper;
 
 namespace NitroxLauncher
 {
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public sealed partial class MainWindow : Window, INotifyPropertyChanged
     {
         private readonly LauncherLogic logic = new LauncherLogic();
         private object frameContent;
@@ -73,7 +73,7 @@ namespace NitroxLauncher
             logic.ServerExited += ServerExited;
 
             logic.SetTargetedSubnauticaPath(GameInstallationFinder.Instance.FindGame())
-                .ContinueWith(task =>
+                .ContinueWith(async task =>
                     {
                         if (logic.IsSubnauticaDirectory(task.Result))
                         {
@@ -93,7 +93,7 @@ namespace NitroxLauncher
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -165,11 +165,6 @@ namespace NitroxLauncher
                 return;
             }
             LauncherLogic.Instance.NavigateTo(elem.Tag?.GetType());
-        }
-
-        private void PART_VerticalScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
         }
     }
 }
