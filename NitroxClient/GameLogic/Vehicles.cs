@@ -52,13 +52,13 @@ namespace NitroxClient.GameLogic
                 string name = string.Empty;
                 float health = 200f;
 
-                if (opvehicle.HasValue)
+                if (opVehicle.HasValue)
                 { //Seamoth & Exosuit
-                    Optional<LiveMixin> livemixin = Optional.OfNullable(opVehicle.Value.GetComponent<LiveMixin>());
+                    Optional<LiveMixin> liveMixin = Optional.OfNullable(opVehicle.Value.GetComponent<LiveMixin>());
 
-                    if (livemixin.HasValue)
+                    if (liveMixin.HasValue)
                     {
-                        health = livemixin.Value.health;
+                        health = liveMixin.Value.health;
                     }
 
                     name = opVehicle.Value.GetName();
@@ -204,7 +204,7 @@ namespace NitroxClient.GameLogic
                 Rocket rocket = gameObject.GetComponent<Rocket>();
                 vehicle = gameObject.GetComponent<Vehicle>();
                 subRoot = gameObject.GetComponent<SubRoot>();
-                
+
                 MultiplayerVehicleControl mvc = null;
 
                 if (subRoot)

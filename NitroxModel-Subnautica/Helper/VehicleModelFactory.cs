@@ -10,11 +10,6 @@ namespace NitroxModel_Subnautica.Helper
 {
     public static class VehicleModelFactory
     {
-        public static VehicleModel BuildFrom(NitroxTechType techType, NitroxId constructedItemId, NitroxVector3 position, NitroxQuaternion rotation, List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, Optional<NitroxId> dockingBayId, string name, NitroxVector3[] hsb, float health)
-        {
-            return BuildFrom(packet.TechType, packet.ConstructedItemId, packet.Position, packet.Rotation, packet.InteractiveChildIdentifiers, packet.Name, packet.HSB, packet.Health);
-        }
-
         public static VehicleModel BuildFrom(NitroxTechType techType, NitroxId objectId, NitroxVector3 position, NitroxQuaternion rotation,
                                              List<InteractiveChildObjectIdentifier> interactiveChildIdentifiers, string name, NitroxVector3[] hsb, float health)
         {

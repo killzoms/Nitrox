@@ -45,9 +45,9 @@ namespace NitroxServer.Communication.Packets.Processors
         {
             foreach (EntityTransformUpdate update in updates)
             {
-                AbsoluteEntityCell? currentCell = entityManager.UpdateEntityPosition(update.Id, update.Position, update.Rotation);
+                AbsoluteEntityCell currentCell = entityManager.UpdateEntityPosition(update.Id, update.Position, update.Rotation);
 
-                if (!currentCell.HasValue)
+                if (currentCell == null)
                 {
                     // Normal behaviour if the entity was removed at the same time as someone trying to simulate a postion update.
                     // we log an info inside entityManager.UpdateEntityPosition just in case.
@@ -59,7 +59,7 @@ namespace NitroxServer.Communication.Packets.Processors
                     Player player = playerUpdates.Key;
                     List<EntityTransformUpdate> visibleUpdates = playerUpdates.Value;
 
-                    if (player.HasCellLoaded(currentCell.Value))
+                    if (player.HasCellLoaded(currentCell))
                     {
                         visibleUpdates.Add(update);
                     }

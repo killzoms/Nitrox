@@ -25,7 +25,7 @@ namespace NitroxModel_Subnautica.Packets
 
         public override string ToString()
         {
-            return $"[ExosuitArmAction - TechType: {TechType}, ArmId: {ArmId}, ArmAction: {ArmAction}, Vector: {OpVector}, Rotation: {OpRotation}]";
+            return $"[ExosuitArmAction - TechType: {TechType}, ArmId: {ArmId}, ArmAction: {ArmAction}, Vector: {Vector}, Rotation: {Rotation}]";
         }
     }
 

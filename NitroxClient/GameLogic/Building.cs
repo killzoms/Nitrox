@@ -68,10 +68,10 @@ namespace NitroxClient.GameLogic
             Transform camera = Camera.main.transform;
             Optional<RotationMetadata> rotationMetadata = rotationMetadataFactory.From(baseGhost);
 
-            NitroxObject obj = new NitroxObject(id);
-            obj.Transform.LocalPosition = placedPosition.ToDto();
-            obj.Transform.LocalRotation = quaternion.ToDto();
-            obj.Transform.SetParent(NitroxObject.GetObjectById(parentBaseId).Transform);
+            NitroxTransform transform = new NitroxObject(id).Transform;
+            transform.LocalPosition = placedPosition.ToDto();
+            transform.LocalRotation = quaternion.ToDto();
+            transform.SetParent(NitroxObject.GetObjectById(parentBaseId).Transform);
 
             BasePiece basePiece = new BasePiece(camera.position.ToDto(), camera.rotation.ToDto(), techType.ToDto(), false, rotationMetadata);
             PlaceBasePiece placedBasePiece = new PlaceBasePiece(basePiece);
@@ -105,10 +105,10 @@ namespace NitroxClient.GameLogic
             }
 
             Transform camera = Camera.main.transform;
-            NitroxObject obj = new NitroxObject(id);
-            obj.Transform.LocalPosition = itemPosition.ToDto();
-            obj.Transform.LocalRotation = quaternion.ToDto();
-            obj.Transform.SetParent(NitroxObject.GetObjectById(parentId)?.Transform);
+            NitroxTransform transform = new NitroxObject(id).Transform;
+            transform.LocalPosition = itemPosition.ToDto();
+            transform.LocalRotation = quaternion.ToDto();
+            transform.SetParent(NitroxObject.GetObjectById(parentId)?.Transform);
 
             BasePiece basePiece = new BasePiece(camera.position.ToDto(), camera.rotation.ToDto(), techType.ToDto(), true, Optional.Empty);
             PlaceBasePiece placedBasePiece = new PlaceBasePiece(basePiece);

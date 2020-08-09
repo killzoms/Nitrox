@@ -104,13 +104,13 @@ namespace NitroxServer.GameLogic.Entities
             }
         }
 
-        public AbsoluteEntityCell? UpdateEntityPosition(NitroxId id, NitroxVector3 position, NitroxQuaternion rotation)
+        public AbsoluteEntityCell UpdateEntityPosition(NitroxId id, NitroxVector3 position, NitroxQuaternion rotation)
         {
             Optional<Entity> opEntity = GetEntityById(id);
             if (!opEntity.HasValue)
             {
                 Log.Debug("Could not update entity position because it was not found (maybe it was recently picked up)");
-                return new AbsoluteEntityCell?();
+                return null;
             }
 
             Entity entity = opEntity.Value;
@@ -222,7 +222,7 @@ namespace NitroxServer.GameLogic.Entities
                                 }
                                 else
                                 {
-                                    Log.Error("Parent not Found! Are you sure it exists? " + entity.Transform.Parent.Id);
+                                    Log.Error($"Parent not Found! Are you sure it exists? {entity.Transform.Parent.Id}");
                                 }
                             }
 

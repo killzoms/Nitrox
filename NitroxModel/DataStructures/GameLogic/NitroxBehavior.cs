@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using NitroxModel.Logger;
 using ProtoBufNet;
 
 namespace NitroxModel.DataStructures.GameLogic
