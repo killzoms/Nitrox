@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using AOT;
-using UnityEngine.XR;
 
 // ReSharper disable ClassNeverInstantiated.Global
 #pragma warning disable IDE0008 // Use explicit type

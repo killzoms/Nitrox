@@ -1,5 +1,4 @@
-﻿using NitroxServer.GameLogic;
-using NitroxServer.GameLogic.Bases;
+﻿using NitroxServer.GameLogic.Bases;
 using NitroxServer.GameLogic.Players;
 using ProtoBufNet;
 

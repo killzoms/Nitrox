@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Core\IAutoFacRegistrar.cs" />
     <Compile Include="Core\NitroxEnvironment.cs" />
+    <Compile Include="Core\NitroxEnvironmentTypes.cs" />
     <Compile Include="Core\NitroxServiceLocator.cs" />
     <Compile Include="DataStructures\GameLogic\Entities\Metadata\PrecursorDoorwayMetadata.cs" />
     <Compile Include="DataStructures\GameLogic\Entities\Metadata\PrecursorKeyTerminalMetadata.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="DataStructures\GameLogic\NitroxTransform.cs" />
     <Compile Include="DataStructures\GameLogic\NitroxVector4.cs" />
     <Compile Include="DataStructures\GameLogic\PDAEntry.cs" />
-    <Compile Include="DataStructures\GameLogic\ItemEquipment.cs" />
+    <Compile Include="DataStructures\GameLogic\EquippedItemData.cs" />
     <Compile Include="DataStructures\GameLogic\Entity.cs" />
     <Compile Include="DataStructures\GameLogic\EscapePodModel.cs" />
     <Compile Include="DataStructures\GameLogic\InteractiveChildObjectIdentifier.cs" />
@@ -93,6 +94,11 @@
     <Compile Include="DataStructures\GameLogic\NitroxTechType.cs" />
     <Compile Include="DataStructures\NitroxId.cs" />
     <Compile Include="DataStructures\NitroxInt3.cs" />
+    <Compile Include="DataStructures\OptionalEmpty.cs" />
+    <Compile Include="DataStructures\OptionalEmptyException.cs" />
+    <Compile Include="DataStructures\OptionalNullException.cs" />
+    <Compile Include="DataStructures\PriorityChain.cs" />
+    <Compile Include="DataStructures\PriorityItem.cs" />
     <Compile Include="DataStructures\Surrogates\SerializationSurrogate.cs" />
     <Compile Include="DataStructures\ThreadSafeCollection.cs" />
     <Compile Include="DataStructures\ThreadSafeDictionary.cs" />
@@ -112,6 +118,7 @@
     <Compile Include="Networking\NitroxDeliveryMethod.cs" />
     <Compile Include="Packets\EntityMetadataUpdate.cs" />
     <Compile Include="Packets\BedEnter.cs" />
+    <Compile Include="DataStructures\GameLogic\Entities\EntityTransformUpdate.cs" />
     <Compile Include="Packets\EscapePodRadioRepair.cs" />
     <Compile Include="Packets\EscapePodRepair.cs" />
     <Compile Include="Packets\IShortString.cs" />
@@ -127,11 +134,12 @@
     <Compile Include="Packets\RemotePlayerEquipmentRemoved.cs" />
     <Compile Include="Packets\StorageSlotItemAdd.cs" />
     <Compile Include="Packets\StorageSlotItemRemove.cs" />
+    <Compile Include="DataStructures\GameLogic\StoryEventType.cs" />
     <Compile Include="Packets\SubRootChanged.cs" />
     <Compile Include="Packets\PlayerKicked.cs" />
     <Compile Include="Packets\VehicleChildUpdate.cs" />
     <Compile Include="DataStructures\GameLogic\VehicleModel.cs" />
-    <Compile Include="DataStructures\SimulationLock.cs" />
+    <Compile Include="DataStructures\SimulationLockType.cs" />
     <Compile Include="DataStructures\Optional.cs" />
     <Compile Include="DataStructures\SimulatedEntity.cs" />
     <Compile Include="DataStructures\PriorityQueue.cs" />
@@ -143,7 +151,8 @@
     <Compile Include="Helper\Validate.cs" />
     <Compile Include="MultiplayerSession\AuthenticationContext.cs" />
     <Compile Include="MultiplayerSession\MultiplayerSessionAuthenticationAuthority.cs" />
-    <Compile Include="MultiplayerSession\MultiplayerSessionReservationState.cs" />
+    <Compile Include="MultiplayerSession\MultiplayerSessionReservationStates.cs" />
+    <Compile Include="MultiplayerSession\MultiplayerSessionReservationStateExtensions.cs" />
     <Compile Include="MultiplayerSession\PlayerContext.cs" />
     <Compile Include="MultiplayerSession\PlayerSettings.cs" />
     <Compile Include="MultiplayerSession\RandomColorGenerator.cs" />
@@ -172,7 +181,7 @@
     <Compile Include="Packets\ItemContainerAdd.cs" />
     <Compile Include="Packets\ItemContainerRemove.cs" />
     <Compile Include="Packets\ItemPosition.cs" />
-    <Compile Include="Packets\KnownTechEntry.cs" />
+    <Compile Include="Packets\KnownTechEntryAdd.cs" />
     <Compile Include="Packets\MedicalCabinetClicked.cs" />
     <Compile Include="Packets\Movement.cs" />
     <Compile Include="Packets\MultiplayerSessionPolicy.cs" />

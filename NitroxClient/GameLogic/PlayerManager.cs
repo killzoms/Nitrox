@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Linq;
 using NitroxClient.GameLogic.PlayerModel;
 using NitroxClient.GameLogic.PlayerModel.Abstract;

@@ -53,13 +53,13 @@ namespace NitroxServer.GameLogic
 
             if (!string.IsNullOrEmpty(serverConfig.ServerPassword) && (!authenticationContext.ServerPassword.HasValue || authenticationContext.ServerPassword.Value != serverConfig.ServerPassword))
             {
-                MultiplayerSessionReservationState rejectedState = MultiplayerSessionReservationState.REJECTED | MultiplayerSessionReservationState.AUTHENTICATION_FAILED;
+                MultiplayerSessionReservationStates rejectedState = MultiplayerSessionReservationStates.REJECTED | MultiplayerSessionReservationStates.AUTHENTICATION_FAILED;
                 return new MultiplayerSessionReservation(correlationId, rejectedState);
             }
 
             if (reservedPlayerNames.Count >= serverConfig.MaxConnections)
             {
-                MultiplayerSessionReservationState rejectedState = MultiplayerSessionReservationState.REJECTED | MultiplayerSessionReservationState.SERVER_PLAYER_CAPACITY_REACHED;
+                MultiplayerSessionReservationStates rejectedState = MultiplayerSessionReservationStates.REJECTED | MultiplayerSessionReservationStates.SERVER_PLAYER_CAPACITY_REACHED;
                 return new MultiplayerSessionReservation(correlationId, rejectedState);
             }
 
@@ -68,13 +68,13 @@ namespace NitroxServer.GameLogic
             allPlayersByName.TryGetValue(playerName, out player);
             if ((player?.IsPermaDeath == true) && serverConfig.IsHardcore)
             {
-                MultiplayerSessionReservationState rejectedState = MultiplayerSessionReservationState.REJECTED | MultiplayerSessionReservationState.HARDCORE_PLAYER_DEAD;
+                MultiplayerSessionReservationStates rejectedState = MultiplayerSessionReservationStates.REJECTED | MultiplayerSessionReservationStates.HARDCORE_PLAYER_DEAD;
                 return new MultiplayerSessionReservation(correlationId, rejectedState);
             }
 
             if (reservedPlayerNames.Contains(playerName))
             {
-                MultiplayerSessionReservationState rejectedState = MultiplayerSessionReservationState.REJECTED | MultiplayerSessionReservationState.UNIQUE_PLAYER_NAME_CONSTRAINT_VIOLATED;
+                MultiplayerSessionReservationStates rejectedState = MultiplayerSessionReservationStates.REJECTED | MultiplayerSessionReservationStates.UNIQUE_PLAYER_NAME_CONSTRAINT_VIOLATED;
                 return new MultiplayerSessionReservation(correlationId, rejectedState);
             }
 

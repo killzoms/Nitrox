@@ -1,5 +1,4 @@
-﻿using NitroxClient.Communication.Abstract;
-using NitroxClient.Communication.Packets.Processors.Abstract;
+﻿using NitroxClient.Communication.Packets.Processors.Abstract;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.DataStructures;
@@ -29,9 +28,9 @@ namespace NitroxClient.Communication.Packets.Processors
              * EntityPositionBroadcaster.WatchEntity(simulatedEntity.Id, gameObject.Value);
              * 
              */
-            simulationOwnershipManager.ReceivedSimulationLockResponse(response.Id, response.LockAquired, response.LockType);
+            simulationOwnershipManager.ReceivedSimulationLockResponse(response.Id, response.LockAcquired, response.LockType);
 
-            if (response.LockAquired)
+            if (response.LockAcquired)
             {
                 RemoveRemoteController(response.Id);
             }

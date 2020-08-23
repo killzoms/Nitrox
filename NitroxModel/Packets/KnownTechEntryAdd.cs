@@ -16,7 +16,7 @@ namespace NitroxModel.Packets
         }
         public override string ToString()
         {
-            return "[KnownTechEntryAdd - TechType: " + TechType + " Verbose: " + Verbose + "]";
+            return $"[KnownTechEntryAdd - TechType: {TechType}, Verbose: {Verbose}]";
         }
     }
 }

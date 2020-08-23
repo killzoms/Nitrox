@@ -12,8 +12,6 @@ using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
-using System;
-using System.Reflection;
 using UnityEngine;
 using NitroxModel_Subnautica.DataStructures;
 using NitroxClient.GameLogic.Bases.Spawning;
@@ -130,7 +128,7 @@ namespace NitroxClient.MonoBehaviours
             {
                 parentBase = NitroxEntity.GetObjectFrom(basePiece.ParentId.Value).OrElse(null);
             }
-            
+
             Constructable constructable;
             GameObject gameObject;
 
@@ -176,7 +174,7 @@ namespace NitroxClient.MonoBehaviours
                 // must fetch BEFORE setState or else the BaseGhost gets destroyed
                 BaseGhost baseGhost = constructing.GetComponentInChildren<BaseGhost>();
 
-                if(baseGhost)
+                if (baseGhost)
                 {
                     latestCell = baseGhost.TargetOffset;
                     latestBase = baseGhost.TargetBase;
@@ -191,7 +189,7 @@ namespace NitroxClient.MonoBehaviours
                     latestBase = ((GameObject)opConstructedBase.Value).GetComponent<Base>();
                     Validate.NotNull(latestBase, "latestBase can not be null");
                 }
-                
+
                 Transform cellTransform = latestBase.GetCellObject(latestCell);
 
                 if (latestCell == default(Int3) || !cellTransform)
@@ -219,7 +217,7 @@ namespace NitroxClient.MonoBehaviours
 
                 Destroy(constructableBase.gameObject);
                 NitroxEntity.SetNewId(finishedPiece, constructionCompleted.PieceId);
-                
+
                 BasePieceSpawnProcessor customSpawnProcessor = BasePieceSpawnProcessor.From(finishedPiece.GetComponent<BaseDeconstructable>());
                 customSpawnProcessor.SpawnPostProcess(latestBase, latestCell, finishedPiece);
             }
@@ -231,7 +229,7 @@ namespace NitroxClient.MonoBehaviours
 
                 Log.Info($"Construction completed on a piece of furniture: {constructionCompleted.PieceId} {constructable.gameObject.name}");
             }
-            
+
             if (constructionCompleted.BaseId != null && !NitroxEntity.GetObjectFrom(constructionCompleted.BaseId).HasValue)
             {
                 Log.Info("Creating base: " + constructionCompleted.BaseId);

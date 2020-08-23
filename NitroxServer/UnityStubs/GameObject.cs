@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NitroxModel.DataStructures.GameLogic;
 using NitroxServer.Serialization;
 using NitroxServer.Serialization.Resources.Datastructures;
 

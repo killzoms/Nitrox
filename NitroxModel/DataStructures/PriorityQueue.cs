@@ -374,38 +374,4 @@ namespace NitroxModel.DataStructures
         private PriorityItem<T> tail;
         private int count;
     }
-
-    public class PriorityChain<T>
-    {
-        public PriorityChain(int priority) // NOTE: should be Priority 
-        {
-            Priority = priority;
-        }
-
-        public int Priority { get; set; } // NOTE: should be Priority
-        public int Count { get; set; }
-        public PriorityItem<T> Head { get; set; }
-        public PriorityItem<T> Tail { get; set; }
-    }
-
-    public class PriorityItem<T>
-    {
-        public PriorityItem(T data)
-        {
-            Data = data;
-        }
-
-        public T Data { get; }
-        public bool IsQueued => Chain != null;
-
-        // Note: not used
-        // public int Priority { get { return _chain.Priority; } } // NOTE: should be Priority 
-
-        internal PriorityItem<T> SequentialPrev { get; set; }
-        internal PriorityItem<T> SequentialNext { get; set; }
-
-        internal PriorityChain<T> Chain { get; set; }
-        internal PriorityItem<T> PriorityPrev { get; set; }
-        internal PriorityItem<T> PriorityNext { get; set; }
-    }
 }

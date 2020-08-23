@@ -5,6 +5,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Major Bug", "S1656:Variables should not be self-assigned", Justification = "<Pending>", Scope = "member", Target = "~M:NitroxModel.Logger.Log.AddSensitiveFilter(NLog.Config.LoggingConfiguration,System.Func{NLog.Targets.Target,System.Boolean})")]
-[assembly: SuppressMessage("Minor Code Smell", "S1075:URIs should not be hardcoded", Justification = "<Pending>", Scope = "member", Target = "~M:NitroxModel.Helper.WebHelper.GetPublicIP~System.String")]
-[assembly: SuppressMessage("Minor Code Smell", "S1075:URIs should not be hardcoded", Justification = "<Pending>", Scope = "member", Target = "~M:NitroxModel.Helper.WebHelper.GetNitroxLatestVersion~System.String")]
+[assembly: SuppressMessage("Major Bug", "S1656:Variables should not be self-assigned", Justification = "NLog magic", Scope = "member", Target = "~M:NitroxModel.Logger.Log.AddSensitiveFilter(NLog.Config.LoggingConfiguration,System.Func{NLog.Targets.Target,System.Boolean})")]
+[assembly: SuppressMessage("Minor Code Smell", "S1075:URIs should not be hardcoded", Justification = "WIP IP-Getting", Scope = "member", Target = "~M:NitroxModel.Helper.WebHelper.GetPublicIP~System.String")]
+[assembly: SuppressMessage("Critical Code Smell", "S2346:Flags enumerations zero-value members should be named \"None\"", Justification = "MultiplayerSessionReservationStates-Context", Scope = "type", Target = "~T:NitroxModel.MultiplayerSession.MultiplayerSessionReservationStates")]
+[assembly: SuppressMessage("Major Code Smell", "S4016:Enumeration members should not be named \"Reserved\"", Justification = "MultiplayerSessionReservationStates-Context", Scope = "type", Target = "~T:NitroxModel.MultiplayerSession.MultiplayerSessionReservationStates")]

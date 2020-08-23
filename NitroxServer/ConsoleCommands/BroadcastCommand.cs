@@ -1,7 +1,6 @@
 ﻿using NitroxModel.DataStructures.GameLogic;
 using NitroxServer.ConsoleCommands.Abstract;
 using NitroxServer.ConsoleCommands.Abstract.Type;
-using NitroxServer.GameLogic;
 
 namespace NitroxServer.ConsoleCommands
 {

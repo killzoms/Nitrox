@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NitroxModel.Helper
+namespace NitroxModel.Core
 {
     public static class NitroxEnvironment
     {
@@ -20,11 +20,5 @@ namespace NitroxModel.Helper
             type = value;
             hasBeenSet = true;
         }
-    }
-
-    public enum NitroxEnvironmentTypes
-    {
-        NORMAL,
-        TESTING
     }
 }

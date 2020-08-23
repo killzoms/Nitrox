@@ -17,27 +17,26 @@ namespace NitroxModel.Packets.Processors.Abstract
                 .Where(additionalConstraints)
                 .ToDictionary(proc => proc.BaseType.GetGenericArguments()[0], proc =>
                 {
-                    ConstructorInfo[] ctors = proc.GetConstructors();
-                    if (ctors.Length > 1)
+                    ConstructorInfo[] constructors = proc.GetConstructors();
+                    if (constructors.Length > 1)
                     {
                         throw new NotSupportedException($"{proc.Name} has more than one constructor!");
                     }
 
-                    ConstructorInfo ctor = ctors.First();
+                    ConstructorInfo constructor = constructors.First();
 
                     // Prepare arguments for constructor (if applicable):
-                    object[] args = ctor.GetParameters().Select(pi =>
+                    object[] args = constructor.GetParameters().Select(pi =>
+                    {
+                        if (processorArguments.TryGetValue(pi.ParameterType, out object v))
                         {
-                            object v;
-                            if (processorArguments.TryGetValue(pi.ParameterType, out v))
-                            {
-                                return v;
-                            }
+                            return v;
+                        }
 
-                            throw new ArgumentException($"Argument value not defined for type {pi.ParameterType}! Used in {proc}");
-                        }).ToArray();
+                        throw new ArgumentException($"Argument value not defined for type {pi.ParameterType}! Used in {proc}");
+                    }).ToArray();
 
-                    return (PacketProcessor)ctor.Invoke(args);
+                    return (PacketProcessor)constructor.Invoke(args);
                 });
         }
     }

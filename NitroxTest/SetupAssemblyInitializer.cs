@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NitroxModel.Helper;
+using NitroxModel.Core;
 using NitroxModel.Logger;
 
 namespace NitroxTest

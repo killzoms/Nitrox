@@ -4,7 +4,6 @@ using NitroxModel.DataStructures.Util;
 using NitroxModel.Packets;
 using NitroxModel_Subnautica.DataStructures;
 using UnityEngine;
-using static NitroxModel.Packets.EntityTransformUpdates;
 
 namespace NitroxClient.Communication.Packets.Processors
 {

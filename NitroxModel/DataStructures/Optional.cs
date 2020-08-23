@@ -160,10 +160,6 @@ namespace NitroxModel.DataStructures.Util
         }
     }
 
-    public struct OptionalEmpty
-    {
-    }
-
     public static class Optional
     {
         internal static readonly Dictionary<Type, Func<object, bool>> valueConditions = new Dictionary<Type, Func<object, bool>>();
@@ -185,50 +181,6 @@ namespace NitroxModel.DataStructures.Util
         {
             // Add to global so that the Optional<T> can lazily evaluate which conditions it should add to its checks based on its type.
             valueConditions.Add(typeof(T), o => hasValueCondition(o as T));
-        }
-    }
-
-    [Serializable]
-    public sealed class OptionalNullException<T> : Exception
-    {
-        public OptionalNullException() : base($"Optional <{nameof(T)}> is null!")
-        {
-        }
-
-        public OptionalNullException(string message) : base($"Optional <{nameof(T)}> is null:\n\t{message}")
-        {
-        }
-
-        private OptionalNullException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-        }
-    }
-
-    [Serializable]
-    public sealed class OptionalEmptyException<T> : Exception
-    {
-        public OptionalEmptyException() : base($"Optional <{nameof(T)}> is empty.")
-        {
-        }
-
-        public OptionalEmptyException(string message) : base($"Optional <{nameof(T)}> is empty:\n\t{message}")
-        {
-        }
-
-        private OptionalEmptyException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
         }
     }
 }

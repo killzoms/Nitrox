@@ -234,7 +234,7 @@ dotnet_diagnostic.S1227.severity = none
 
 dotnet_diagnostic.S1244.severity = none
 
-dotnet_diagnostic.S125.severity = warning
+dotnet_diagnostic.S125.severity = suggestion
 
 dotnet_diagnostic.S126.severity = none
 

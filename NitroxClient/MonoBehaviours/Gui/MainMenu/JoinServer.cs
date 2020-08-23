@@ -428,7 +428,7 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
                 case MultiplayerSessionConnectionStage.SESSION_RESERVATION_REJECTED:
                     Log.InGame("Reservation rejected...");
 
-                    MultiplayerSessionReservationState reservationState = multiplayerSession.Reservation.ReservationState;
+                    MultiplayerSessionReservationStates reservationState = multiplayerSession.Reservation.ReservationState;
 
                     string reservationRejectionNotification = reservationState.Describe();
 
