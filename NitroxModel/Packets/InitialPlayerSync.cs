@@ -11,7 +11,7 @@ namespace NitroxModel.Packets
     [Serializable]
     public class InitialPlayerSync : Packet, IShortString
     {
-        public NitroxId AssignedEscapePodId;
+        public NitroxId AssignedEscapePodId { get; }
         public List<EscapePodModel> EscapePodsData { get; }
         public List<EquippedItemData> EquippedItems { get; }
         public List<EquippedItemData> Modules { get; }

@@ -24,7 +24,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[CellEntities {string.Join(", ", Entities)}]";
+            return $"[CellEntities - Entities: ({string.Join(", ", Entities)})]";
         }
     }
 }

@@ -16,5 +16,10 @@ namespace NitroxModel.Packets
             PlayerContext = playerContext;
             EquippedTechTypes = equippedTechTypes;
         }
+
+        public override string ToString()
+        {
+            return $"[PlayerJoinedMultiplayerSession - PlayerContext: {PlayerContext}, EquippedTechTypes: {EquippedTechTypes}]";
+        }
     }
 }

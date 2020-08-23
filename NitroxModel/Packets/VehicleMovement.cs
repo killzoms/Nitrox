@@ -18,7 +18,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[VehicleMovement - {base.ToString()}, Data: {VehicleMovementData}]";
+            return $"[VehicleMovement - VehicleMovementData: {VehicleMovementData}, Movement: {base.ToString()}]";
         }
     }
 }

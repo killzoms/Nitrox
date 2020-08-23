@@ -27,7 +27,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return "[DroppedItem - id: " + Id + " WaterParkId: " + WaterParkId + " techType: " + TechType + " itemPosition: " + ItemPosition + "]";
+            return $"[DroppedItem - Id: {Id}, WaterParkId: {WaterParkId}, TechType: {TechType}, ItemPosition: {ItemPosition}]";
         }
     }
 }

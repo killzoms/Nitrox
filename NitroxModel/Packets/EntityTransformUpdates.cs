@@ -27,34 +27,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            string toString = "";
-
-            foreach (EntityTransformUpdate update in Updates)
-            {
-                toString += update + " ";
-            }
-
-            return "[EntityTransformUpdates - Updates: " + toString + "]";
-        }
-
-        [Serializable]
-        public class EntityTransformUpdate
-        {
-            public NitroxId Id { get; }
-            public NitroxVector3 Position { get; }
-            public NitroxQuaternion Rotation { get; }
-
-            public EntityTransformUpdate(NitroxId id, NitroxVector3 position, NitroxQuaternion rotation)
-            {
-                Id = id;
-                Position = position;
-                Rotation = rotation;
-            }
-
-            public override string ToString()
-            {
-                return "(" + Id + " " + Position + " " + Rotation + ")";
-            }
+            return $"[EntityTransformUpdates - Updates: ({string.Join(", ", Updates)})]";
         }
     }
 }

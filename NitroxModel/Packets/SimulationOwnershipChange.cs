@@ -18,11 +18,6 @@ namespace NitroxModel.Packets
             };
         }
 
-        public SimulationOwnershipChange(List<SimulatedEntity> entities)
-        {
-            Entities = entities;
-        }
-
         public SimulationOwnershipChange(SimulatedEntity entity)
         {
             Entities = new List<SimulatedEntity>
@@ -31,18 +26,15 @@ namespace NitroxModel.Packets
             };
         }
 
+        public SimulationOwnershipChange(List<SimulatedEntity> entities)
+        {
+            Entities = entities;
+        }
+
+
         public override string ToString()
         {
-            StringBuilder stringBuilder = new StringBuilder("[SimulationOwnershipChange - ");
-
-            foreach (SimulatedEntity entity in Entities)
-            {
-                stringBuilder.Append(entity);
-            }
-
-            stringBuilder.Append("]");
-
-            return stringBuilder.ToString();
+            return $"[SimulationOwnershipChange - Entities: ({string.Join(", ", Entities)})]";
         }
     }
 }

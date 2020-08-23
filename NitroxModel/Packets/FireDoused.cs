@@ -23,7 +23,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return "[FireDoused Id: " + Id + "Douse Amount: " + DouseAmount + "]";
+            return $"[FireDoused - Id: {Id}, DouseAmount: {DouseAmount}]";
         }
     }
 }

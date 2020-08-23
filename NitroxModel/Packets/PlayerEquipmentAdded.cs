@@ -14,5 +14,10 @@ namespace NitroxModel.Packets
             TechType = techType;
             EquippedItem = equippedItem;
         }
+
+        public override string ToString()
+        {
+            return $"[PlayerEquipmentAdded - TechType: {TechType}, EquippedItem: {EquippedItem}]";
+        }
     }
 }

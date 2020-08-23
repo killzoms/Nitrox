@@ -20,7 +20,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return "[ItemPosition position: " + Position + " Rotation: " + Rotation + " id: " + Id + "]";
+            return $"[ItemPosition - Id: {Id}, Position: {Position}, Rotation: {Rotation}]";
         }
     }
 }

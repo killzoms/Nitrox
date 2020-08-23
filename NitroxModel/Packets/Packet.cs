@@ -84,9 +84,7 @@ namespace NitroxModel.Packets
             // We have our own surrogates to (de)serialize types that are not marked [Serializable]
             // This code is very similar to how serializability is checked in:
             // System.Runtime.Serialization.Formatters.Binary.BinaryCommon.CheckSerializable
-
-            ISurrogateSelector selector;
-            return (serializer.SurrogateSelector.GetSurrogate(type, Packet.serializer.Context, out selector) != null);
+            return (serializer.SurrogateSelector.GetSurrogate(type, Packet.serializer.Context, out ISurrogateSelector _) != null);
         }
 
         public WrapperPacket ToWrapperPacket()

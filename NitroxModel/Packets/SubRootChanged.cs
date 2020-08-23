@@ -18,7 +18,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return "[SubRootChanged - PlayerId: " + PlayerId + " SubRootId: " + SubRootId + "]";
+            return $"[SubRootChanged - PlayerId: {PlayerId}, SubRootId: {SubRootId}]";
         }
     }
 }

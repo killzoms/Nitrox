@@ -12,5 +12,10 @@ namespace NitroxModel.Packets
         {
             SignMetadata = signMetadata;
         }
+
+        public override string ToString()
+        {
+            return $"[SignChanged - SignMetadata: {SignMetadata}]";
+        }
     }
 }

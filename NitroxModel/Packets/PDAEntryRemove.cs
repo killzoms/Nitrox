@@ -6,9 +6,9 @@ namespace NitroxModel.Packets
     [Serializable]
     public class PDAEntryRemove : Packet
     {
-        public NitroxTechType TechType;
-        public float Progress;
-        public int Unlocked;
+        public NitroxTechType TechType { get; }
+        public float Progress { get; }
+        public int Unlocked { get; }
 
         public PDAEntryRemove(NitroxTechType techType, float progress, int unlocked)
         {
@@ -19,7 +19,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return "[PDAEntryRemove - techType: " + TechType + " progress: " + Progress + " unlocked: " + Unlocked + "]";
+            return $"[PDAEntryRemove - TechType: {TechType}, Progress: {Progress}, Unlocked: {Unlocked}]";
         }
     }
 }

@@ -15,7 +15,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return "[ModuleAdded EquippedItemData: " + EquippedItemData + " ]";
+            return $"[ModuleAdded - EquippedItemData: {EquippedItemData}]";
         }
     }
 }
