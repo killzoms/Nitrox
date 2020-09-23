@@ -11,19 +11,21 @@ namespace NitroxPatcher.Patches.Persistent
 {
     public class GameInput_Initialize_Patch : NitroxPatch, IPersistentPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(GameInput);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(GameInput).GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo keyBindingManagerGetHighestKeyBindingValueMethod = typeof(KeyBindingManager).GetMethod(nameof(KeyBindingManager.GetHighestKeyBindingValue), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo mathMaxMethod = typeof(Math).GetMethod(nameof(Math.Max), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(int), typeof(int) }, null);
+        private static readonly ConstructorInfo keyBindingManagerConstructor = typeof(KeyBindingManager).GetConstructors().First();
 
-        public static readonly OpCode INJECTION_OPCODE = OpCodes.Stsfld;
-        public static readonly object INJECTION_OPERAND = TARGET_CLASS.GetField("numButtons", BindingFlags.Static | BindingFlags.NonPublic);
+        private static readonly OpCode injectionOpCode = OpCodes.Stsfld;
+        private static readonly object injectionOperand = typeof(GameInput).GetField("numButtons", BindingFlags.NonPublic | BindingFlags.Static);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND);
+            Validate.NotNull(injectionOperand);
 
             foreach (CodeInstruction instruction in instructions)
             {
-                if (instruction.opcode.Equals(INJECTION_OPCODE) && instruction.operand.Equals(INJECTION_OPERAND))
+                if (instruction.opcode.Equals(injectionOpCode) && instruction.operand.Equals(injectionOperand))
                 {
                     /*
                      * int prev = GameInput.GetMaximumEnumValue(typeof(GameInput.Button)) + 1;
@@ -31,11 +33,11 @@ namespace NitroxPatcher.Patches.Persistent
                      * KeyBindingManager keyBindingManager = new KeyBindingManager();
                      * GameButton.numButtons = Math.Max(keyBindingManager.GetHighestKeyBindingValue() + 1, prev);
                      */
-                    yield return new CodeInstruction(OpCodes.Newobj, typeof(KeyBindingManager).GetConstructors().First());
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(KeyBindingManager).GetMethod("GetHighestKeyBindingValue", BindingFlags.Instance | BindingFlags.Public));
+                    yield return new CodeInstruction(OpCodes.Newobj, keyBindingManagerConstructor);
+                    yield return new CodeInstruction(OpCodes.Callvirt, keyBindingManagerGetHighestKeyBindingValueMethod);
                     yield return new CodeInstruction(OpCodes.Ldc_I4_1);
                     yield return new CodeInstruction(OpCodes.Add);
-                    yield return new CodeInstruction(OpCodes.Call, typeof(Math).GetMethod("Max", new[] { typeof(int), typeof(int) }));
+                    yield return new CodeInstruction(OpCodes.Call, mathMaxMethod);
                 }
 
                 yield return instruction;
@@ -44,7 +46,7 @@ namespace NitroxPatcher.Patches.Persistent
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

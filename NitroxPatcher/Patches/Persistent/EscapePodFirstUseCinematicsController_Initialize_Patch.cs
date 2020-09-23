@@ -1,14 +1,12 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.MonoBehaviours;
 
 namespace NitroxPatcher.Patches.Persistent
 {
-    class EscapePodFirstUseCinematicsController_Initialize_Patch : NitroxPatch, IPersistentPatch
+    public class EscapePodFirstUseCinematicsController_Initialize_Patch : NitroxPatch, IPersistentPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(EscapePodFirstUseCinematicsController);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(EscapePodFirstUseCinematicsController).GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static bool Prefix(EscapePodFirstUseCinematicsController __instance)
         {
@@ -23,7 +21,7 @@ namespace NitroxPatcher.Patches.Persistent
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

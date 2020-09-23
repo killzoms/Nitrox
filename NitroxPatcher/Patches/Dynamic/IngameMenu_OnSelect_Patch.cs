@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Harmony;
@@ -8,9 +7,8 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class IngameMenu_OnSelect_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(IngameMenu);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("OnSelect");
-        public static readonly MethodInfo GAMEMODEUTILS_ISPERMADEATH_METHOD = typeof(GameModeUtils).GetMethod("IsPermadeath", BindingFlags.Public | BindingFlags.Static);
+        private static readonly MethodInfo targetMethod = typeof(IngameMenu).GetMethod(nameof(IngameMenu.OnSelect), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo gameModeUtilsIsPermadeathMethod = typeof(GameModeUtils).GetMethod(nameof(GameModeUtils.IsPermadeath), BindingFlags.Public | BindingFlags.Static);
 
         public static void Postfix()
         {
@@ -38,7 +36,7 @@ namespace NitroxPatcher.Patches.Dynamic
              */
             foreach (CodeInstruction instruction in instructions)
             {
-                if (GAMEMODEUTILS_ISPERMADEATH_METHOD.Equals(instruction.operand))
+                if (gameModeUtilsIsPermadeathMethod.Equals(instruction.operand))
                 {
                     yield return new CodeInstruction(OpCodes.Ret);
                     break;
@@ -50,8 +48,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchMultiple(harmony, targetMethod, false, true, true);
         }
     }
 }

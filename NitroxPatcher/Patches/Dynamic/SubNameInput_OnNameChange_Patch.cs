@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.Communication.Abstract;
 using NitroxClient.MonoBehaviours;
@@ -13,18 +12,18 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class SubNameInput_OnNameChange_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(SubNameInput).GetMethod("OnNameChange", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(SubNameInput).GetMethod(nameof(SubNameInput.OnNameChange), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Postfix(SubNameInput __instance)
         {
-            SubName subname = (SubName)__instance.ReflectionGet("target");
+            SubName subName = (SubName)__instance.ReflectionGet("target");
 
-            if (subname != null)
+            if (subName)
             {
                 GameObject parentVehicle;
-                Vehicle vehicle = subname.GetComponentInParent<Vehicle>();
-                SubRoot subRoot = subname.GetComponentInParent<SubRoot>();
-                Rocket rocket = subname.GetComponentInParent<Rocket>();
+                Vehicle vehicle = subName.GetComponentInParent<Vehicle>();
+                SubRoot subRoot = subName.GetComponentInParent<SubRoot>();
+                Rocket rocket = subName.GetComponentInParent<Rocket>();
 
                 if (vehicle)
                 {
@@ -40,14 +39,14 @@ namespace NitroxPatcher.Patches.Dynamic
                 }
 
                 NitroxId id = NitroxEntity.GetId(parentVehicle);
-                VehicleNameChange packet = new VehicleNameChange(id, subname.GetName());
+                VehicleNameChange packet = new VehicleNameChange(id, subName.GetName());
                 NitroxServiceLocator.LocateService<IPacketSender>().Send(packet);
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

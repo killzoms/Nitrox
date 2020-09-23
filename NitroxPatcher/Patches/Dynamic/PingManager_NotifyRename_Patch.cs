@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.Communication.Abstract;
 using NitroxClient.GameLogic.Helper;
@@ -11,8 +10,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class PingManager_NotifyRename_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(PingManager);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod(nameof(PingManager.NotifyRename), BindingFlags.Public | BindingFlags.Static);
+        private static readonly MethodInfo targetMethod = typeof(PingManager).GetMethod(nameof(PingManager.NotifyRename), BindingFlags.Public | BindingFlags.Static);
 
         public static void Postfix(PingInstance instance)
         {
@@ -28,7 +26,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

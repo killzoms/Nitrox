@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Harmony;
@@ -11,25 +10,36 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Builder_TryPlace_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(Builder);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("TryPlace");
+        private static readonly MethodInfo targetMethod = typeof(Builder).GetMethod(nameof(Builder.TryPlace));
 
-        public static readonly OpCode PLACE_BASE_INJECTION_OPCODE = OpCodes.Callvirt;
-        public static readonly object PLACE_BASE_INJECTION_OPERAND = typeof(BaseGhost).GetMethod("Place");
+        private static readonly MethodInfo baseGhostGetTargetBaseMethod = typeof(BaseGhost).GetMethod("get_TargetBase", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo gameObjectGetTransformMethod = typeof(GameObject).GetMethod("get_transform", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo transformGetPositionMethod = typeof(Transform).GetMethod("get_position", BindingFlags.Public | BindingFlags.Instance);
 
-        public static readonly OpCode PLACE_FURNITURE_INJECTION_OPCODE = OpCodes.Call;
-        public static readonly object PLACE_FURNITURE_INJECTION_OPERAND = typeof(SkyEnvironmentChanged).GetMethod("Send", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(GameObject), typeof(Component) }, null);
+        private static readonly MethodInfo craftDateGetTechTypeMethod = typeof(CraftData).GetMethod(nameof(CraftData.GetTechType), BindingFlags.Static | BindingFlags.Public, null, new[] { typeof(GameObject) }, null);
+        private static readonly MethodInfo buildingPlaceBasePieceMethod = typeof(Building).GetMethod(nameof(Building.PlaceBasePiece), BindingFlags.Instance | BindingFlags.Public, null, new[] { typeof(BaseGhost), typeof(ConstructableBase), typeof(Base), typeof(TechType), typeof(Quaternion) }, null);
+        private static readonly MethodInfo buildingPlaceFurnitureMethod = typeof(Building).GetMethod(nameof(Building.PlaceFurniture), BindingFlags.Instance | BindingFlags.Public, null, new[] { typeof(GameObject), typeof(TechType), typeof(Vector3), typeof(Quaternion) }, null);
+
+        private static readonly FieldInfo builderPrefabField = typeof(Builder).GetField("prefab", BindingFlags.Static | BindingFlags.NonPublic);
+        private static readonly FieldInfo builderPlaceRotationField = typeof(Builder).GetField("placeRotation", BindingFlags.Static | BindingFlags.NonPublic);
+        private static readonly FieldInfo builderGhostModelField = typeof(Builder).GetField("ghostModel", BindingFlags.Static | BindingFlags.NonPublic);
+
+        internal static readonly OpCode placeBaseInjectionOpCode = OpCodes.Callvirt;
+        internal static readonly object placeBaseInjectionOperand = typeof(BaseGhost).GetMethod("Place");
+
+        internal static readonly OpCode placeFurnitureInjectionOpCode = OpCodes.Call;
+        internal static readonly object placeFurnitureInjectionOperand = typeof(SkyEnvironmentChanged).GetMethod(nameof(SkyEnvironmentChanged.Send), BindingFlags.Static | BindingFlags.Public, null, new[] { typeof(GameObject), typeof(Component) }, null);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(PLACE_BASE_INJECTION_OPERAND);
-            Validate.NotNull(PLACE_FURNITURE_INJECTION_OPERAND);
+            Validate.NotNull(placeBaseInjectionOperand);
+            Validate.NotNull(placeFurnitureInjectionOperand);
 
             foreach (CodeInstruction instruction in instructions)
             {
                 yield return instruction;
 
-                if (instruction.opcode.Equals(PLACE_BASE_INJECTION_OPCODE) && instruction.operand.Equals(PLACE_BASE_INJECTION_OPERAND))
+                if (instruction.opcode.Equals(placeBaseInjectionOpCode) && instruction.operand.Equals(placeBaseInjectionOperand))
                 {
                     /*
                      *  Multiplayer.Logic.Building.PlaceBasePiece(componentInParent, component.TargetBase, CraftData.GetTechType(Builder.prefab), Builder.placeRotation);
@@ -38,34 +48,34 @@ namespace NitroxPatcher.Patches.Dynamic
                     yield return new CodeInstruction(OpCodes.Ldloc_1);
                     yield return new CodeInstruction(OpCodes.Ldloc_0);
                     yield return new CodeInstruction(OpCodes.Ldloc_1);
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(BaseGhost).GetMethod("get_TargetBase"));
-                    yield return new CodeInstruction(OpCodes.Ldsfld, TARGET_CLASS.GetField("prefab", BindingFlags.Static | BindingFlags.NonPublic));
-                    yield return new CodeInstruction(OpCodes.Call, typeof(CraftData).GetMethod("GetTechType", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(GameObject) }, null));
-                    yield return new CodeInstruction(OpCodes.Ldsfld, TARGET_CLASS.GetField("placeRotation", BindingFlags.Static | BindingFlags.NonPublic));
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(Building).GetMethod("PlaceBasePiece", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(BaseGhost), typeof(ConstructableBase), typeof(Base), typeof(TechType), typeof(Quaternion) }, null));
+                    yield return new CodeInstruction(OpCodes.Callvirt, baseGhostGetTargetBaseMethod);
+                    yield return new CodeInstruction(OpCodes.Ldsfld, builderPrefabField);
+                    yield return new CodeInstruction(OpCodes.Call, craftDateGetTechTypeMethod);
+                    yield return new CodeInstruction(OpCodes.Ldsfld, builderPlaceRotationField);
+                    yield return new CodeInstruction(OpCodes.Callvirt, buildingPlaceBasePieceMethod);
                 }
 
-                if (instruction.opcode.Equals(PLACE_FURNITURE_INJECTION_OPCODE) && instruction.operand.Equals(PLACE_FURNITURE_INJECTION_OPERAND))
+                if (instruction.opcode.Equals(placeFurnitureInjectionOpCode) && instruction.operand.Equals(placeFurnitureInjectionOperand))
                 {
                     /*
                      *  Multiplayer.Logic.Building.PlaceFurniture(gameObject, CraftData.GetTechType(Builder.prefab), Builder.ghostModel.transform.position, Builder.placeRotation);
                      */
                     yield return TranspilerHelper.LocateService<Building>();
                     yield return new CodeInstruction(OpCodes.Ldloc_2);
-                    yield return new CodeInstruction(OpCodes.Ldsfld, TARGET_CLASS.GetField("prefab", BindingFlags.Static | BindingFlags.NonPublic));
-                    yield return new CodeInstruction(OpCodes.Call, typeof(CraftData).GetMethod("GetTechType", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(GameObject) }, null));
-                    yield return new CodeInstruction(OpCodes.Ldsfld, TARGET_CLASS.GetField("ghostModel", BindingFlags.Static | BindingFlags.NonPublic));
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(GameObject).GetMethod("get_transform"));
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(Transform).GetMethod("get_position"));
-                    yield return new CodeInstruction(OpCodes.Ldsfld, TARGET_CLASS.GetField("placeRotation", BindingFlags.Static | BindingFlags.NonPublic));
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(Building).GetMethod("PlaceFurniture", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(GameObject), typeof(TechType), typeof(Vector3), typeof(Quaternion) }, null));
+                    yield return new CodeInstruction(OpCodes.Ldsfld, builderPrefabField);
+                    yield return new CodeInstruction(OpCodes.Call, craftDateGetTechTypeMethod);
+                    yield return new CodeInstruction(OpCodes.Ldsfld, builderGhostModelField);
+                    yield return new CodeInstruction(OpCodes.Callvirt, gameObjectGetTransformMethod);
+                    yield return new CodeInstruction(OpCodes.Callvirt, transformGetPositionMethod);
+                    yield return new CodeInstruction(OpCodes.Ldsfld, builderPlaceRotationField);
+                    yield return new CodeInstruction(OpCodes.Callvirt, buildingPlaceFurnitureMethod);
                 }
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

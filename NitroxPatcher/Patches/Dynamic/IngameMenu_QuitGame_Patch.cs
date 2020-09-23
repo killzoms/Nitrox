@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.Communication.Abstract;
 using NitroxModel.Core;
@@ -9,8 +8,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class IngameMenu_QuitGame_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(IngameMenu);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("QuitGame");
+        private static readonly MethodInfo targetMethod = typeof(IngameMenu).GetMethod(nameof(IngameMenu.QuitGame), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Prefix()
         {
@@ -21,7 +19,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

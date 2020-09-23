@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxModel.Core;
@@ -8,8 +7,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class PDAScanner_NotifyProgress_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(PDAScanner);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("NotifyProgress", BindingFlags.NonPublic | BindingFlags.Static);
+        private static readonly MethodInfo targetMethod = typeof(PDAScanner).GetMethod("NotifyProgress", BindingFlags.NonPublic | BindingFlags.Static);
 
         public static void Prefix(PDAScanner.Entry entry)
         {
@@ -21,7 +19,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

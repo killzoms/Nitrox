@@ -1,23 +1,20 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
-using NitroxModel.Helper;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
     public class CyclopsHelmHUDManager_StopPiloting_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CyclopsHelmHUDManager);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("StopPiloting", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(CyclopsHelmHUDManager).GetMethod(nameof(CyclopsHelmHUDManager.StopPiloting), BindingFlags.Public | BindingFlags.Instance);
 
-        public static void Postfix(CyclopsHelmHUDManager __instance)
+        public static void Postfix(CyclopsHelmHUDManager __instance, ref bool ___hudActive)
         {
-            __instance.ReflectionSet("hudActive", true);
+            ___hudActive = true;
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

@@ -9,13 +9,18 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Player_Update_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(Player);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Update", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Player).GetMethod(nameof(Player.Update), BindingFlags.Public | BindingFlags.Instance);
+        private static DevConsole devConsoleInstance;
 
         public static void Postfix(Player __instance)
         {
             // TODO: Use proper way to check if input is free, because players can be editing labels etc.
-            if ((bool)((DevConsole)ReflectionHelper.ReflectionGet<DevConsole>(null, "instance", false, true)).ReflectionGet("state"))
+            if (!devConsoleInstance)
+            {
+                devConsoleInstance = (DevConsole)ReflectionHelper.ReflectionGet<DevConsole>(null, "instance", false, true);
+            }
+
+            if ((bool)devConsoleInstance.ReflectionGet("state", false, false))
             {
                 return;
             }
@@ -35,7 +40,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

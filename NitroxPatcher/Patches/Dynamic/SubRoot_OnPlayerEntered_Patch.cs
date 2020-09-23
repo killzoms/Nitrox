@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -7,15 +6,16 @@ using Harmony;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class SubRoot_OnPlayerEntered_Patch : NitroxPatch, IDynamicPatch
+    public class SubRoot_OnPlayerEntered_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(SubRoot);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("OnPlayerEntered", BindingFlags.Public | BindingFlags.Instance);
-        public static readonly OpCode START_INJECTION_CODE = OpCodes.Ldarg_0;
-        public static readonly OpCode START_INJECTION_CODE_INVINCIBLE = OpCodes.Stfld;
-        public static readonly FieldInfo LIVEMIXIN_INVINCIBLE = typeof(LiveMixin).GetField("invincible", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(SubRoot).GetMethod(nameof(SubRoot.OnPlayerEntered), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly FieldInfo liveMixinInvincibleField = typeof(LiveMixin).GetField(nameof(LiveMixin.invincible), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly FieldInfo subRootLiveField = typeof(SubRoot).GetField("live", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        /* There is a bug, where Subroot.live is not loaded when starting in a cyclops. Therefore this codepiece needs to check that and jump accordingly if not present
+        private static readonly OpCode startInjectionCode = OpCodes.Ldarg_0;
+        private static readonly OpCode startInjectionCodeInvincible = OpCodes.Stfld;
+
+        /* There is a bug, where Subroot.live is not loaded when starting in a cyclops. Therefore this code-piece needs to check that and jump accordingly if not present
          * 
          * For this change
          * 
@@ -36,26 +36,24 @@ namespace NitroxPatcher.Patches.Dynamic
             Label newJumpPoint = generator.DefineLabel();
             for (int i = 3; i < instructionList.Count; i++)
             {
-                if (instructionList[i].opcode == START_INJECTION_CODE_INVINCIBLE &&
-                    Equals(instructionList[i].operand, LIVEMIXIN_INVINCIBLE))
+                if (instructionList[i].opcode == startInjectionCodeInvincible &&
+                    Equals(instructionList[i].operand, liveMixinInvincibleField) &&
+                    instructionList[i - 3].opcode == startInjectionCode)
                 {
-                    if (instructionList[i - 3].opcode == START_INJECTION_CODE)
-                    {
-                        instructionList[i + 1].labels.Add(newJumpPoint);
-                        injectionPoint = i - 3;
-                    }
+                    instructionList[i + 1].labels.Add(newJumpPoint);
+                    injectionPoint = i - 3;
                 }
 
             }
             if (injectionPoint != 0)
             {
 
-                MethodInfo op_inequality_method = typeof(UnityEngine.Object).GetMethod("op_Inequality");
+                MethodInfo opInequalityMethod = typeof(UnityEngine.Object).GetMethod("op_Inequality");
                 List<CodeInstruction> injectedInstructions = new List<CodeInstruction> {
                                                                     new CodeInstruction(OpCodes.Ldarg_0),
-                                                                    new CodeInstruction(OpCodes.Ldfld, TARGET_CLASS.GetField("live", BindingFlags.NonPublic | BindingFlags.Instance)),
+                                                                    new CodeInstruction(OpCodes.Ldfld, subRootLiveField),
                                                                     new CodeInstruction(OpCodes.Ldnull),
-                                                                    new CodeInstruction(OpCodes.Call, op_inequality_method),
+                                                                    new CodeInstruction(OpCodes.Call, opInequalityMethod),
                                                                     new CodeInstruction(OpCodes.Brfalse, newJumpPoint)
                                                                     };
                 instructionList.InsertRange(injectionPoint, injectedInstructions);
@@ -65,7 +63,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

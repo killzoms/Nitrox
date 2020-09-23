@@ -10,9 +10,7 @@ namespace NitroxPatcher.Patches.Persistent
 {
     public class ProtobufSerializer_Serialize_Patch : NitroxPatch, IPersistentPatch
     {
-        private static readonly Type TARGET_TYPE = typeof(ProtobufSerializer);
-        private static readonly MethodInfo TARGET_METHOD = TARGET_TYPE.GetMethod("Serialize", BindingFlags.Instance | BindingFlags.NonPublic);
-
+        private static readonly MethodInfo targetMethod = typeof(ProtobufSerializer).GetMethod("Serialize", BindingFlags.NonPublic | BindingFlags.Instance);
         /// <summary>
         ///     This patch is in a hot path so it needs this optimization.
         /// </summary>
@@ -20,8 +18,7 @@ namespace NitroxPatcher.Patches.Persistent
 
         public static bool Prefix(Stream stream, object source, Type type)
         {
-            int key;
-            if (Multiplayer.Active && serializer.NitroxTypes.TryGetValue(type, out key))
+            if (Multiplayer.Active && serializer.NitroxTypes.TryGetValue(type, out int _))
             {
                 serializer.Serialize(stream, source);
                 return false;
@@ -32,7 +29,7 @@ namespace NitroxPatcher.Patches.Persistent
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

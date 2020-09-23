@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using NitroxModel.Packets;
 
-namespace NitroxModel.Packets.Exceptions
+namespace NitroxModel.Exceptions
 {
     [Serializable]
     public class UncorrelatedPacketException : Exception

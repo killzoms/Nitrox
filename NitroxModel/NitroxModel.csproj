@@ -95,8 +95,9 @@
     <Compile Include="DataStructures\NitroxId.cs" />
     <Compile Include="DataStructures\NitroxInt3.cs" />
     <Compile Include="DataStructures\OptionalEmpty.cs" />
-    <Compile Include="DataStructures\OptionalEmptyException.cs" />
-    <Compile Include="DataStructures\OptionalNullException.cs" />
+    <Compile Include="Exceptions\GameObjectNullException.cs" />
+    <Compile Include="Exceptions\OptionalEmptyException.cs" />
+    <Compile Include="Exceptions\OptionalNullException.cs" />
     <Compile Include="DataStructures\PriorityChain.cs" />
     <Compile Include="DataStructures\PriorityItem.cs" />
     <Compile Include="DataStructures\Surrogates\SerializationSurrogate.cs" />
@@ -174,7 +175,7 @@
     <Compile Include="Packets\EntityTransformUpdates.cs" />
     <Compile Include="Packets\ModuleAdded.cs" />
     <Compile Include="Packets\ModuleRemoved.cs" />
-    <Compile Include="Packets\Exceptions\UncorrelatedPacketException.cs" />
+    <Compile Include="Exceptions\UncorrelatedPacketException.cs" />
     <Compile Include="Packets\FabricatorBeginCrafting.cs" />
     <Compile Include="Packets\FabricatorItemPickup.cs" />
     <Compile Include="Packets\FireDoused.cs" />
@@ -237,5 +238,6 @@
       <Name>LiteNetLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

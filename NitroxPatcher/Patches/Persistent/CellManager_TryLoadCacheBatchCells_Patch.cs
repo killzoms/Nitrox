@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -7,27 +6,25 @@ using Harmony;
 
 namespace NitroxPatcher.Patches.Persistent
 {
-    class CellManager_TryLoadCacheBatchCells_Patch : NitroxPatch, IPersistentPatch
+    public class CellManager_TryLoadCacheBatchCells_Patch : NitroxPatch, IPersistentPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CellManager);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("TryLoadCacheBatchCells", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(CellManager).GetMethod(nameof(CellManager.TryLoadCacheBatchCells), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo largeWorldPathPrefixMethod = typeof(LargeWorldStreamer).GetProperty("pathPrefix", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
+        private static readonly MethodInfo largeWorldFallbackPrefixMethod = typeof(LargeWorldStreamer).GetProperty("fallbackPrefix", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
             List<CodeInstruction> instrList = instructions.ToList();
 
             Label pathPrefixJmp = generator.DefineLabel();
-
             Label labeledPathInstructionJmp = generator.DefineLabel();
-
             Label fallbackPrefixJmp = generator.DefineLabel();
-
             Label labeledFallbackInstructionJmp = generator.DefineLabel();
 
             for (int i = 0; i < instrList.Count; i++)
             {
                 CodeInstruction instruction = instrList[i];
-                if (instrList.Count > i + 2 && instrList[i + 2].opcode == OpCodes.Callvirt && instrList[i + 2].operand == (object)typeof(LargeWorldStreamer).GetProperty("pathPrefix", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
+                if (instrList.Count > i + 2 && instrList[i + 2].opcode == OpCodes.Callvirt && instrList[i + 2].operand == largeWorldPathPrefixMethod)
                 {
                     foreach (CodeInstruction instr in TranspilerHelper.IsMultiplayer(pathPrefixJmp, generator))
                     {
@@ -47,7 +44,7 @@ namespace NitroxPatcher.Patches.Persistent
                     yield return labeledCodeInstruction;
                     i += 3;
                 }
-                else if (instrList.Count > i + 2 && instrList[i + 2].opcode == OpCodes.Callvirt && instrList[i + 2].operand == (object)typeof(LargeWorldStreamer).GetProperty("fallbackPrefix", BindingFlags.Public | BindingFlags.Instance).GetGetMethod())
+                else if (instrList.Count > i + 2 && instrList[i + 2].opcode == OpCodes.Callvirt && instrList[i + 2].operand == largeWorldFallbackPrefixMethod)
                 {
                     foreach (CodeInstruction instr in TranspilerHelper.IsMultiplayer(fallbackPrefixJmp, generator))
                     {
@@ -76,7 +73,7 @@ namespace NitroxPatcher.Patches.Persistent
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

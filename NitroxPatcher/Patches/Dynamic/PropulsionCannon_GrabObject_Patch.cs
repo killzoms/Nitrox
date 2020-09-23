@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.GameLogic.HUD;
@@ -13,14 +12,12 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class PropulsionCannon_GrabObject_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(PropulsionCannon);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("GrabObject", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(PropulsionCannon).GetMethod(nameof(PropulsionCannon.GrabObject), BindingFlags.Public | BindingFlags.Instance);
 
-        private static NitroxId id;
         private static PropulsionCannon cannon;
         private static GameObject grabbedObject;
 
-        private static bool skipPrefixPatch = false;
+        private static bool skipPrefixPatch;
 
         public static bool Prefix(PropulsionCannon __instance, GameObject target)
         {
@@ -34,7 +31,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
             SimulationOwnership simulationOwnership = NitroxServiceLocator.LocateService<SimulationOwnership>();
 
-            id = NitroxEntity.GetId(grabbedObject);
+            NitroxId id = NitroxEntity.GetId(grabbedObject);
 
             if (simulationOwnership.HasExclusiveLock(id))
             {
@@ -65,7 +62,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

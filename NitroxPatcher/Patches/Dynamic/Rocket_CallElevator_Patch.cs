@@ -5,13 +5,12 @@ using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
 using NitroxModel_Subnautica.Packets;
-using UnityEngine;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
     public class Rocket_CallElevator_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(Rocket).GetMethod("CallElevator", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Rocket).GetMethod(nameof(Rocket.CallElevator), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Prefix(Rocket __instance, out Rocket.RocketElevatorStates __state)
         {
@@ -22,17 +21,15 @@ namespace NitroxPatcher.Patches.Dynamic
         {
             if (__state != __instance.elevatorState)
             {
-                Rockets rocket = NitroxServiceLocator.LocateService<Rockets>();
-                GameObject gameObject = __instance.gameObject;
-                NitroxId id = NitroxEntity.GetId(gameObject);
+                NitroxId id = NitroxEntity.GetId(__instance.gameObject);
 
-                rocket.CallElevator(id, RocketElevatorPanel.EXTERNAL_PANEL, up);
+                NitroxServiceLocator.LocateService<Rockets>().CallElevator(id, RocketElevatorPanel.EXTERNAL_PANEL, up);
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
+            PatchMultiple(harmony, targetMethod, true, true, false);
         }
     }
 }

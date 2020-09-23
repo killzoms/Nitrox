@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.MonoBehaviours.Gui.Input;
 using NitroxClient.MonoBehaviours.Gui.Input.KeyBindings;
@@ -9,8 +8,7 @@ namespace NitroxPatcher.Patches.Persistent
 {
     public class GameInput_SetupDefaultKeyboardBindings_Patch : NitroxPatch, IPersistentPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(GameInput);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("SetupDefaultKeyboardBindings", BindingFlags.NonPublic | BindingFlags.Static);
+        private static readonly MethodInfo targetMethod = typeof(GameInput).GetMethod("SetupDefaultKeyboardBindings", BindingFlags.NonPublic | BindingFlags.Static);
 
         public static void Postfix()
         {
@@ -23,7 +21,7 @@ namespace NitroxPatcher.Patches.Persistent
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

@@ -76,7 +76,7 @@ namespace NitroxPatcher
 
         public static void Apply()
         {
-            Validate.NotNull(container, "No patches have been discovered yet! Run Execute() first.");
+            Validate.NotNull(container, $"No patches have been discovered yet! Run {nameof(Execute)} first.");
             if (isApplied)
             {
                 return;
@@ -97,7 +97,7 @@ namespace NitroxPatcher
         /// </summary>
         public static void Restore()
         {
-            Validate.NotNull(container, "No patches have been discovered yet! Run Execute() first.");
+            Validate.NotNull(container, $"No patches have been discovered yet! Run {nameof(Execute)} first.");
             if (!isApplied)
             {
                 return;
@@ -141,8 +141,7 @@ namespace NitroxPatcher
         {
             Log.Info("Applying Nitrox behaviours..");
 
-            GameObject nitroxRoot = new GameObject();
-            nitroxRoot.name = "Nitrox";
+            GameObject nitroxRoot = new GameObject { name = "Nitrox" };
             nitroxRoot.AddComponent<NitroxBootstrapper>();
 
             Log.Info("Behaviours applied.");

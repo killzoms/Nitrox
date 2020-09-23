@@ -15,7 +15,7 @@ namespace NitroxTest.Patcher.Patches
         public void Sanity()
         {
             List<CodeInstruction> instructions = PatchTestHelper.GenerateDummyInstructions(100);
-            instructions.Add(new CodeInstruction(BuilderTool_HandleInput_Patch.INJECTION_OPCODE, BuilderTool_HandleInput_Patch.INJECTION_OPERAND));
+            instructions.Add(new CodeInstruction(BuilderTool_HandleInput_Patch.injectionOpCode, BuilderTool_HandleInput_Patch.injectionOperand));
 
             IEnumerable<CodeInstruction> result = BuilderTool_HandleInput_Patch.Transpiler(null, instructions);
 
@@ -25,8 +25,8 @@ namespace NitroxTest.Patcher.Patches
         [TestMethod]
         public void InjectionSanity()
         {
-            ReadOnlyCollection<CodeInstruction> beforeInstructions = PatchTestHelper.GetInstructionsFromMethod((DynamicMethod)BuilderTool_HandleInput_Patch.TARGET_METHOD);
-            IEnumerable<CodeInstruction> result = BuilderTool_HandleInput_Patch.Transpiler(BuilderTool_HandleInput_Patch.TARGET_METHOD, beforeInstructions);
+            ReadOnlyCollection<CodeInstruction> beforeInstructions = PatchTestHelper.GetInstructionsFromMethod((DynamicMethod)BuilderTool_HandleInput_Patch.targetMethod);
+            IEnumerable<CodeInstruction> result = BuilderTool_HandleInput_Patch.Transpiler(BuilderTool_HandleInput_Patch.targetMethod, beforeInstructions);
 
             Assert.IsTrue(beforeInstructions.Count < result.Count());
         }

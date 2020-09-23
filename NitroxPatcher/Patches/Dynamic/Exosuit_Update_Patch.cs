@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -10,15 +9,14 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Exosuit_Update_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(Exosuit);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Update", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Exosuit).GetMethod(nameof(Exosuit.Update), BindingFlags.Public | BindingFlags.Instance);
 
-        public static readonly OpCode INJECTION_OPCODE = OpCodes.Call;
-        public static readonly object INJECTION_OPERAND = TARGET_CLASS.GetMethod("UpdateSounds", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly OpCode injectionOpCode = OpCodes.Call;
+        private static readonly object injectionOperand = typeof(Exosuit).GetMethod("UpdateSounds", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND);
+            Validate.NotNull(injectionOperand);
 
             List<CodeInstruction> instructionList = instructions.ToList();
 
@@ -37,7 +35,7 @@ namespace NitroxPatcher.Patches.Dynamic
                  *  if(!true)
                  * 
                  */
-                if (instruction.opcode == INJECTION_OPCODE && instruction.operand == INJECTION_OPERAND)
+                if (instruction.opcode == injectionOpCode && instruction.operand == injectionOperand)
                 {
                     i++; //increment to ldloc.2 (loading flag2 on evaluation stack)
                     CodeInstruction ldFlag2 = instructionList[i];
@@ -52,7 +50,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

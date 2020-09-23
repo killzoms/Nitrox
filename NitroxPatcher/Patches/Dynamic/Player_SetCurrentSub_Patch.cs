@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
@@ -11,14 +10,13 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Player_SetCurrentSub_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(Player);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("SetCurrentSub", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Player).GetMethod(nameof(Player.SetCurrentSub), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Prefix(SubRoot sub)
         {
             NitroxId subId = null;
 
-            if (sub != null)
+            if (sub)
             {
                 subId = NitroxEntity.GetId(sub.gameObject);
             }
@@ -28,7 +26,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

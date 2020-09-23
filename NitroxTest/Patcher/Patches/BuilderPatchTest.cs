@@ -16,8 +16,8 @@ namespace NitroxTest.Patcher.Patches
         public void Sanity()
         {
             List<CodeInstruction> instructions = PatchTestHelper.GenerateDummyInstructions(100);
-            instructions.Add(new CodeInstruction(Builder_TryPlace_Patch.PLACE_BASE_INJECTION_OPCODE, Builder_TryPlace_Patch.PLACE_BASE_INJECTION_OPERAND));
-            instructions.Add(new CodeInstruction(Builder_TryPlace_Patch.PLACE_FURNITURE_INJECTION_OPCODE, Builder_TryPlace_Patch.PLACE_FURNITURE_INJECTION_OPERAND));
+            instructions.Add(new CodeInstruction(Builder_TryPlace_Patch.placeBaseInjectionOpCode, Builder_TryPlace_Patch.placeBaseInjectionOperand));
+            instructions.Add(new CodeInstruction(Builder_TryPlace_Patch.placeFurnitureInjectionOpCode, Builder_TryPlace_Patch.placeFurnitureInjectionOperand));
 
             IEnumerable<CodeInstruction> result = Builder_TryPlace_Patch.Transpiler(null, instructions);
             Assert.AreEqual(120, result.Count());

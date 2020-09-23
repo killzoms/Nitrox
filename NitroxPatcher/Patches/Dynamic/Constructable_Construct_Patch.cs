@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxModel.Core;
@@ -9,8 +8,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Constructable_Construct_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(Constructable);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Construct");
+        private static readonly MethodInfo targetMethod = typeof(Constructable).GetMethod(nameof(Constructable.Construct), BindingFlags.Public | BindingFlags.Instance);
 
         private static Base lastTargetBase;
         private static Int3 lastTargetBaseOffset;
@@ -34,7 +32,7 @@ namespace NitroxPatcher.Patches.Dynamic
             else
             {
                 lastTargetBase = null;
-                lastTargetBaseOffset = default(Int3);
+                lastTargetBaseOffset = default;
             }
 
             return true;
@@ -50,7 +48,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
+            PatchMultiple(harmony, targetMethod, true, true, false);
         }
     }
 }

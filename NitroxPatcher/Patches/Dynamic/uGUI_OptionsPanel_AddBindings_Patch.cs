@@ -9,8 +9,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class uGUI_OptionsPanel_AddBindings_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(uGUI_OptionsPanel);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("AddBindings", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(uGUI_OptionsPanel).GetMethod("AddBindings", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static void Postfix(uGUI_OptionsPanel __instance, int tabIndex, GameInput.Device device)
         {
@@ -27,7 +26,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

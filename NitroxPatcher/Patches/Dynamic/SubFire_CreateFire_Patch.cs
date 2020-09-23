@@ -15,10 +15,9 @@ namespace NitroxPatcher.Patches.Dynamic
     ///     unlike <see cref="SubRoot.OnTakeDamage(DamageInfo)" />, fires
     ///     can be created outside of <see cref="SubFire.OnTakeDamage(DamageInfo)" />
     /// </summary>
-    internal class SubFire_CreateFire_Patch : NitroxPatch, IDynamicPatch
+    public class SubFire_CreateFire_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(SubFire);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("CreateFire", BindingFlags.Instance | BindingFlags.Public);
+        private static readonly MethodInfo targetMethod = typeof(SubFire).GetMethod(nameof(SubFire.CreateFire), BindingFlags.Public | BindingFlags.Instance);
 
         public static bool Prefix(SubFire __instance, SubFire.RoomFire startInRoom, out bool __state)
         {
@@ -30,7 +29,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public static void Postfix(SubFire __instance, SubFire.RoomFire startInRoom, bool __state)
         {
-            // Spent way too much time trying to get around a bug in dnspy that doesn't allow me to propery edit this method, so I'm going with the hacky solution.
+            // Spent way too much time trying to get around a bug in dnspy that doesn't allow me to properly edit this method, so I'm going with the hacky solution.
             // Every time a Fire is created, the whole list of SubFire.availableNodes is cleared, then populated with any transforms that have 0 childCount. 
             // Next, it chooses a random index, then spawns a fire in that node.
             // We can easily find where it is because it'll be the only Transform in SubFire.availableNodes with a childCount > 0
@@ -45,7 +44,6 @@ namespace NitroxPatcher.Patches.Dynamic
                     if (transform.childCount > 0)
                     {
                         int nodeIndex = Array.IndexOf(roomFiresDict[startInRoom.roomLinks.room].spawnNodes, transform);
-                        Fire fire = transform.GetComponentInChildren<Fire>();
                         fires.OnCreate(transform.GetComponentInChildren<Fire>(), startInRoom, nodeIndex);
                         return;
                     }
@@ -55,7 +53,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
+            PatchMultiple(harmony, targetMethod, true, true, false);
         }
     }
 }

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class EnergyMixin_SpawnDefault_Patch : NitroxPatch, IDynamicPatch
+    public class EnergyMixin_SpawnDefault_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(EnergyMixin);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("SpawnDefault", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(EnergyMixin).GetMethod(nameof(EnergyMixin.SpawnDefault), BindingFlags.Public | BindingFlags.Instance);
 
         public static bool Prefix(EnergyMixin __instance)
         {
-            //Try to figure out if the default battery is spawned from a vehicle or cyclops
+            //Try to figure out if the default battery is spawned for a vehicle or cyclops
             if (__instance.gameObject.GetComponent<Vehicle>())
             {
                 return false;
@@ -30,7 +28,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

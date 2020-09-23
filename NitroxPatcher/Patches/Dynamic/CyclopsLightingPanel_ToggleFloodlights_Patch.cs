@@ -10,8 +10,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class CyclopsLightingPanel_ToggleFloodlights_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CyclopsLightingPanel);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("ToggleFloodlights", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(CyclopsLightingPanel).GetMethod(nameof(CyclopsLightingPanel.ToggleFloodlights), BindingFlags.Public | BindingFlags.Instance);
 
         public static bool Prefix(CyclopsLightingPanel __instance, out bool __state)
         {
@@ -30,7 +29,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
+            PatchMultiple(harmony, targetMethod, true, true, false);
         }
     }
 }

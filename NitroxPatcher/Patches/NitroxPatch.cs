@@ -19,26 +19,26 @@ namespace NitroxPatcher.Patches
             }
         }
 
-        public HarmonyMethod GetHarmonyMethod(string methodName)
+        private HarmonyMethod GetHarmonyMethod(string methodName)
         {
             MethodInfo method = GetType().GetMethod(methodName, BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
             Validate.NotNull(method, $"Patcher: Patch method \"{methodName}\" cannot be found");
             return new HarmonyMethod(method);
         }
 
-        protected void PatchTranspiler(HarmonyInstance harmony, MethodBase targetMethod, string transpilerMethod = "Transpiler")
+        protected void PatchTranspiler(HarmonyInstance harmony, MethodBase targetMethod)
         {
-            PatchMultiple(harmony, targetMethod, null, null, transpilerMethod);
+            PatchMultiple(harmony, targetMethod, null, null, "Transpiler");
         }
 
-        protected void PatchPrefix(HarmonyInstance harmony, MethodBase targetMethod, string prefixMethod = "Prefix")
+        protected void PatchPrefix(HarmonyInstance harmony, MethodBase targetMethod)
         {
-            PatchMultiple(harmony, targetMethod, prefixMethod);
+            PatchMultiple(harmony, targetMethod, "Prefix");
         }
 
-        protected void PatchPostfix(HarmonyInstance harmony, MethodBase targetMethod, string postfixMethod = "Postfix")
+        protected void PatchPostfix(HarmonyInstance harmony, MethodBase targetMethod)
         {
-            PatchMultiple(harmony, targetMethod, null, postfixMethod);
+            PatchMultiple(harmony, targetMethod, null, "Postfix");
         }
 
         protected void PatchMultiple(HarmonyInstance harmony, MethodBase targetMethod, bool prefix, bool postfix, bool transpiler)
@@ -50,8 +50,7 @@ namespace NitroxPatcher.Patches
             PatchMultiple(harmony, targetMethod, prefixMethod, postfixMethod, transpilerMethod);
         }
 
-        protected void PatchMultiple(HarmonyInstance harmony, MethodBase targetMethod,
-            string prefixMethod = null, string postfixMethod = null, string transpilerMethod = null)
+        private void PatchMultiple(HarmonyInstance harmony, MethodBase targetMethod, string prefixMethod = null, string postfixMethod = null, string transpilerMethod = null)
         {
             Validate.NotNull(targetMethod, "Target method cannot be null");
 

@@ -1,31 +1,25 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
-using NitroxModel.Helper;
+using UnityEngine;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
     class CyclopsHelmHUDManager_Start_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CyclopsHelmHUDManager);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(CyclopsHelmHUDManager).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public static void Postfix(CyclopsHelmHUDManager __instance)
+        private static readonly int engineOn = Animator.StringToHash("EngineOn");
+        private static readonly int engineOff = Animator.StringToHash("EngineOff");
+
+        public static void Postfix(CyclopsHelmHUDManager __instance, ref bool ___hudActive)
         {
-            __instance.ReflectionSet("hudActive", true);
-            if (__instance.motorMode.engineOn)
-            {
-                __instance.engineToggleAnimator.SetTrigger("EngineOn");
-            }
-            else
-            {
-                __instance.engineToggleAnimator.SetTrigger("EngineOff");
-            }
+            ___hudActive = true;
+            __instance.engineToggleAnimator.SetTrigger(__instance.motorMode.engineOn ? engineOn : engineOff);
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

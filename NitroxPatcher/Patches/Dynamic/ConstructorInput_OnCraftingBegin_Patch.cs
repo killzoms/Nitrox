@@ -12,35 +12,36 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class ConstructorInput_OnCraftingBegin_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(ConstructorInput);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("OnCraftingBegin", BindingFlags.NonPublic | BindingFlags.Instance);
+        internal static readonly MethodInfo targetMethod = typeof(ConstructorInput).GetMethod("OnCraftingBegin", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public static readonly OpCode INJECTION_OPCODE = OpCodes.Callvirt;
-        public static readonly object INJECTION_OPERAND = typeof(Constructor).GetMethod("SendBuildBots", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(GameObject) }, null);
+        internal static readonly OpCode injectionOpCode = OpCodes.Callvirt;
+        internal static readonly object injectionOperand = typeof(Constructor).GetMethod(nameof(Constructor.SendBuildBots), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(GameObject) }, null);
+
+        private static readonly MethodInfo transientLocalObjectManagerAddMethod = typeof(TransientLocalObjectManager).GetMethod(nameof(Add), BindingFlags.Static | BindingFlags.Public, null, new Type[] { TransientObjectType.CONSTRUCTOR_INPUT_CRAFTED_GAMEOBJECT.GetType(), typeof(object) }, null);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND);
+            Validate.NotNull(injectionOperand);
 
             foreach (CodeInstruction instruction in instructions)
             {
                 yield return instruction;
 
-                if (instruction.opcode.Equals(INJECTION_OPCODE) && instruction.operand.Equals(INJECTION_OPERAND))
+                if (instruction.opcode.Equals(injectionOpCode) && instruction.operand.Equals(injectionOperand))
                 {
                     /*
                      * TransientLocalObjectManager.Add(TransientLocalObjectManager.TransientObjectType.CONSTRUCTOR_INPUT_CRAFTED_GAMEOBJECT, gameObject);
                      */
                     yield return new CodeInstruction(OpCodes.Ldc_I4_0);
                     yield return original.Ldloc<GameObject>(0);
-                    yield return new CodeInstruction(OpCodes.Call, typeof(TransientLocalObjectManager).GetMethod("Add", BindingFlags.Static | BindingFlags.Public, null, new Type[] { TransientObjectType.CONSTRUCTOR_INPUT_CRAFTED_GAMEOBJECT.GetType(), typeof(object) }, null));
+                    yield return new CodeInstruction(OpCodes.Call, transientLocalObjectManagerAddMethod);
                 }
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

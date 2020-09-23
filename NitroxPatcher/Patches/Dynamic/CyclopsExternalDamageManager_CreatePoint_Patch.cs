@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
@@ -9,8 +8,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     class CyclopsExternalDamageManager_CreatePoint_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CyclopsExternalDamageManager);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("CreatePoint", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(CyclopsExternalDamageManager).GetMethod("CreatePoint", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static bool Prefix(CyclopsExternalDamageManager __instance, out bool __state)
         {
@@ -30,7 +28,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
+            PatchMultiple(harmony, targetMethod, true, true, false);
         }
     }
 }

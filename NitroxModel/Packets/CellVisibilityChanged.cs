@@ -20,7 +20,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[CellVisibilityChanged - PlayerID: {PlayerId}, Added: ({string.Join(", ", Added.ToList())}), Removed: ({string.Join(", ", Removed.ToList())})]";
+            return $"[CellVisibilityChanged - PlayerID: {PlayerId}, Added: {Added.Length}, Removed: {Removed.Length}]";
         }
     }
 }

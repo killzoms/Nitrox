@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
@@ -14,19 +13,17 @@ namespace NitroxPatcher.Patches.Dynamic
      */
     class CyclopsFireSuppressionButton_StartCooldown_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CyclopsFireSuppressionSystemButton);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("StartCooldown", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(CyclopsFireSuppressionSystemButton).GetMethod(nameof(CyclopsFireSuppressionSystemButton.StartCooldown), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Postfix(CyclopsFireSuppressionSystemButton __instance)
         {
-            SubRoot cyclops = __instance.subRoot;
-            NitroxId id = NitroxEntity.GetId(cyclops.gameObject);
+            NitroxId id = NitroxEntity.GetId(__instance.subRoot.gameObject);
             NitroxServiceLocator.LocateService<Cyclops>().BroadcastActivateFireSuppression(id);
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

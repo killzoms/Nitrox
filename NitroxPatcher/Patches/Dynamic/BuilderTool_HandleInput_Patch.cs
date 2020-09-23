@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Harmony;
@@ -11,35 +10,37 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class BuilderTool_HandleInput_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(BuilderTool);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("HandleInput", BindingFlags.NonPublic | BindingFlags.Instance);
+        internal static readonly MethodInfo targetMethod = typeof(BuilderTool).GetMethod("HandleInput", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public static readonly OpCode INJECTION_OPCODE = OpCodes.Callvirt;
-        public static readonly object INJECTION_OPERAND = typeof(Constructable).GetMethod("SetState", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo componentGetGameObjectMethod = typeof(Component).GetMethod("get_gameObject", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo buildingDeconstructionBeginMethod = typeof(Building).GetMethod(nameof(Building.DeconstructionBegin), BindingFlags.Public | BindingFlags.Instance);
+
+        internal static readonly OpCode injectionOpCode = OpCodes.Callvirt;
+        internal static readonly object injectionOperand = typeof(Constructable).GetMethod(nameof(Constructable.SetState), BindingFlags.Public | BindingFlags.Instance);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND);
+            Validate.NotNull(injectionOperand);
 
             foreach (CodeInstruction instruction in instructions)
             {
                 yield return instruction;
-                if (instruction.opcode.Equals(INJECTION_OPCODE) && instruction.operand.Equals(INJECTION_OPERAND))
+                if (instruction.opcode.Equals(injectionOpCode) && instruction.operand.Equals(injectionOperand))
                 {
                     /*
                      * Multiplayer.Logic.Building.DeconstructionBegin(constructable.gameObject);
                      */
                     yield return TranspilerHelper.LocateService<Building>();
                     yield return original.Ldloc<Constructable>();
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(Component).GetMethod("get_gameObject", BindingFlags.Instance | BindingFlags.Public));
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(Building).GetMethod("DeconstructionBegin", BindingFlags.Public | BindingFlags.Instance));
+                    yield return new CodeInstruction(OpCodes.Callvirt, componentGetGameObjectMethod);
+                    yield return new CodeInstruction(OpCodes.Callvirt, buildingDeconstructionBeginMethod);
                 }
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

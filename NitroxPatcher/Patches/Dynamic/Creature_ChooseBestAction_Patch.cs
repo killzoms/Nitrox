@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
@@ -10,10 +9,9 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Creature_ChooseBestAction_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(Creature);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("ChooseBestAction", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Creature).GetMethod("ChooseBestAction", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private static CreatureAction previousAction;
+        //private static CreatureAction previousAction;
 
         public static bool Prefix(Creature __instance, ref CreatureAction __result)
         {
@@ -21,7 +19,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
             if (NitroxServiceLocator.LocateService<SimulationOwnership>().HasAnyLockType(id))
             {
-                previousAction = (CreatureAction)typeof(Creature).GetField("prevBestAction", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
+                //previousAction = (CreatureAction)typeof(Creature).GetField("prevBestAction", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(__instance);
                 return true;
             }
 
@@ -36,16 +34,16 @@ namespace NitroxPatcher.Patches.Dynamic
 
             if (NitroxServiceLocator.LocateService<SimulationOwnership>().HasAnyLockType(id))
             {
-                if (previousAction != __result)
-                {
-                    // Multiplayer.Logic.AI.CreatureActionChanged(id, __result);
-                }
+                //if (previousAction != __result)
+                //{
+                //    // Multiplayer.Logic.AI.CreatureActionChanged(id, __result);
+                //}
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
+            PatchMultiple(harmony, targetMethod, true, true, false);
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Packets;
-using NitroxModel.Packets.Exceptions;
+using NitroxModel.Exceptions;
 
 namespace NitroxModel.Helper
 {

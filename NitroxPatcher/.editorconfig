@@ -1,0 +1,16 @@
+# Code files
+[*.{cs,vb}]
+
+resharper_unused_type_global_highlighting = none
+
+# S101: Ignore types should be named in PascalCase
+dotnet_diagnostic.S101.severity = none
+
+# S125: Ignore sections of code should not be commented out
+dotnet_diagnostic.S125.severity = none
+
+# S3400: Methods should not return constants
+dotnet_diagnostic.S3400.severity = none
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = none

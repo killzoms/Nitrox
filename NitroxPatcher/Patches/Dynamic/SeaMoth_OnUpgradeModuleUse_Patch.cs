@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.Communication;
 using NitroxClient.Communication.Abstract;
@@ -11,20 +10,21 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class SeaMoth_OnUpgradeModuleUse_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(SeaMoth).GetMethod("OnUpgradeModuleUse", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(SeaMoth).GetMethod("OnUpgradeModuleUse", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static bool Prefix(SeaMoth __instance, TechType techType, int slotID, out PacketSuppressor<ItemContainerRemove> __state)
         {
             __state = null;
 
-            if (techType == TechType.SeamothElectricalDefense)
+            switch (techType)
             {
-                NitroxServiceLocator.LocateService<SeamothModulesEvent>().BroadcastElectricalDefense(techType, slotID, __instance);
-            }
-            else if (techType == TechType.SeamothTorpedoModule)
-            {
-                __state = NitroxServiceLocator.LocateService<IPacketSender>().Suppress<ItemContainerRemove>();
-                NitroxServiceLocator.LocateService<SeamothModulesEvent>().BroadcastTorpedoLaunch(techType, slotID, __instance);
+                case TechType.SeamothElectricalDefense:
+                    NitroxServiceLocator.LocateService<SeamothModulesEvent>().BroadcastElectricalDefense(techType, slotID, __instance);
+                    break;
+                case TechType.SeamothTorpedoModule:
+                    __state = NitroxServiceLocator.LocateService<IPacketSender>().Suppress<ItemContainerRemove>();
+                    NitroxServiceLocator.LocateService<SeamothModulesEvent>().BroadcastTorpedoLaunch(techType, slotID, __instance);
+                    break;
             }
 
             return true;
@@ -37,7 +37,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
+            PatchMultiple(harmony, targetMethod, true, true, false);
         }
     }
 }

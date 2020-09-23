@@ -8,6 +8,8 @@ using NitroxClient.MonoBehaviours;
 using NitroxClient.Unity.Helper;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
+using NitroxModel.Exceptions;
+using NitroxModel.Logger;
 using NitroxModel_Subnautica.DataStructures.GameLogic;
 using UnityEngine;
 
@@ -15,16 +17,14 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class ToggleLights_SetLightsActive_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(ToggleLights);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("SetLightsActive", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(ToggleLights).GetMethod(nameof(ToggleLights.SetLightsActive), BindingFlags.Public | BindingFlags.Instance);
 
         private static readonly HashSet<Type> syncedParents = new HashSet<Type>()
         {
             typeof(SeaMoth),
             typeof(Seaglide),
             typeof(FlashLight),
-            // LEDLight uses ToggleLights, but does not provide a method to toggle them.
-            typeof(LEDLight)
+            typeof(LEDLight)    // LEDLight uses ToggleLights, but does not provide a method to toggle them.
         };
 
         public static bool Prefix(ToggleLights __instance, out bool __state)
@@ -58,6 +58,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
                 if (!gameObject)
                 {
+                    Log.Error(new GameObjectNullException());
                     DebugUtils.PrintHierarchy(__instance.gameObject);
                 }
 
@@ -73,29 +74,29 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchMultiple(harmony, TARGET_METHOD, true, true, false);
+            PatchMultiple(harmony, targetMethod, true, true, false);
         }
 
-        public class LightToggleContainer
-        {
-            public readonly Type ComponentType;
-            public readonly bool InParent;
+        //public class LightToggleContainer
+        //{
+        //    public readonly Type ComponentType;
+        //    public readonly bool InParent;
 
-            public LightToggleContainer(Type componentType, bool inParent)
-            {
-                ComponentType = componentType;
-                InParent = inParent;
-            }
+        //    public LightToggleContainer(Type componentType, bool inParent)
+        //    {
+        //        ComponentType = componentType;
+        //        InParent = inParent;
+        //    }
 
-            public Component Get(GameObject go)
-            {
-                if (InParent)
-                {
-                    return go.GetComponentInParent(ComponentType);
-                }
+        //    public Component Get(GameObject go)
+        //    {
+        //        if (InParent)
+        //        {
+        //            return go.GetComponentInParent(ComponentType);
+        //        }
 
-                return go.GetComponent(ComponentType);
-            }
-        }
+        //        return go.GetComponent(ComponentType);
+        //    }
+        //}
     }
 }

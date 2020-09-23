@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Harmony;
@@ -11,15 +10,18 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class CrafterLogic_TryPickup_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CrafterLogic);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("TryPickup", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(CrafterLogic).GetMethod(nameof(CrafterLogic.TryPickup), BindingFlags.Public | BindingFlags.Instance);
 
-        public static readonly OpCode INJECTION_OPCODE = OpCodes.Stfld;
-        public static readonly object INJECTION_OPERAND = TARGET_CLASS.GetField("numCrafted", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly OpCode injectionOpCode = OpCodes.Stfld;
+        private static readonly object injectionOperand = typeof(CrafterLogic).GetField(nameof(CrafterLogic.numCrafted), BindingFlags.Public | BindingFlags.Instance);
+
+        private static readonly MethodInfo componentGetGameObjectMethod = typeof(Component).GetMethod("get_gameObject", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo craftingFabricatorItemPickedUpMethod = typeof(Crafting).GetMethod(nameof(Crafting.FabricatorItemPickedUp), BindingFlags.Public | BindingFlags.Instance);
+
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND, "Operand can not be null");
+            Validate.NotNull(injectionOperand, "Operand can not be null");
 
             bool injected = false;
 
@@ -27,7 +29,7 @@ namespace NitroxPatcher.Patches.Dynamic
             {
                 yield return instruction;
 
-                if (instruction.opcode.Equals(INJECTION_OPCODE) && instruction.operand.Equals(INJECTION_OPERAND) && !injected)
+                if (instruction.opcode.Equals(injectionOpCode) && instruction.operand.Equals(injectionOperand) && !injected)
                 {
                     injected = true;
 
@@ -36,16 +38,16 @@ namespace NitroxPatcher.Patches.Dynamic
                      */
                     yield return TranspilerHelper.LocateService<Crafting>();
                     yield return new CodeInstruction(OpCodes.Ldarg_0);
-                    yield return new CodeInstruction(OpCodes.Call, typeof(Component).GetMethod("get_gameObject", BindingFlags.Instance | BindingFlags.Public));
+                    yield return new CodeInstruction(OpCodes.Call, componentGetGameObjectMethod);
                     yield return original.Ldloc<TechType>();
-                    yield return new CodeInstruction(OpCodes.Callvirt, typeof(Crafting).GetMethod("FabricatorItemPickedUp", BindingFlags.Instance | BindingFlags.Public));
+                    yield return new CodeInstruction(OpCodes.Callvirt, craftingFabricatorItemPickedUpMethod);
                 }
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

@@ -2,6 +2,5 @@
 {
     public interface IPersistentPatch : INitroxPatch
     {
-
     }
 }

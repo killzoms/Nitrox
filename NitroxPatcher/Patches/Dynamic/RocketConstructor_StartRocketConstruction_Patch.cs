@@ -12,9 +12,10 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class RocketConstructor_StartRocketConstruction_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(RocketConstructor).GetMethod("StartRocketConstruction", BindingFlags.Public | BindingFlags.Instance);
-
-        public static readonly OpCode INJECTION_CODE = OpCodes.Stloc_2;
+        private static readonly MethodInfo targetMethod = typeof(RocketConstructor).GetMethod(nameof(RocketConstructor.StartRocketConstruction), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly FieldInfo rocketConstructorRocketField = typeof(RocketConstructor).GetField(nameof(RocketConstructor.rocket), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo startRocketConstructionCallbackMethod = typeof(RocketConstructor_StartRocketConstruction_Patch).GetMethod(nameof(Callback), BindingFlags.Public | BindingFlags.Static);
+        private static readonly OpCode injectionCode = OpCodes.Stloc_2;
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
@@ -29,14 +30,14 @@ namespace NitroxPatcher.Patches.Dynamic
 			     *      this.SendBuildBots(toBuild);
 		         * }
                  */
-                if (instruction.opcode == INJECTION_CODE)
+                if (instruction.opcode == injectionCode)
                 {
                     yield return new CodeInstruction(OpCodes.Ldarg_0);
-                    yield return new CodeInstruction(OpCodes.Ldfld, typeof(RocketConstructor).GetField("rocket", BindingFlags.Public | BindingFlags.Instance)); //this.rocket
+                    yield return new CodeInstruction(OpCodes.Ldfld, rocketConstructorRocketField); //this.rocket
                     yield return new CodeInstruction(OpCodes.Ldarg_0); //this
-                    yield return new CodeInstruction(OpCodes.Ldloc_0); //techtype
+                    yield return new CodeInstruction(OpCodes.Ldloc_0); //techType
                     yield return new CodeInstruction(OpCodes.Ldloc_2); //toBuild GO
-                    yield return new CodeInstruction(OpCodes.Call, typeof(RocketConstructor_StartRocketConstruction_Patch).GetMethod("Callback", BindingFlags.Static | BindingFlags.Public));
+                    yield return new CodeInstruction(OpCodes.Call, startRocketConstructionCallbackMethod);
                 }
 
             }
@@ -51,7 +52,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

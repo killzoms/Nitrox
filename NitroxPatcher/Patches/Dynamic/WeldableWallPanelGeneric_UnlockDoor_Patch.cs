@@ -8,9 +8,9 @@ using NitroxModel.DataStructures.GameLogic.Entities.Metadata;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class WeldableWallPanelGeneric_UnlockDoor_Patch : NitroxPatch, IDynamicPatch
+    public class WeldableWallPanelGeneric_UnlockDoor_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(WeldableWallPanelGeneric).GetMethod(nameof(WeldableWallPanelGeneric.UnlockDoor), BindingFlags.Instance | BindingFlags.Public);
+        private static readonly MethodInfo targetMethod = typeof(WeldableWallPanelGeneric).GetMethod(nameof(WeldableWallPanelGeneric.UnlockDoor), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Postfix(WeldableWallPanelGeneric __instance)
         {
@@ -18,15 +18,14 @@ namespace NitroxPatcher.Patches.Dynamic
             {
                 NitroxId id = NitroxEntity.GetId(__instance.gameObject);
                 WeldableWallPanelGenericMetadata weldableWallPanelGenericMetadata = new WeldableWallPanelGenericMetadata(__instance.liveMixin.health);
-                Entities entities = NitroxServiceLocator.LocateService<Entities>();
 
-                entities.BroadcastMetadataUpdate(id, weldableWallPanelGenericMetadata);
+                NitroxServiceLocator.LocateService<Entities>().BroadcastMetadataUpdate(id, weldableWallPanelGenericMetadata);
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

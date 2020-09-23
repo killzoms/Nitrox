@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
@@ -11,21 +10,18 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Sealed_Weld_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(Sealed);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Weld", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Sealed).GetMethod(nameof(Sealed.Weld), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Postfix(Sealed __instance)
         {
             NitroxId id = NitroxEntity.GetId(__instance.gameObject);
-            SealedDoorMetadata doorMetadata = new SealedDoorMetadata(__instance._sealed, __instance.openedAmount);
-            Entities entities = NitroxServiceLocator.LocateService<Entities>();
 
-            entities.BroadcastMetadataUpdate(id, doorMetadata);
+            NitroxServiceLocator.LocateService<Entities>().BroadcastMetadataUpdate(id, new SealedDoorMetadata(__instance._sealed, __instance.openedAmount));
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -9,12 +8,11 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class CyclopsShieldButton_OnClick_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CyclopsShieldButton);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("OnClick", BindingFlags.Public | BindingFlags.Instance);
-        public static readonly OpCode START_CUT_CODE = OpCodes.Ldsfld;
-        public static readonly OpCode START_CUT_CODE_CALL = OpCodes.Callvirt;
-        public static readonly FieldInfo PLAYER_MAIN_FIELD = typeof(Player).GetField("main", BindingFlags.Public | BindingFlags.Static);
-        public static readonly OpCode END_CUT_CODE = OpCodes.Ret;
+        private static readonly MethodInfo targetMethod = typeof(CyclopsShieldButton).GetMethod(nameof(CyclopsShieldButton.OnClick), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly OpCode startCutCode = OpCodes.Ldsfld;
+        private static readonly OpCode startCutCodeCall = OpCodes.Callvirt;
+        private static readonly FieldInfo playerMainField = typeof(Player).GetField(nameof(Player.main), BindingFlags.Public | BindingFlags.Static);
+        private static readonly OpCode endCutCode = OpCodes.Ret;
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
@@ -29,12 +27,12 @@ namespace NitroxPatcher.Patches.Dynamic
              */
             for (int i = 1; i < instructionList.Count; i++)
             {
-                if (instructionList[i - 1].opcode.Equals(START_CUT_CODE) && instructionList[i - 1].operand.Equals(PLAYER_MAIN_FIELD) && instructionList[i].opcode == START_CUT_CODE_CALL)
+                if (instructionList[i - 1].opcode.Equals(startCutCode) && instructionList[i - 1].operand.Equals(playerMainField) && instructionList[i].opcode == startCutCodeCall)
                 {
                     startCut = i - 1;
                 }
                 // Cut at the first return encountered
-                if (endCut == instructionList.Count && instructionList[i].opcode.Equals(END_CUT_CODE))
+                if (endCut == instructionList.Count && instructionList[i].opcode.Equals(endCutCode))
                 {
                     endCut = i;
                 }
@@ -49,7 +47,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

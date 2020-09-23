@@ -7,11 +7,9 @@ using NitroxModel_Subnautica.Packets;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class ExosuitDrillArm_OnUseDown_Patch : NitroxPatch, IDynamicPatch
+    public class ExosuitDrillArm_OnUseDown_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(ExosuitDrillArm);
-        public static readonly Type TARGET_INTERFACE = typeof(IExosuitArm);
-        public static readonly MethodInfo TARGET_METHOD_INTERFACE = TARGET_INTERFACE.GetMethod("OnUseDown");
+        private static readonly MethodInfo targetMethodInterface = typeof(IExosuitArm).GetMethod(nameof(IExosuitArm.OnUseDown));
 
         public static void Prefix(ExosuitDrillArm __instance)
         {
@@ -20,9 +18,8 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            InterfaceMapping interfaceMap = TARGET_CLASS.GetInterfaceMap(TARGET_INTERFACE);
-            int i = Array.IndexOf(interfaceMap.InterfaceMethods, TARGET_METHOD_INTERFACE);
-            MethodInfo targetMethod = interfaceMap.TargetMethods[i];
+            InterfaceMapping interfaceMap = typeof(ExosuitDrillArm).GetInterfaceMap(typeof(IExosuitArm));
+            MethodInfo targetMethod = interfaceMap.TargetMethods[Array.IndexOf(interfaceMap.InterfaceMethods, targetMethodInterface)];
             PatchPrefix(harmony, targetMethod);
         }
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
@@ -11,20 +10,20 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class DockedVehicleHandTarget_OnHandClick_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(DockedVehicleHandTarget);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("OnHandClick", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(DockedVehicleHandTarget).GetMethod(nameof(DockedVehicleHandTarget.OnHandClick), BindingFlags.Public | BindingFlags.Instance);
 
         private static DockedVehicleHandTarget dockedVehicle;
         private static VehicleDockingBay vehicleDockingBay;
         private static GUIHand guiHand;
-        private static bool skipPrefix = false;
+        private static bool skipPrefix;
+        private const string VEHICLE_BLOCKED_TEXT = "Another player is using this vehicle!";
 
         public static bool Prefix(DockedVehicleHandTarget __instance, GUIHand hand)
         {
             vehicleDockingBay = __instance.dockingBay;
             Vehicle vehicle = vehicleDockingBay.GetDockedVehicle();
 
-            if (skipPrefix || vehicle == null)
+            if (skipPrefix || !vehicle)
             {
                 return true;
             }
@@ -54,12 +53,12 @@ namespace NitroxPatcher.Patches.Dynamic
                 NitroxServiceLocator.LocateService<Vehicles>().BroadcastVehicleUndocking(vehicleDockingBay, vehicleDockingBay.GetDockedVehicle());
 
                 skipPrefix = true;
-                TARGET_METHOD.Invoke(dockedVehicle, new[] { guiHand });
+                targetMethod.Invoke(dockedVehicle, new[] { guiHand });
                 skipPrefix = false;
             }
             else
             {
-                HandReticle.main.SetInteractText("Another player is using this vehicle!");
+                HandReticle.main.SetInteractText(VEHICLE_BLOCKED_TEXT);
                 HandReticle.main.SetIcon(HandReticle.IconType.HandDeny, 1f);
                 dockedVehicle.isValidHandTarget = false;
             }
@@ -67,7 +66,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

@@ -43,8 +43,7 @@ namespace NitroxClient.GameLogic
             EscapePod.main.transform.position = escapePod.Location.ToUnity();
             EscapePod.main.playerSpawn.position = escapePod.Location.ToUnity() + playerSpawnRelativeToEscapePodPosition; // This Might not correctly handle rotated EscapePods
 
-            Rigidbody rigidbody = EscapePod.main.GetComponent<Rigidbody>();
-            if (rigidbody)
+            if (EscapePod.main.TryGetComponent(out Rigidbody rigidbody))
             {
                 Log.Debug("Freezing escape pod rigidbody");
                 rigidbody.constraints = RigidbodyConstraints.FreezeAll;
@@ -70,7 +69,7 @@ namespace NitroxClient.GameLogic
             }
         }
 
-        public void SyncEscapePodIds(List<EscapePodModel> escapePods)
+        public void SyncEscapePodIds(IEnumerable<EscapePodModel> escapePods)
         {
             foreach (EscapePodModel model in escapePods)
             {
@@ -84,16 +83,8 @@ namespace NitroxClient.GameLogic
         private GameObject CreateNewEscapePod(EscapePodModel model)
         {
             SuppressEscapePodAwakeMethod = true;
-            GameObject escapePod;
 
-            if (model.Id.Equals(myEscapePodId))
-            {
-                escapePod = EscapePod.main.gameObject;
-            }
-            else
-            {
-                escapePod = Object.Instantiate(EscapePod.main.gameObject);
-            }
+            GameObject escapePod = model.Id.Equals(myEscapePodId) ? EscapePod.main.gameObject : Object.Instantiate(EscapePod.main.gameObject);
 
             escapePod.transform.position = model.Location.ToUnity();
 
@@ -154,9 +145,10 @@ namespace NitroxClient.GameLogic
                 pod.animator.SetFloat(lifepodDamage, 1.0f);
                 pod.fixPanelGoal.Trigger();
                 pod.fixPanelPowerUp.Play();
-            } else
+            }
+            else
             {
-                Log.Warn("No escape pod to be repaired by id " + id);
+                Log.Warn($"No escape pod to be repaired by id {id}");
             }
         }
 
@@ -164,20 +156,20 @@ namespace NitroxClient.GameLogic
         {
             NitroxId id = null;
 
-            foreach(KeyValuePair<NitroxId, GameObject> dict in escapePodsById)
+            foreach (KeyValuePair<NitroxId, GameObject> dict in escapePodsById)
             {
-                if(NitroxEntity.GetId(dict.Value) == NitroxEntity.GetId(pod.gameObject))
+                if (NitroxEntity.GetId(dict.Value).Equals(NitroxEntity.GetId(pod.gameObject)))
                 {
-                    id = dict.Key; // we're looking for serverside id here
+                    id = dict.Key; // we're looking for server-side id here
                     break;
                 }
             }
 
             if (id != null)
             {
-                EscapePodRepair repair = new EscapePodRepair(id);
-                packetSender.Send(repair);
-            } else
+                packetSender.Send(new EscapePodRepair(id));
+            }
+            else
             {
                 Log.Warn("Couldn't find escape pod id on repair");
             }
@@ -198,10 +190,8 @@ namespace NitroxClient.GameLogic
 
         public void OnRadioRepairedByMe(Radio radio)
         {
-            // todo: can this apply to non-escape pod radios?
-
             NitroxId id = NitroxEntity.GetId(radio.gameObject);
-            
+
             EscapePodRadioRepair repair = new EscapePodRadioRepair(id);
             packetSender.Send(repair);
         }

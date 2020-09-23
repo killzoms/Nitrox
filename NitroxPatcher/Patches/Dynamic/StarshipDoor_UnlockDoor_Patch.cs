@@ -8,9 +8,9 @@ using NitroxModel.DataStructures.GameLogic.Entities.Metadata;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class StarshipDoor_UnlockDoor_Patch : NitroxPatch, IDynamicPatch
+    public class StarshipDoor_UnlockDoor_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(StarshipDoor).GetMethod(nameof(StarshipDoor.UnlockDoor), BindingFlags.Instance | BindingFlags.Public);
+        private static readonly MethodInfo targetMethod = typeof(StarshipDoor).GetMethod(nameof(StarshipDoor.UnlockDoor), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Prefix(StarshipDoor __instance)
         {
@@ -18,15 +18,14 @@ namespace NitroxPatcher.Patches.Dynamic
             {
                 NitroxId id = NitroxEntity.GetId(__instance.gameObject);
                 StarshipDoorMetadata starshipDoorMetadata = new StarshipDoorMetadata(!__instance.doorLocked, __instance.doorOpen);
-                Entities entities = NitroxServiceLocator.LocateService<Entities>();
 
-                entities.BroadcastMetadataUpdate(id, starshipDoorMetadata);
+                NitroxServiceLocator.LocateService<Entities>().BroadcastMetadataUpdate(id, starshipDoorMetadata);
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

@@ -8,25 +8,23 @@ using NitroxModel.DataStructures.GameLogic.Entities.Metadata;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class PrecursorKeyTerminal_OnHandClick_Patch : NitroxPatch, IDynamicPatch
+    public class PrecursorKeyTerminal_OnHandClick_Patch : NitroxPatch, IDynamicPatch
     {
-        private static readonly MethodInfo TARGET_METHOD = typeof(PrecursorKeyTerminal).GetMethod(nameof(PrecursorKeyTerminal.OnHandClick), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(PrecursorKeyTerminal).GetMethod(nameof(PrecursorKeyTerminal.OnHandClick), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Postfix(PrecursorKeyTerminal __instance)
         {
             if (__instance.slotted)
             {
                 NitroxId id = NitroxEntity.GetId(__instance.gameObject);
-                PrecursorKeyTerminalMetadata precursorKeyTerminalMetadata = new PrecursorKeyTerminalMetadata(__instance.slotted);
 
-                Entities entities = NitroxServiceLocator.LocateService<Entities>();
-                entities.BroadcastMetadataUpdate(id, precursorKeyTerminalMetadata);
+                NitroxServiceLocator.LocateService<Entities>().BroadcastMetadataUpdate(id, new PrecursorKeyTerminalMetadata(__instance.slotted));
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

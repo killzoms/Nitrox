@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.GameLogic.HUD;
@@ -13,8 +12,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class PilotingChair_OnHandClick_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(PilotingChair);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("OnHandClick", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(PilotingChair).GetMethod(nameof(PilotingChair.OnHandClick), BindingFlags.Public | BindingFlags.Instance);
 
         private static PilotingChair pilotingChair;
         private static GUIHand guiHand;
@@ -52,7 +50,7 @@ namespace NitroxPatcher.Patches.Dynamic
             if (lockAquired)
             {
                 skipPrefix = true;
-                TARGET_METHOD.Invoke(pilotingChair, new[] { guiHand });
+                targetMethod.Invoke(pilotingChair, new[] { guiHand });
                 skipPrefix = false;
             }
             else
@@ -64,7 +62,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

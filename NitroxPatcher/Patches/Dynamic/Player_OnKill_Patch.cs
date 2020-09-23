@@ -8,29 +8,27 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Player_OnKill_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(Player).GetMethod(nameof(Player.OnKill), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Player).GetMethod(nameof(Player.OnKill), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo skipMethod = typeof(GameModeUtils).GetMethod(nameof(GameModeUtils.IsPermadeath), BindingFlags.Public | BindingFlags.Static);
 
-        public static readonly MethodInfo SKIP_METHOD = typeof(GameModeUtils).GetMethod(nameof(GameModeUtils.IsPermadeath), BindingFlags.Public | BindingFlags.Static);
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> instructionList = instructions.ToList();
-            /**
-            * Skips
-            * if (GameModeUtils.IsPermadeath())
-            * {
-            *      SaveLoadManager.main.ClearSlotAsync(SaveLoadManager.main.GetCurrentSlot());
-            *      this.EndGame();
-            *      return;
-            * }
-            */
-            for (int i = 0; i < instructionList.Count; i++)
-            {
-                CodeInstruction instr = instructionList[i];
+            // Skips:
+            // if (GameModeUtils.IsPermadeath())
+            // {
+            //      SaveLoadManager.main.ClearSlotAsync(SaveLoadManager.main.GetCurrentSlot());
+            //      this.EndGame();
+            //      return;
+            // }
 
-                if (instr.opcode == OpCodes.Call && instr.operand.Equals(SKIP_METHOD))
+            foreach (CodeInstruction instr in instructions.ToList())
+            {
+                if (instr.opcode == OpCodes.Call && instr.operand.Equals(skipMethod))
                 {
-                    CodeInstruction newInstr = new CodeInstruction(OpCodes.Ldc_I4_0);
-                    newInstr.labels = instr.labels;
+                    CodeInstruction newInstr = new CodeInstruction(OpCodes.Ldc_I4_0)
+                    {
+                        labels = instr.labels
+                    };
                     yield return newInstr;
                 }
                 else
@@ -42,7 +40,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

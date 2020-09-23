@@ -1,4 +1,5 @@
-﻿using Harmony;
+﻿using System.Reflection;
+using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
 using NitroxClient.Unity.Helper;
@@ -8,19 +9,16 @@ using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel_Subnautica.DataStructures.GameLogic;
-using System.Reflection;
-using UnityEngine;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
     public class Rocket_Start_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(Rocket).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Rocket).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static bool Prefix(Rocket __instance)
         {
-            GameObject gameObject = __instance.gameObject;
-            NitroxId id = NitroxEntity.GetId(gameObject);
+            NitroxId id = NitroxEntity.GetId(__instance.gameObject);
             Optional<NeptuneRocketModel> model = NitroxServiceLocator.LocateService<Vehicles>().TryGetVehicle<NeptuneRocketModel>(id);
 
             if (!model.HasValue)
@@ -31,7 +29,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
             __instance.currentRocketStage = model.Value.CurrentStage;
 
-            RocketConstructor rocketConstructor = gameObject.GetComponentInChildren<RocketConstructor>(true);
+            RocketConstructor rocketConstructor = __instance.gameObject.GetComponentInChildren<RocketConstructor>(true);
             if (rocketConstructor)
             {
                 NitroxEntity.SetNewId(rocketConstructor.gameObject, model.Value.ConstructorId);
@@ -53,7 +51,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

@@ -4,8 +4,10 @@ using NitroxClient.GameLogic;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class DevConsole_Update_Patch : NitroxPatch, IDynamicPatch
+    public class DevConsole_Update_Patch : NitroxPatch, IDynamicPatch
     {
+        private static readonly MethodInfo targetMethod = typeof(DevConsole).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+
         public static void Prefix()
         {
             DevConsole.disableConsole = NitroxConsole.DisableConsole;
@@ -13,7 +15,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, typeof(DevConsole).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic));
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

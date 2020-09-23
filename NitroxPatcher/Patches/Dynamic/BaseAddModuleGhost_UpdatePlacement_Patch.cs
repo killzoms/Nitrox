@@ -11,20 +11,19 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class BaseAddModuleGhost_UpdatePlacement_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(BaseAddModuleGhost);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("UpdatePlacement", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(BaseAddModuleGhost).GetMethod(nameof(BaseAddModuleGhost.UpdatePlacement), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo getIsPlacingMethod = typeof(MultiplayerBuilder).GetMethod("get_isPlacing", BindingFlags.Public | BindingFlags.Static);
 
-        public static readonly OpCode INJECTION_OPCODE = OpCodes.Ldsfld;
-        public static readonly Type OPERAND_CLASS = typeof(Player);
-        public static readonly object INJECTION_OPERAND = OPERAND_CLASS.GetField("main", BindingFlags.Public | BindingFlags.Static);
+        private static readonly OpCode injectionOpCode = OpCodes.Ldsfld;
+        private static readonly object injectionOperand = typeof(Player).GetField(nameof(Player.main), BindingFlags.Public | BindingFlags.Static);
 
-        public static readonly OpCode INSTRUCTION_BEFORE_JUMP = OpCodes.Ldfld;
-        public static readonly object INSTRUCTION_BEFORE_JUMP_OPERAND = typeof(SubRoot).GetField("isBase", BindingFlags.Public | BindingFlags.Instance);
-        public static readonly OpCode JUMP_INSTRUCTION_TO_COPY = OpCodes.Brtrue;
+        private static readonly OpCode instructionBeforeJump = OpCodes.Ldfld;
+        private static readonly object instructionBeforeJumpOperand = typeof(SubRoot).GetField(nameof(SubRoot.isBase), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly OpCode jumpInstructionToCopy = OpCodes.Brtrue;
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND);
+            Validate.NotNull(injectionOperand);
 
             List<CodeInstruction> instructionList = instructions.ToList();
 
@@ -54,12 +53,12 @@ namespace NitroxPatcher.Patches.Dynamic
                     // First fetch the place we want to jump... this will be the same place as !main.currentSub.isBase
                     CodeInstruction jumpInstruction = GetJumpInstruction(instructionList, i);
 
-                    yield return new CodeInstruction(OpCodes.Call, typeof(MultiplayerBuilder).GetMethod("get_isPlacing", BindingFlags.Public | BindingFlags.Static));
+                    yield return new CodeInstruction(OpCodes.Call, getIsPlacingMethod);
                     yield return new CodeInstruction(OpCodes.Brtrue_S, jumpInstruction.operand); // copy the jump location
                 }
 
                 // We want to inject just after Player main = Player.main... if this is that instruction then we'll inject after the next opcode (stfld)
-                shouldInject = (instruction.opcode.Equals(INJECTION_OPCODE) && instruction.operand.Equals(INJECTION_OPERAND));
+                shouldInject = (instruction.opcode.Equals(injectionOpCode) && instruction.operand.Equals(injectionOperand));
             }
         }
 
@@ -69,13 +68,13 @@ namespace NitroxPatcher.Patches.Dynamic
             {
                 CodeInstruction instruction = instructions[i];
 
-                if (instruction.opcode == INSTRUCTION_BEFORE_JUMP && instruction.operand == INSTRUCTION_BEFORE_JUMP_OPERAND)
+                if (instruction.opcode == instructionBeforeJump && instruction.operand == instructionBeforeJumpOperand)
                 {
                     // we located the instruction before the jump... the next instruction should be the jump
                     CodeInstruction jmpInstruction = instructions[i + 1];
 
                     // Validate that it is what we are looking for
-                    Validate.IsTrue(JUMP_INSTRUCTION_TO_COPY == jmpInstruction.opcode, "Looks like subnautica code has changed.  Update jump offset!");
+                    Validate.IsTrue(jumpInstructionToCopy == jmpInstruction.opcode, "Looks like subnautica code has changed.  Update jump offset!");
 
                     return jmpInstruction;
                 }
@@ -86,7 +85,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

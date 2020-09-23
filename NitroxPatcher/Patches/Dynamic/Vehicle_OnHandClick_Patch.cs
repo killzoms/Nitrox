@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxClient.GameLogic.HUD;
@@ -12,12 +11,11 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Vehicle_OnHandClick_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(Vehicle);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("OnHandClick", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(Vehicle).GetMethod("OnHandClick", BindingFlags.Public | BindingFlags.Instance);
 
         private static Vehicle vehicle;
         private static GUIHand guiHand;
-        private static bool skipPrefix = false;
+        private static bool skipPrefix;
 
         public static bool Prefix(Vehicle __instance, GUIHand hand)
         {
@@ -49,7 +47,7 @@ namespace NitroxPatcher.Patches.Dynamic
             if (lockAquired)
             {
                 skipPrefix = true;
-                TARGET_METHOD.Invoke(vehicle, new[] { guiHand });
+                targetMethod.Invoke(vehicle, new[] { guiHand });
                 skipPrefix = false;
             }
             else
@@ -61,7 +59,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

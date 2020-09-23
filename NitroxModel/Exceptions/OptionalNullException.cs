@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
-namespace NitroxModel.DataStructures.Util
+namespace NitroxModel.Exceptions
 {
     [Serializable]
     public sealed class OptionalNullException<T> : Exception

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Harmony;
@@ -11,27 +10,27 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class BaseDeconstructable_Deconstruct_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(BaseDeconstructable);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Deconstruct");
+        private static readonly MethodInfo targetMethod = typeof(BaseDeconstructable).GetMethod(nameof(BaseDeconstructable.Deconstruct), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo callbackMethod = typeof(BaseDeconstructable_Deconstruct_Patch).GetMethod(nameof(Callback), BindingFlags.Public | BindingFlags.Static);
 
-        public static readonly OpCode INJECTION_OPCODE = OpCodes.Callvirt;
-        public static readonly object INJECTION_OPERAND = typeof(Constructable).GetMethod("SetState");
+        private static readonly OpCode injectionOpCode = OpCodes.Callvirt;
+        private static readonly object injectionOperand = typeof(Constructable).GetMethod(nameof(Constructable.SetState));
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND);
+            Validate.NotNull(injectionOperand);
 
             foreach (CodeInstruction instruction in instructions)
             {
                 yield return instruction;
 
-                if (instruction.opcode.Equals(INJECTION_OPCODE) && instruction.operand.Equals(INJECTION_OPERAND))
+                if (instruction.opcode.Equals(injectionOpCode) && instruction.operand.Equals(injectionOperand))
                 {
                     /*
                      * BaseDeconstructable_Deconstruct_Patch.Callback(gameObject);
                      */
                     yield return original.Ldloc<ConstructableBase>(0);
-                    yield return new CodeInstruction(OpCodes.Call, typeof(BaseDeconstructable_Deconstruct_Patch).GetMethod("Callback", BindingFlags.Static | BindingFlags.Public));
+                    yield return new CodeInstruction(OpCodes.Call, callbackMethod);
                 }
             }
         }
@@ -43,7 +42,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

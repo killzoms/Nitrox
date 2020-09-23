@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -11,14 +10,16 @@ using NitroxModel.DataStructures;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class CyclopsSonarButton_SonarPing_Patch : NitroxPatch, IDynamicPatch
+    public class CyclopsSonarButton_SonarPing_Patch : NitroxPatch, IDynamicPatch
     {
+        private static readonly MethodInfo targetMethod = typeof(CyclopsSonarButton).GetMethod("SonarPing", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly OpCode jumpTargetCode = OpCodes.Ldsfld;
+        private static readonly FieldInfo jumpTargetField = typeof(SNCameraRoot).GetField(nameof(SNCameraRoot.main), BindingFlags.Public | BindingFlags.Static);
 
-        public static readonly Type TARGET_CLASS = typeof(CyclopsSonarButton);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("SonarPing", BindingFlags.NonPublic | BindingFlags.Instance);
-        public static readonly OpCode JUMP_TARGET_CODE = OpCodes.Ldsfld;
-        public static readonly FieldInfo JUMP_TARGET_FIELD = typeof(SNCameraRoot).GetField("main", BindingFlags.Public | BindingFlags.Static);
-
+        private static readonly FieldInfo playerMainField = typeof(Player).GetField(nameof(Player.main), BindingFlags.Public | BindingFlags.Static);
+        private static readonly MethodInfo playerGetCurrentSubMethod = typeof(Player).GetMethod("get_currentSub", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly FieldInfo cyclopsSonarButtonSubRootField = typeof(CyclopsSonarButton).GetField(nameof(CyclopsSonarButton.subRoot), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo objectOpInequalityMethod = typeof(UnityEngine.Object).GetMethod("op_Inequality", BindingFlags.Public | BindingFlags.Static);
 
         // Send ping to other players        
         public static void Postfix(CyclopsSonarButton __instance)
@@ -59,7 +60,7 @@ namespace NitroxPatcher.Patches.Dynamic
             for (int i = 0; i < instructionList.Count; i++)
             {
                 CodeInstruction instruction = instructionList[i];
-                if (instruction.opcode.Equals(JUMP_TARGET_CODE) && instruction.operand.Equals(JUMP_TARGET_FIELD))
+                if (instruction.opcode.Equals(jumpTargetCode) && instruction.operand.Equals(jumpTargetField))
                 {
                     Label jumpLabel = instruction.labels[0];
                     IEnumerable<CodeInstruction> injectInstructions = AssembleNewCode(jumpLabel, toInjectJump);
@@ -75,12 +76,9 @@ namespace NitroxPatcher.Patches.Dynamic
                  * 
                  * will be new code
                  */
-                if (instruction.opcode.Equals(OpCodes.Brtrue))
+                if (instruction.opcode.Equals(OpCodes.Brtrue) && instructionList[i - 1].opcode.Equals(OpCodes.Ldloc_1) && instructionList[i + 1].opcode.Equals(OpCodes.Ldarg_0))
                 {
-                    if (instructionList[i - 1].opcode.Equals(OpCodes.Ldloc_1) && instructionList[i + 1].opcode.Equals(OpCodes.Ldarg_0))
-                    {
-                        instruction.operand = toInjectJump;
-                    }
+                    instruction.operand = toInjectJump;
                 }
                 yield return instruction;
             }
@@ -98,28 +96,23 @@ namespace NitroxPatcher.Patches.Dynamic
              */
             List<CodeInstruction> injectInstructions = new List<CodeInstruction>();
 
-            CodeInstruction instruction = new CodeInstruction(OpCodes.Ldsfld);
-            instruction.operand = typeof(Player).GetField("main", BindingFlags.Public | BindingFlags.Static);
+            CodeInstruction instruction = new CodeInstruction(OpCodes.Ldsfld) { operand = playerMainField };
             instruction.labels.Add(innerJumpLabel);
             injectInstructions.Add(instruction);
 
-            instruction = new CodeInstruction(OpCodes.Callvirt);
-            instruction.operand = typeof(Player).GetMethod("get_currentSub", BindingFlags.Public | BindingFlags.Instance);
+            instruction = new CodeInstruction(OpCodes.Callvirt) { operand = playerGetCurrentSubMethod };
             injectInstructions.Add(instruction);
 
             instruction = new CodeInstruction(OpCodes.Ldarg_0);
             injectInstructions.Add(instruction);
 
-            instruction = new CodeInstruction(OpCodes.Ldfld);
-            instruction.operand = TARGET_CLASS.GetField("subRoot", BindingFlags.Public | BindingFlags.Instance);
+            instruction = new CodeInstruction(OpCodes.Ldfld) { operand = cyclopsSonarButtonSubRootField };
             injectInstructions.Add(instruction);
 
-            instruction = new CodeInstruction(OpCodes.Call);
-            instruction.operand = typeof(UnityEngine.Object).GetMethod("op_Inequality", BindingFlags.Public | BindingFlags.Static);
+            instruction = new CodeInstruction(OpCodes.Call) { operand = objectOpInequalityMethod };
             injectInstructions.Add(instruction);
 
-            instruction = new CodeInstruction(OpCodes.Brfalse);
-            instruction.operand = outJumpLabel;
+            instruction = new CodeInstruction(OpCodes.Brfalse) { operand = outJumpLabel };
             injectInstructions.Add(instruction);
 
             instruction = new CodeInstruction(OpCodes.Ret);
@@ -130,8 +123,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchMultiple(harmony, targetMethod, false, true, true);
         }
     }
 }

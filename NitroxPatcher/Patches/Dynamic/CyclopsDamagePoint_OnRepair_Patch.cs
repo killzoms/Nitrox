@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxModel.Core;
@@ -12,8 +11,7 @@ namespace NitroxPatcher.Patches.Dynamic
     /// </summary>
     class CyclopsDamagePoint_OnRepair_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(CyclopsDamagePoint);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("OnRepair", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(CyclopsDamagePoint).GetMethod(nameof(CyclopsDamagePoint.OnRepair), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Postfix(CyclopsDamagePoint __instance)
         {
@@ -23,7 +21,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

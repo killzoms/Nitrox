@@ -5,7 +5,7 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class PrefabPlaceholdersGroup_Spawn_Patch : NitroxPatch, IDynamicPatch
     {
-        public static MethodInfo TARGET_METHOD = typeof(PrefabPlaceholdersGroup).GetMethod("Spawn", BindingFlags.Instance | BindingFlags.Public);
+        private static readonly MethodInfo targetMethod = typeof(PrefabPlaceholdersGroup).GetMethod(nameof(PrefabPlaceholdersGroup.Spawn), BindingFlags.Public | BindingFlags.Instance);
 
         public static bool Prefix()
         {
@@ -14,7 +14,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPrefix(harmony, TARGET_METHOD);
+            PatchPrefix(harmony, targetMethod);
         }
     }
 }

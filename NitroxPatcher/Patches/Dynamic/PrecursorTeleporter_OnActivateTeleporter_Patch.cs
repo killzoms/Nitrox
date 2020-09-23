@@ -8,22 +8,20 @@ using NitroxModel.DataStructures.GameLogic.Entities.Metadata;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class PrecursorTeleporter_OnActivateTeleporter_Patch : NitroxPatch, IDynamicPatch
+    public class PrecursorTeleporter_OnActivateTeleporter_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly MethodInfo TARGET_METHOD = typeof(PrecursorTeleporter).GetMethod("OnActivateTeleporter", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(PrecursorTeleporter).GetMethod("OnActivateTeleporter", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static void Postfix(PrecursorTeleporter __instance)
         {
             NitroxId id = NitroxEntity.GetId(__instance.gameObject);
-            PrecursorTeleporterMetadata precursorTeleporterMetadata = new PrecursorTeleporterMetadata(__instance.isOpen);
 
-            Entities entities = NitroxServiceLocator.LocateService<Entities>();
-            entities.BroadcastMetadataUpdate(id, precursorTeleporterMetadata);
+            NitroxServiceLocator.LocateService<Entities>().BroadcastMetadataUpdate(id, new PrecursorTeleporterMetadata(__instance.isOpen));
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

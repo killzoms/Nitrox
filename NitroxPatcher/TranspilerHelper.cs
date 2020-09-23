@@ -9,10 +9,10 @@ using NitroxModel.Core;
 
 namespace NitroxPatcher
 {
-    static class TranspilerHelper
+    internal static class TranspilerHelper
     {
-        private static readonly MethodInfo serviceLocator = typeof(NitroxServiceLocator)
-            .GetMethod("LocateService", BindingFlags.Static | BindingFlags.Public, null, new Type[] { }, null);
+        private static readonly MethodInfo serviceLocator = typeof(NitroxServiceLocator).GetMethod(nameof(NitroxServiceLocator.LocateService), BindingFlags.Public | BindingFlags.Static, null, new Type[] { }, null);
+        private static readonly PropertyInfo multiplayerActive = typeof(Multiplayer).GetProperty(nameof(Multiplayer.Active), BindingFlags.Public | BindingFlags.Static);
 
         public static CodeInstruction LocateService<T>()
         {
@@ -32,7 +32,7 @@ namespace NitroxPatcher
         /// <returns></returns>
         public static IEnumerable<CodeInstruction> IsMultiplayer(Label jmpLabel, ILGenerator generator)
         {
-            yield return new CodeInstruction(OpCodes.Callvirt, typeof(Multiplayer).GetProperty("Active", BindingFlags.Public | BindingFlags.Static).GetGetMethod());
+            yield return new CodeInstruction(OpCodes.Callvirt, multiplayerActive.GetGetMethod());
             yield return new CodeInstruction(OpCodes.Brfalse, jmpLabel); // If false jump to the end of the code block
         }
 
@@ -44,7 +44,7 @@ namespace NitroxPatcher
         /// <returns></returns>
         public static IEnumerable<CodeInstruction> IsNotMultiplayer(Label jmpLabel, ILGenerator generator)
         {
-            yield return new CodeInstruction(OpCodes.Callvirt, typeof(Multiplayer).GetProperty("Active", BindingFlags.Public | BindingFlags.Static).GetGetMethod());
+            yield return new CodeInstruction(OpCodes.Callvirt, multiplayerActive.GetGetMethod());
             yield return new CodeInstruction(OpCodes.Brtrue, jmpLabel); // If true jump to the end of the code block
         }
 
@@ -82,14 +82,7 @@ namespace NitroxPatcher
                 case 3:
                     return new CodeInstruction(OpCodes.Ldloc_3);
                 default:
-                    if (i <= 0xFF)
-                    {
-                        return new CodeInstruction(OpCodes.Ldloc_S, (byte)i);
-                    }
-                    else
-                    {
-                        return new CodeInstruction(OpCodes.Ldloc, (ushort)i);
-                    }
+                    return i <= 0xFF ? new CodeInstruction(OpCodes.Ldloc_S, (byte)i) : new CodeInstruction(OpCodes.Ldloc, (ushort)i);
             }
         }
 
@@ -111,11 +104,7 @@ namespace NitroxPatcher
         /// <param name="i">Index of the local variable to load, in a list of only variables of type <typeparamref name="T"/></param>
         public static CodeInstruction Ldloc<T>(this MethodBase method, int i)
         {
-            if (method == null)
-            {
-                return new CodeInstruction(OpCodes.Nop);
-            }
-            return Ldloc(method.GetLocalVariableIndex<T>(i));
+            return method == null ? new CodeInstruction(OpCodes.Nop) : Ldloc(method.GetLocalVariableIndex<T>(i));
         }
     }
 }

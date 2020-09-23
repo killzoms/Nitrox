@@ -8,25 +8,24 @@ using NitroxModel.DataStructures.GameLogic.Entities.Metadata;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
-    class PrecursorTeleporterActivationTerminal_OnProxyHandClick_Patch : NitroxPatch, IDynamicPatch
+    public class PrecursorTeleporterActivationTerminal_OnProxyHandClick_Patch : NitroxPatch, IDynamicPatch
     {
-        private static readonly MethodInfo TARGET_METHOD = typeof(PrecursorTeleporterActivationTerminal).GetMethod(nameof(PrecursorTeleporterActivationTerminal.OnProxyHandClick), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo targetMethod = typeof(PrecursorTeleporterActivationTerminal).GetMethod(nameof(PrecursorTeleporterActivationTerminal.OnProxyHandClick), BindingFlags.Public | BindingFlags.Instance);
 
         public static void Postfix(PrecursorTeleporterActivationTerminal __instance)
         {
             if (__instance.unlocked)
             {
                 NitroxId id = NitroxEntity.GetId(__instance.gameObject);
-                PrecursorTeleporterActivationTerminalMetadata precursorTeleporterActivationTerminalMetadata = new PrecursorTeleporterActivationTerminalMetadata(__instance.unlocked);
+                PrecursorTeleporterActivationTerminalMetadata teleporterMetadata = new PrecursorTeleporterActivationTerminalMetadata(__instance.unlocked);
 
-                Entities entities = NitroxServiceLocator.LocateService<Entities>();
-                entities.BroadcastMetadataUpdate(id, precursorTeleporterActivationTerminalMetadata);
+                NitroxServiceLocator.LocateService<Entities>().BroadcastMetadataUpdate(id, teleporterMetadata);
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchPostfix(harmony, TARGET_METHOD);
+            PatchPostfix(harmony, targetMethod);
         }
     }
 }

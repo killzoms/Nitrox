@@ -1,46 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using Harmony;
 using NitroxClient.GameLogic.Helper;
 using NitroxModel.Helper;
 using UnityEngine;
-using static NitroxClient.GameLogic.Helper.TransientLocalObjectManager;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
     public class BaseGhost_Finish_Patch : NitroxPatch, IDynamicPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(BaseGhost);
-        public static readonly MethodInfo TARGET_METHOD = TARGET_CLASS.GetMethod("Finish", BindingFlags.Public | BindingFlags.Instance);
+        internal static readonly MethodInfo targetMethod = typeof(BaseGhost).GetMethod(nameof(BaseGhost.Finish), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo objectManagerAddMethod = typeof(TransientLocalObjectManager).GetMethod(nameof(TransientLocalObjectManager.Add), BindingFlags.Static | BindingFlags.Public, null, new[] { TransientLocalObjectManager.TransientObjectType.BASE_GHOST_NEWLY_CONSTRUCTED_BASE_GAMEOBJECT.GetType(), typeof(object) }, null);
 
-        public static readonly OpCode INJECTION_OPCODE = OpCodes.Stfld;
-        public static readonly object INJECTION_OPERAND = TARGET_CLASS.GetField("targetBase", BindingFlags.NonPublic | BindingFlags.Instance);
+        internal static readonly OpCode injectionOpCode = OpCodes.Stfld;
+        internal static readonly object injectionOperand = typeof(BaseGhost).GetField("targetBase", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND);
+            Validate.NotNull(injectionOperand);
 
             foreach (CodeInstruction instruction in instructions)
             {
                 yield return instruction;
 
-                if (instruction.opcode.Equals(INJECTION_OPCODE))
+                if (instruction.opcode.Equals(injectionOpCode))
                 {
                     /*
                      * TransientLocalObjectManager.Add(TransientLocalObjectManager.TransientObjectType.BASE_GHOST_NEWLY_CONSTRUCTED_BASE_GAMEOBJECT, gameObject);
                      */
                     yield return new CodeInstruction(OpCodes.Ldc_I4_1);
                     yield return original.Ldloc<GameObject>(1);
-                    yield return new CodeInstruction(OpCodes.Call, typeof(TransientLocalObjectManager).GetMethod("Add", BindingFlags.Static | BindingFlags.Public, null, new Type[] { TransientObjectType.BASE_GHOST_NEWLY_CONSTRUCTED_BASE_GAMEOBJECT.GetType(), typeof(object) }, null));
+                    yield return new CodeInstruction(OpCodes.Call, objectManagerAddMethod);
                 }
             }
         }
 
         public override void Patch(HarmonyInstance harmony)
         {
-            PatchTranspiler(harmony, TARGET_METHOD);
+            PatchTranspiler(harmony, targetMethod);
         }
     }
 }

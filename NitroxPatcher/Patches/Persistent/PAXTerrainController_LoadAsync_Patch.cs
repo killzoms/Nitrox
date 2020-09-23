@@ -11,14 +11,15 @@ namespace NitroxPatcher.Patches.Persistent
 {
     public class PAXTerrainController_LoadAsync_Patch : NitroxPatch, IPersistentPatch
     {
-        public static readonly Type TARGET_CLASS = typeof(PAXTerrainController);
-        public static readonly object INJECTION_OPERAND = typeof(PAXTerrainController).GetMethod("LoadWorldTiles", BindingFlags.NonPublic | BindingFlags.Instance);
-        public static readonly FieldInfo LARGE_WORLD_STREAMER_FROZEN_FIELD = typeof(LargeWorldStreamer).GetField("frozen", BindingFlags.Public | BindingFlags.Instance);
-        public static readonly FieldInfo PAX_TERRAIN_CONTROLLER_STREAMER_FIELD = typeof(PAXTerrainController).GetField("streamer", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly Type targetClass = typeof(PAXTerrainController);
+        private static readonly object injectionOperand = typeof(PAXTerrainController).GetMethod("LoadWorldTiles", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo largeWorldStreamerFrozenField = typeof(LargeWorldStreamer).GetField(nameof(LargeWorldStreamer.frozen), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly FieldInfo paxTerrainControllerStreamerField = typeof(PAXTerrainController).GetField("streamer", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly MethodInfo multiplayerSubnauticaLoadingCompletedMethod = typeof(Multiplayer).GetMethod(nameof(Multiplayer.SubnauticaLoadingCompleted), BindingFlags.Public | BindingFlags.Static);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, ILGenerator ilGenerator, IEnumerable<CodeInstruction> instructions)
         {
-            Validate.NotNull(INJECTION_OPERAND);
+            Validate.NotNull(injectionOperand);
             List<CodeInstruction> instrList = instructions.ToList();
             Label jmpLabelStartOfMethod = ilGenerator.DefineLabel();
 
@@ -27,7 +28,7 @@ namespace NitroxPatcher.Patches.Persistent
                 CodeInstruction instruction = instrList[i];
                 if (instrList[i].opcode == OpCodes.Switch)
                 {
-                    List<Label> labels = ((Label[])instruction.operand).ToList(); // removing unneccessary labels
+                    List<Label> labels = ((Label[])instruction.operand).ToList(); // removing unnecessary labels
                     labels.RemoveRange(3, 5);
                     yield return new CodeInstruction(instruction.opcode, labels.ToArray());
                 }
@@ -37,18 +38,18 @@ namespace NitroxPatcher.Patches.Persistent
                 }
                 else if (instrList.Count > i + 2 &&
                          instrList[i + 1].opcode == OpCodes.Ldfld &&
-                         Equals(instrList[i + 1].operand, PAX_TERRAIN_CONTROLLER_STREAMER_FIELD) &&
+                         Equals(instrList[i + 1].operand, paxTerrainControllerStreamerField) &&
                          instrList[i + 3].opcode == OpCodes.Stfld &&
-                         Equals(instrList[i + 3].operand, LARGE_WORLD_STREAMER_FROZEN_FIELD))
+                         Equals(instrList[i + 3].operand, largeWorldStreamerFrozenField))
                 {
                     instruction.labels.Add(jmpLabelStartOfMethod);
                     yield return instruction; // Add a label for jumping
                 }
                 else if (instruction.opcode == OpCodes.Stfld &&
-                         Equals(instruction.operand, LARGE_WORLD_STREAMER_FROZEN_FIELD))
+                         Equals(instruction.operand, largeWorldStreamerFrozenField))
                 {
                     yield return instruction;
-                    yield return new CodeInstruction(OpCodes.Call, typeof(Multiplayer).GetMethod(nameof(Multiplayer.SubnauticaLoadingCompleted), BindingFlags.Public | BindingFlags.Static));
+                    yield return new CodeInstruction(OpCodes.Call, multiplayerSubnauticaLoadingCompletedMethod);
                     yield return new CodeInstruction(OpCodes.Ldarg_0); // this
                     yield return new CodeInstruction(OpCodes.Ldc_I4_8); // Load 8 onto the stack
                     yield return new CodeInstruction(OpCodes.Stfld, GetStateField(GetLoadAsyncEnumerableMethod())); // Store last stack item into state field
@@ -83,7 +84,7 @@ namespace NitroxPatcher.Patches.Persistent
 
         private static Type GetLoadAsyncEnumerableMethod()
         {
-            Type[] nestedTypes = TARGET_CLASS.GetNestedTypes(BindingFlags.NonPublic | BindingFlags.Static);
+            Type[] nestedTypes = targetClass.GetNestedTypes(BindingFlags.NonPublic | BindingFlags.Static);
             Type targetEnumeratorClass = null;
 
             foreach (Type type in nestedTypes)
