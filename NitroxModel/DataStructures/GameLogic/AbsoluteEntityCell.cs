@@ -147,11 +147,14 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public int GetHashCode(AbsoluteEntityCell obj)
         {
-            int hashCode = 658330915;
-            hashCode = hashCode * -1521134295 + EqualityComparer<Int3>.Default.GetHashCode(obj.BatchId);
-            hashCode = hashCode * -1521134295 + EqualityComparer<Int3>.Default.GetHashCode(obj.CellId);
-            hashCode = hashCode * -1521134295 + obj.Level.GetHashCode();
-            return hashCode;
+            unchecked
+            {
+                int hashCode = 658330915;
+                hashCode = hashCode * -1521134295 + EqualityComparer<Int3>.Default.GetHashCode(obj.BatchId);
+                hashCode = hashCode * -1521134295 + EqualityComparer<Int3>.Default.GetHashCode(obj.CellId);
+                hashCode = hashCode * -1521134295 + obj.Level.GetHashCode();
+                return hashCode;
+            }
         }
 
         public override string ToString()

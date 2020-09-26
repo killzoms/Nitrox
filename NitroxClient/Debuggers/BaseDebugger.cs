@@ -36,7 +36,7 @@ namespace NitroxClient.Debuggers
         /// </remarks>
         private readonly Dictionary<string, DebuggerTab> tabs = new Dictionary<string, DebuggerTab>();
 
-        protected BaseDebugger(int desiredWidth, string debuggerName = null, KeyCode hotkey = KeyCode.None, bool control = false, bool shift = false, bool alt = false, GUI_SkinCreationOptions skinOptions = GUI_SkinCreationOptions.DEFAULT)
+        protected BaseDebugger(int desiredWidth = 200, string debuggerName = null, KeyCode hotkey = KeyCode.None, bool control = false, bool shift = false, bool alt = false, GUI_SkinCreationOptions skinOptions = GUI_SkinCreationOptions.DEFAULT)
         {
             if (desiredWidth < 200)
             {

@@ -47,12 +47,14 @@ namespace NitroxModel.DataStructures
 
         public override int GetHashCode()
         {
-            int hashCode = -307843816;
-            hashCode = hashCode * -1521134295 + X.GetHashCode();
-            hashCode = hashCode * -1521134295 + Y.GetHashCode();
-            hashCode = hashCode * -1521134295 + Z.GetHashCode();
-
-            return hashCode;
+            unchecked
+            {
+                int hashCode = -307843816;
+                hashCode = hashCode * -1521134295 + X.GetHashCode();
+                hashCode = hashCode * -1521134295 + Y.GetHashCode();
+                hashCode = hashCode * -1521134295 + Z.GetHashCode();
+                return hashCode;
+            }
         }
 
         public static NitroxInt3 Floor(float x, float y, float z)

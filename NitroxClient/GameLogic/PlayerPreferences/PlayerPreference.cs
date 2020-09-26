@@ -6,10 +6,10 @@ namespace NitroxClient.GameLogic.PlayerPreferences
     [Serializable]
     public sealed class PlayerPreference : IEquatable<PlayerPreference>
     {
-        public string PlayerName { get; private set; }
-        public float RedAdditive { get; private set; }
-        public float GreenAdditive { get; private set; }
-        public float BlueAdditive { get; private set; }
+        public string PlayerName { get; }
+        public float RedAdditive { get; }
+        public float GreenAdditive { get; }
+        public float BlueAdditive { get; }
 
         public PlayerPreference()
         {
@@ -32,13 +32,7 @@ namespace NitroxClient.GameLogic.PlayerPreferences
 
         public PlayerPreference Clone()
         {
-            return new PlayerPreference
-            {
-                PlayerName = PlayerName,
-                RedAdditive = RedAdditive,
-                GreenAdditive = GreenAdditive,
-                BlueAdditive = BlueAdditive
-            };
+            return new PlayerPreference(PlayerName, new Color(RedAdditive, GreenAdditive, BlueAdditive));
         }
 
         public bool Equals(PlayerPreference other)

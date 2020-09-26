@@ -18,10 +18,13 @@ GOTO END
 CALL "sonar.config.bat"
 
 ECHO Sonar prepare phase
-%sonar%SonarScanner.MSBuild.exe begin /k:"%sonarkey%" /d:sonar.organization="%sonarorg%" /d:sonar.host.url="%sonarurl%" /d:sonar.login="%token%"
+%sonar%SonarScanner.MSBuild.exe begin /k:"%sonarkey%" /o:"%sonarorg%" /d:sonar.host.url="%sonarurl%" /d:sonar.login="%token%" /v:"%version%" /d:sonar.sources="Nitrox/Nitrox.Bootloader,Nitrox/NitroxClient,Nitrox/NitroxLauncher,Nitrox/NitroxModel,Nitrox/NitroxModel.Subnautica,Nitrox/NitroxPatcher,Nitrox/NitroxServer,Nitrox/NitroxServer.Subnautica" /d:sonar.tests="Nitrox/NitroxTest" /d:sonar.cs.vstest.reportsPaths="Nitrox/TestResults"
 
 ECHO Solution build for analysis
-%msbuild%MsBuild.exe /t:Rebuild
+MsBuild.exe /t:Rebuild
+
+ECHO Run test coverage tool
+"%vsPath%\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" /Logger:trx;LogFileName=NitroxTestResult.trx "NitroxTest\bin\Debug\NitroxTest.dll"
 
 ECHO Sonar processing phase
 %sonar%SonarScanner.MSBuild.exe end /d:sonar.login="%token%"

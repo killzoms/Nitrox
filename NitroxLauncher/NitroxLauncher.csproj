@@ -22,7 +22,7 @@
     <Optimize>false</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\.sonarlint\subnauticanitroxcsharp.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -183,9 +183,6 @@
     <Resource Include="Fonts\OpenSans-Regular.ttf" />
     <Resource Include="Fonts\OpenSans-Semibold.ttf" />
     <Resource Include="Fonts\OpenSans-SemiboldItalic.ttf" />
-    <None Include="..\.sonarlint\subnauticanitroxcsharp.ruleset">
-      <Link>subnauticanitroxcsharp.ruleset</Link>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -285,11 +282,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\serverIllustration.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="..\.sonarlint\subnauticanitrox\CSharp\SonarLint.xml">
-      <Link>SonarLint.xml</Link>
-    </AdditionalFiles>
   </ItemGroup>
   <ItemGroup />
   <!-- Move assets from Subnautica assets to launcher.

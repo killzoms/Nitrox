@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Nitrox.Bootloader")]
+[assembly: AssemblyTitle("Bootloader")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 // COMMON: [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Nitrox.Bootloader")]
+[assembly: AssemblyProduct("Bootloader")]
 // COMMON: [assembly: AssemblyCopyright("")]
 // COMMON: [assembly: AssemblyTrademark("")]
 // COMMON: [assembly: AssemblyCulture("")]
