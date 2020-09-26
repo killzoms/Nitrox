@@ -5,7 +5,7 @@ using NitroxServer.GameLogic.Items;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class StorageSlotAddItemProcessor : AuthenticatedPacketProcessor<StorageSlotItemAdd>
+    public class StorageSlotAddItemProcessor : AuthenticatedPacketProcessor<StorageSlotItemAdd>
     {
         private readonly PlayerManager playerManager;
         private readonly InventoryManager inventoryManager;
@@ -16,10 +16,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.inventoryManager = inventoryManager;
         }
 
-        public override void Process(StorageSlotItemAdd packet, Player player)
+        public override void Process(StorageSlotItemAdd packet, Player sendingPlayer)
         {
             inventoryManager.StorageItemAdded(packet.ItemData);
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

@@ -6,7 +6,7 @@ using NitroxServer.GameLogic;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class PlayerDeathEventProcessor : AuthenticatedPacketProcessor<PlayerDeathEvent>
+    public class PlayerDeathEventProcessor : AuthenticatedPacketProcessor<PlayerDeathEvent>
     {
         private readonly PlayerManager playerManager;
         private readonly ServerConfig serverConfig;
@@ -17,23 +17,22 @@ namespace NitroxServer.Communication.Packets.Processors
             this.serverConfig = serverConfig;
         }
 
-        public override void Process(PlayerDeathEvent packet, Player player)
+        public override void Process(PlayerDeathEvent packet, Player sendingPlayer)
         {
-            if(serverConfig.IsHardcore)
+            if (serverConfig.IsHardcore)
             {
-                player.IsPermaDeath = true;
-                PlayerKicked playerKicked = new PlayerKicked("Permanent death from hardcore mode");
-                player.SendPacket(playerKicked);
+                sendingPlayer.IsPermaDeath = true;
+                sendingPlayer.SendPacket(new PlayerKicked("Permanent death from hardcore mode"));
             }
 
-            player.LastStoredPosition = packet.DeathPosition;
+            sendingPlayer.LastStoredPosition = packet.DeathPosition;
 
-            if (player.Permissions > Perms.MODERATOR)
+            if (sendingPlayer.Permissions > Perms.MODERATOR)
             {
-                player.SendPacket(new ChatMessage(ChatMessage.SERVER_ID, "You can use /back to go to your death location"));
+                sendingPlayer.SendPacket(new ChatMessage(ChatMessage.SERVER_ID, "You can use /back to go to your death location"));
             }
 
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

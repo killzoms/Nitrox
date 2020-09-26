@@ -25,7 +25,7 @@ namespace NitroxServer.ConsoleCommands.Abstract
         public bool AllowedArgOverflow { get; }
         public List<IParameter<object>> Parameters { get; }
 
-        protected Command(string name, Perms perm, string description, bool allowedArgOveflow = false)
+        protected Command(string name, Perms perm, string description, bool allowedArgOverflow = false)
         {
             Validate.NotNull(name);
 
@@ -33,7 +33,7 @@ namespace NitroxServer.ConsoleCommands.Abstract
             RequiredPermLevel = perm;
             aliases = new List<string>();
             Parameters = new List<IParameter<object>>();
-            AllowedArgOverflow = allowedArgOveflow;
+            AllowedArgOverflow = allowedArgOverflow;
             Description = string.IsNullOrEmpty(description) ? "No description provided" : description;
         }
 

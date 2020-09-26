@@ -38,9 +38,7 @@ namespace NitroxServer.Communication.Packets.Processors
         {
             foreach (Player player in playerManager.GetConnectedPlayers())
             {
-                bool updateVisibleToPlayer = player.CanSee(entity) || entity.ExistsInGlobalRoot;
-
-                if (player != sendingPlayer && updateVisibleToPlayer)
+                if (player != sendingPlayer && (player.CanSee(entity) || entity.ExistsInGlobalRoot))
                 {
                     player.SendPacket(packet);
                 }

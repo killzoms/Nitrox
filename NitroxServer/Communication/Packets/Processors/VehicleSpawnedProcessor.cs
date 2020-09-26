@@ -16,10 +16,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.world = world;
         }
 
-        public override void Process(VehicleSpawned packet, Player player)
+        public override void Process(VehicleSpawned packet, Player sendingPlayer)
         {
             world.VehicleManager.AddVehicle(packet.VehicleModel);
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

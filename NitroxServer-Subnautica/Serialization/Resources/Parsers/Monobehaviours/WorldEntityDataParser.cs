@@ -1,24 +1,25 @@
 ﻿using AssetsTools.NET;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 using UWE;
 
-namespace NitroxServer_Subnautica.Serialization.Resources.Parsers.Monobehaviours
+namespace NitroxServer_Subnautica.Serialization.Resources.Parsers.MonoBehaviours
 {
-    class WorldEntityDataParser : MonobehaviourParser
+    public class WorldEntityDataParser : MonoBehaviourParser
     {
         public override void Parse(AssetIdentifier identifier, AssetIdentifier gameObjectIdentifier, AssetsFileReader reader, ResourceAssets resourceAssets)
         {
             reader.Align();
             uint size = reader.ReadUInt32();
-            WorldEntityInfo wei;
 
             for (int i = 0; i < size; i++)
             {
-                wei = new WorldEntityInfo();
-                wei.classId = reader.ReadCountStringInt32();
-                wei.techType = (TechType)reader.ReadInt32();
-                wei.slotType = (EntitySlot.Type)reader.ReadInt32();
-                wei.prefabZUp = reader.ReadBoolean();
+                WorldEntityInfo wei = new WorldEntityInfo
+                {
+                    classId = reader.ReadCountStringInt32(),
+                    techType = (TechType)reader.ReadInt32(),
+                    slotType = (EntitySlot.Type)reader.ReadInt32(),
+                    prefabZUp = reader.ReadBoolean()
+                };
 
                 reader.Align();
 

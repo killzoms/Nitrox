@@ -1,9 +1,9 @@
 ﻿using AssetsTools.NET;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 
 namespace NitroxServer_Subnautica.Serialization.Resources.Parsers.Text
 {
-    class EntityDistributionsParser : AssetParser
+    public class EntityDistributionsParser : AssetParser
     {
         public override void Parse(AssetIdentifier identifier, AssetsFileReader reader, ResourceAssets resourceAssets)
         {

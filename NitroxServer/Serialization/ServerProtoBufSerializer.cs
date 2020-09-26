@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using NitroxModel.Logger;
 using ProtoBufNet;
@@ -95,17 +96,9 @@ namespace NitroxServer.Serialization
             }
         }
 
-        private bool HasUweProtoContract(Type type)
+        private static bool HasUweProtoContract(Type type)
         {
-            foreach (object o in type.GetCustomAttributes(false))
-            {
-                if (o.GetType().ToString().Contains("ProtoContractAttribute"))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return type.GetCustomAttributes(false).Any(o => o.GetType().ToString().Contains("ProtoContractAttribute"));
         }
 
         private void ManuallyRegisterUweProtoMembers(MemberInfo[] info, Type type)

@@ -5,7 +5,7 @@ using NitroxServer.GameLogic.Entities;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class PickupItemPacketProcessor : AuthenticatedPacketProcessor<PickupItem>
+    public class PickupItemPacketProcessor : AuthenticatedPacketProcessor<PickupItem>
     {
         private readonly EntityManager entityManager;
         private readonly PlayerManager playerManager;
@@ -18,17 +18,16 @@ namespace NitroxServer.Communication.Packets.Processors
             this.simulationOwnershipData = simulationOwnershipData;
         }
 
-        public override void Process(PickupItem packet, Player player)
+        public override void Process(PickupItem packet, Player sendingPlayer)
         {
             if (simulationOwnershipData.RevokeOwnerOfId(packet.Id))
             {
-                ushort serverId = ushort.MaxValue;
-                SimulationOwnershipChange simulationOwnershipChange = new SimulationOwnershipChange(packet.Id, serverId, NitroxModel.DataStructures.SimulationLockType.TRANSIENT);
+                SimulationOwnershipChange simulationOwnershipChange = new SimulationOwnershipChange(packet.Id, ushort.MaxValue, NitroxModel.DataStructures.SimulationLockType.TRANSIENT);
                 playerManager.SendPacketToAllPlayers(simulationOwnershipChange);
             }
 
             entityManager.PickUpEntity(packet.Id);
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

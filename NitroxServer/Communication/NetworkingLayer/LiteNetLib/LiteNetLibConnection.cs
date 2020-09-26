@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using NitroxModel.Logger;
@@ -7,7 +7,7 @@ using NitroxModel.Packets;
 
 namespace NitroxServer.Communication.NetworkingLayer.LiteNetLib
 {
-    public class LiteNetLibConnection : NitroxConnection
+    public class LiteNetLibConnection : INitroxConnection
     {
         private readonly NetPacketProcessor netPacketProcessor = new NetPacketProcessor();
         private readonly NetPeer peer;

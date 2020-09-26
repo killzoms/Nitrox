@@ -41,14 +41,11 @@ namespace NitroxServer.Serialization.World
 
         public bool IsValid()
         {
-            return (ParsedBatchCells != null) && // Always returns false on empty saves
-                   (ServerStartTime.HasValue) &&
-                   (VehicleData != null) &&
-                   (InventoryData != null) &&
-                   (GameData != null) &&
-                   (EntityData?.Entities != null) &&
-                   (EscapePodData != null) &&
-                   (StoryTimingData != null);
+            return ParsedBatchCells != null && // Always returns false on empty saves
+                   ServerStartTime.HasValue && VehicleData != null &&
+                   InventoryData != null && GameData != null &&
+                   EntityData?.Entities != null && EscapePodData != null &&
+                   StoryTimingData != null;
         }
     }
 }

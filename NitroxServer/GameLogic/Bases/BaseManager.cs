@@ -16,7 +16,6 @@ namespace NitroxServer.GameLogic.Bases
 
         public BaseManager(List<BasePiece> partiallyConstructedPieces, List<BasePiece> completedBasePieceHistory)
         {
-            this.completedBasePieceHistory = completedBasePieceHistory;
             partiallyConstructedPiecesById = partiallyConstructedPieces.ToDictionary(piece => piece.Id);
 
             int highestPartialIndex = partiallyConstructedPieces.Any() ? partiallyConstructedPieces.Max(piece => piece.BuildIndex) : 0;
@@ -27,7 +26,7 @@ namespace NitroxServer.GameLogic.Bases
 
         public List<BasePiece> GetCompletedBasePieceHistory()
         {
-            lock(completedBasePieceHistory)
+            lock (completedBasePieceHistory)
             {
                 return new List<BasePiece>(completedBasePieceHistory);
             }
@@ -52,11 +51,9 @@ namespace NitroxServer.GameLogic.Bases
 
         public void BasePieceConstructionAmountChanged(NitroxId id, float constructionAmount)
         {
-            BasePiece basePiece;
-
             lock (partiallyConstructedPiecesById)
             {
-                if (partiallyConstructedPiecesById.TryGetValue(id, out basePiece))
+                if (partiallyConstructedPiecesById.TryGetValue(id, out BasePiece basePiece))
                 {
                     basePiece.ConstructionAmount = constructionAmount;
 
@@ -70,18 +67,16 @@ namespace NitroxServer.GameLogic.Bases
 
         public void BasePieceConstructionCompleted(NitroxId id, NitroxId baseId)
         {
-            BasePiece basePiece;
-
             lock (partiallyConstructedPiecesById)
             {
-                if (partiallyConstructedPiecesById.TryGetValue(id, out basePiece))
+                if (partiallyConstructedPiecesById.TryGetValue(id, out BasePiece basePiece))
                 {
                     basePiece.ConstructionAmount = 1.0f;
                     basePiece.ConstructionCompleted = true;
 
-                    if(!basePiece.IsFurniture)
+                    if (!basePiece.IsFurniture)
                     {
-                        // For standard base pieces, the baseId is may not be finialized until construction 
+                        // For standard base pieces, the baseId is may not be finalized until construction 
                         // completes because Subnautica uses a GhostBase in the world if there hasn't yet been
                         // a fully constructed piece.  Therefor, we always update this attribute to make sure it
                         // is the latest.
@@ -101,11 +96,9 @@ namespace NitroxServer.GameLogic.Bases
 
         public void BasePieceDeconstructionBegin(NitroxId id)
         {
-            BasePiece basePiece;
-
             lock (completedBasePieceHistory)
             {
-                basePiece = completedBasePieceHistory.Find(piece => piece.Id == id);
+                BasePiece basePiece = completedBasePieceHistory.Find(piece => piece.Id == id);
 
                 if (basePiece != null)
                 {
@@ -113,12 +106,12 @@ namespace NitroxServer.GameLogic.Bases
                     basePiece.ConstructionCompleted = false;
                     completedBasePieceHistory.Remove(basePiece);
 
-                    lock(partiallyConstructedPiecesById)
+                    lock (partiallyConstructedPiecesById)
                     {
                         partiallyConstructedPiecesById[basePiece.Id] = basePiece;
                     }
                 }
-            }        
+            }
         }
 
         public void BasePieceDeconstructionCompleted(NitroxId id)
@@ -131,11 +124,9 @@ namespace NitroxServer.GameLogic.Bases
 
         public void UpdateBasePieceMetadata(NitroxId id, BasePieceMetadata metadata)
         {
-            BasePiece basePiece;
-
             lock (completedBasePieceHistory)
             {
-                basePiece = completedBasePieceHistory.Find(piece => piece.Id == id);
+                BasePiece basePiece = completedBasePieceHistory.Find(piece => piece.Id == id);
 
                 if (basePiece != null)
                 {

@@ -13,28 +13,28 @@ namespace NitroxServer.Communication.NetworkingLayer
     public abstract class NitroxServer
     {
         protected bool isStopped = true;
-        protected int portNumber, maxConn;
+        protected readonly int portNumber, maxConnections;
 
         protected readonly PacketHandler packetHandler;
         protected readonly EntitySimulation entitySimulation;
-        protected readonly Dictionary<long, NitroxConnection> connectionsByRemoteIdentifier = new Dictionary<long, NitroxConnection>();
+        protected readonly Dictionary<long, INitroxConnection> connectionsByRemoteIdentifier = new Dictionary<long, INitroxConnection>();
         protected readonly PlayerManager playerManager;
 
-        public NitroxServer(PacketHandler packetHandler, PlayerManager playerManager, EntitySimulation entitySimulation, ServerConfig serverConfig)
+        protected NitroxServer(PacketHandler packetHandler, PlayerManager playerManager, EntitySimulation entitySimulation, ServerConfig serverConfig)
         {
             this.packetHandler = packetHandler;
             this.playerManager = playerManager;
             this.entitySimulation = entitySimulation;
 
             portNumber = serverConfig.ServerPort;
-            maxConn = serverConfig.MaxConnections;
+            maxConnections = serverConfig.MaxConnections;
         }
 
         public abstract bool Start();
 
         public abstract void Stop();
 
-        protected void ClientDisconnected(NitroxConnection connection)
+        protected void ClientDisconnected(INitroxConnection connection)
         {
             Player player = playerManager.GetPlayer(connection);
 
@@ -49,13 +49,12 @@ namespace NitroxServer.Communication.NetworkingLayer
 
                 if (ownershipChanges.Count > 0)
                 {
-                    SimulationOwnershipChange ownershipChange = new SimulationOwnershipChange(ownershipChanges);
-                    playerManager.SendPacketToAllPlayers(ownershipChange);
+                    playerManager.SendPacketToAllPlayers(new SimulationOwnershipChange(ownershipChanges));
                 }
             }
         }
 
-        protected void ProcessIncomingData(NitroxConnection connection, Packet packet)
+        protected void ProcessIncomingData(INitroxConnection connection, Packet packet)
         {
             try
             {
@@ -63,7 +62,7 @@ namespace NitroxServer.Communication.NetworkingLayer
             }
             catch (Exception ex)
             {
-                Log.Error("Exception while processing packet: " + packet + " " + ex);
+                Log.Error(ex, $"Exception while processing packet: {packet}.");
             }
         }
     }

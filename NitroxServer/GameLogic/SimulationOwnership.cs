@@ -5,10 +5,10 @@ namespace NitroxServer.GameLogic
 {
     public class SimulationOwnershipData
     {
-        struct PlayerLock
+        private readonly struct PlayerLock
         {
             public Player Player { get; }
-            public SimulationLockType LockType { get; set; }
+            public SimulationLockType LockType { get; }
 
             public PlayerLock(Player player, SimulationLockType lockType)
             {
@@ -17,16 +17,14 @@ namespace NitroxServer.GameLogic
             }
         }
 
-        Dictionary<NitroxId, PlayerLock> playerLocksById = new Dictionary<NitroxId, PlayerLock>();
+        private readonly Dictionary<NitroxId, PlayerLock> playerLocksById = new Dictionary<NitroxId, PlayerLock>();
 
         public bool TryToAcquire(NitroxId id, Player player, SimulationLockType requestedLock)
         {
             lock (playerLocksById)
             {
-                PlayerLock playerLock;
-
-                // If no one is simulating then aquire a lock for this player
-                if (!playerLocksById.TryGetValue(id, out playerLock))
+                // If no one is simulating then acquire a lock for this player
+                if (!playerLocksById.TryGetValue(id, out PlayerLock playerLock))
                 {
                     playerLocksById[id] = new PlayerLock(player, requestedLock);
                     return true;
@@ -57,9 +55,7 @@ namespace NitroxServer.GameLogic
         {
             lock (playerLocksById)
             {
-                PlayerLock playerLock;
-
-                if (playerLocksById.TryGetValue(id, out playerLock) && playerLock.Player == player)
+                if (playerLocksById.TryGetValue(id, out PlayerLock playerLock) && playerLock.Player == player)
                 {
                     playerLocksById.Remove(id);
                     return true;

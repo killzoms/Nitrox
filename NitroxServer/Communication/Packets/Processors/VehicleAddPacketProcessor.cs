@@ -6,7 +6,7 @@ using NitroxServer.GameLogic.Vehicles;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class VehicleAddPacketProcessor : AuthenticatedPacketProcessor<VehicleCreated>
+    public class VehicleAddPacketProcessor : AuthenticatedPacketProcessor<VehicleCreated>
     {
         private readonly PlayerManager playerManager;
         private readonly VehicleManager vehicleManager;
@@ -17,11 +17,11 @@ namespace NitroxServer.Communication.Packets.Processors
             this.vehicleManager = vehicleManager;
         }
 
-        public override void Process(VehicleCreated packet, Player player)
+        public override void Process(VehicleCreated packet, Player sendingPlayer)
         {
             Log.Debug(packet);
             vehicleManager.AddVehicle(packet.CreatedVehicle);
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

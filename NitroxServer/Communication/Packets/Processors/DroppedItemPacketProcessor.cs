@@ -8,7 +8,7 @@ using NitroxServer.GameLogic.Entities;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class DroppedItemPacketProcessor : AuthenticatedPacketProcessor<DroppedItem>
+    public class DroppedItemPacketProcessor : AuthenticatedPacketProcessor<DroppedItem>
     {
         private readonly EntityManager entityManager;
         private readonly PlayerManager playerManager;
@@ -21,24 +21,22 @@ namespace NitroxServer.Communication.Packets.Processors
             this.entitySimulation = entitySimulation;
         }
 
-        public override void Process(DroppedItem packet, Player droppingPlayer)
+        public override void Process(DroppedItem packet, Player sendingPlayer)
         {
             bool existsInGlobalRoot = Map.Main.GlobalRootTechTypes.Contains(packet.TechType);
             Entity entity = new Entity(packet.ItemPosition, packet.ItemRotation, NitroxVector3.One, packet.TechType, 0, null, true, packet.WaterParkId.OrElse(null), packet.Bytes, existsInGlobalRoot, packet.Id);
             entityManager.RegisterNewEntity(entity);
 
-            SimulatedEntity simulatedEntity = entitySimulation.AssignNewEntityToPlayer(entity, droppingPlayer);
+            SimulatedEntity simulatedEntity = entitySimulation.AssignNewEntityToPlayer(entity, sendingPlayer);
 
             SimulationOwnershipChange ownershipChangePacket = new SimulationOwnershipChange(simulatedEntity);
             playerManager.SendPacketToAllPlayers(ownershipChangePacket);
 
-            foreach (Player player in playerManager.GetConnectedPlayers())
+            foreach (Player connectedPlayer in playerManager.GetConnectedPlayers())
             {
-                bool isOtherPlayer = player != droppingPlayer;
-                if (isOtherPlayer && player.CanSee(entity))
+                if (connectedPlayer != sendingPlayer && connectedPlayer.CanSee(entity))
                 {
-                    CellEntities cellEntities = new CellEntities(entity);
-                    player.SendPacket(cellEntities);
+                    connectedPlayer.SendPacket(new CellEntities(entity));
                 }
             }
         }

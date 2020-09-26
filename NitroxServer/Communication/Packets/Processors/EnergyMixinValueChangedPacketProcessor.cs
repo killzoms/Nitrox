@@ -5,7 +5,7 @@ using NitroxServer.GameLogic.Items;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class EnergyMixinValueChangedPacketProcessor : AuthenticatedPacketProcessor<EnergyMixinValueChanged>
+    public class EnergyMixinValueChangedPacketProcessor : AuthenticatedPacketProcessor<EnergyMixinValueChanged>
     {
         private readonly PlayerManager playerManager;
         private readonly InventoryManager inventoryManager;
@@ -16,12 +16,12 @@ namespace NitroxServer.Communication.Packets.Processors
             this.inventoryManager = inventoryManager;
         }
 
-        public override void Process(EnergyMixinValueChanged packet, Player player)
+        public override void Process(EnergyMixinValueChanged packet, Player sendingPlayer)
         {
             if (!inventoryManager.GetAllStorageSlotItems().Contains(packet.BatteryData))
             {
                 inventoryManager.StorageItemAdded(packet.BatteryData); // Updates the charge of the battery on the server
-                playerManager.SendPacketToOtherPlayers(packet, player);
+                playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
             }
         }
     }

@@ -16,7 +16,7 @@ namespace NitroxServer.Communication.Packets.Processors
             this.storyGoalData = storyGoalData;
         }
 
-        public override void Process(StoryEventSend packet, Player player)
+        public override void Process(StoryEventSend packet, Player sendingPlayer)
         {
             switch (packet.StoryEventType)
             {
@@ -40,7 +40,7 @@ namespace NitroxServer.Communication.Packets.Processors
                     }
                     break;
             }
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

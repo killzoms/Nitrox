@@ -5,7 +5,7 @@ using NitroxServer.GameLogic;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class SubRootChangedPacketProcessor : AuthenticatedPacketProcessor<SubRootChanged>
+    public class SubRootChangedPacketProcessor : AuthenticatedPacketProcessor<SubRootChanged>
     {
         private readonly PlayerManager playerManager;
 
@@ -14,11 +14,11 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(SubRootChanged packet, Player player)
+        public override void Process(SubRootChanged packet, Player sendingPlayer)
         {
             Log.Debug(packet);
-            player.SubRootId = packet.SubRootId;
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            sendingPlayer.SubRootId = packet.SubRootId;
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

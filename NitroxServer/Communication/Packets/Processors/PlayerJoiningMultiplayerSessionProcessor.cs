@@ -26,14 +26,12 @@ namespace NitroxServer.Communication.Packets.Processors
             this.world = world;
         }
 
-        public override void Process(PlayerJoiningMultiplayerSession packet, NitroxConnection connection)
+        public override void Process(PlayerJoiningMultiplayerSession packet, INitroxConnection connection)
         {
-            bool wasBrandNewPlayer;
-            Player player = playerManager.PlayerConnected(connection, packet.ReservationKey, out wasBrandNewPlayer);
+            Player player = playerManager.PlayerConnected(connection, packet.ReservationKey, out bool wasBrandNewPlayer);
             timeKeeper.SendCurrentTimePacket(player);
 
-            Optional<EscapePodModel> newlyCreatedEscapePod;
-            NitroxId assignedEscapePodId = world.EscapePodManager.AssignPlayerToEscapePod(player.Id, out newlyCreatedEscapePod);
+            NitroxId assignedEscapePodId = world.EscapePodManager.AssignPlayerToEscapePod(player.Id, out Optional<EscapePodModel> newlyCreatedEscapePod);
             if (newlyCreatedEscapePod.HasValue)
             {
                 AddEscapePod addEscapePod = new AddEscapePod(newlyCreatedEscapePod.Value);
@@ -52,7 +50,8 @@ namespace NitroxServer.Communication.Packets.Processors
                 player.Permissions = Perms.ADMIN;
             }
 
-            InitialPlayerSync initialPlayerSync = new InitialPlayerSync(player.GameObjectId,
+            InitialPlayerSync initialPlayerSync = new InitialPlayerSync(
+                player.GameObjectId,
                 wasBrandNewPlayer,
                 world.EscapePodManager.GetEscapePods(),
                 assignedEscapePodId,
@@ -86,11 +85,9 @@ namespace NitroxServer.Communication.Packets.Processors
                     List<EquippedItemData> equippedItems = otherPlayer.GetEquipment();
                     List<NitroxTechType> techTypes = equippedItems.Select(equippedItem => equippedItem.TechType).ToList();
 
-                    InitialRemotePlayerData remotePlayer = new InitialRemotePlayerData(otherPlayer.PlayerContext, otherPlayer.Position, otherPlayer.SubRootId, techTypes);
-                    playerData.Add(remotePlayer);
+                    playerData.Add(new InitialRemotePlayerData(otherPlayer.PlayerContext, otherPlayer.Position, otherPlayer.SubRootId, techTypes));
                 }
             }
-
             return playerData;
         }
     }

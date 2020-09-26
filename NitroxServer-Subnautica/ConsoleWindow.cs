@@ -7,7 +7,7 @@ namespace NitroxServer_Subnautica
     /// <summary>
     ///     Helper methods to manage the console window used by this process.
     /// </summary>
-    public class ConsoleWindow
+    public static class ConsoleWindow
     {
         /// <summary>
         ///     This flag enables the user to use the mouse to select and edit text. To enable
@@ -38,8 +38,7 @@ namespace NitroxServer_Subnautica
             try
             {
                 IntPtr conHandle = GetStdHandle(STD_INPUT_HANDLE);
-                int mode;
-                if (!GetConsoleMode(conHandle, out mode))
+                if (!GetConsoleMode(conHandle, out int mode))
                 {
                     return;
                 }
@@ -50,7 +49,7 @@ namespace NitroxServer_Subnautica
                 }
                 else
                 {
-                    mode = mode & ~(QUICK_EDIT_MODE | EXTENDED_FLAGS);
+                    mode &= ~(QUICK_EDIT_MODE | EXTENDED_FLAGS);
                 }
                 SetConsoleMode(conHandle, mode);
             }

@@ -11,7 +11,7 @@ namespace NitroxServer.GameLogic.Entities
     public class EntityData
     {
         [ProtoMember(1)]
-        public List<Entity> Entities = new List<Entity>();
+        public List<Entity> Entities { get; private set; } = new List<Entity>();
 
         [ProtoAfterDeserialization]
         private void ProtoAfterDeserialization()

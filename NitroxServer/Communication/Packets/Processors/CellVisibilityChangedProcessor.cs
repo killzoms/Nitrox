@@ -8,7 +8,7 @@ using NitroxServer.GameLogic.Entities;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class CellVisibilityChangedProcessor : AuthenticatedPacketProcessor<CellVisibilityChanged>
+    public class CellVisibilityChangedProcessor : AuthenticatedPacketProcessor<CellVisibilityChanged>
     {
         private readonly EntityManager entityManager;
         private readonly EntitySimulation entitySimulation;
@@ -21,14 +21,14 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(CellVisibilityChanged packet, Player player)
+        public override void Process(CellVisibilityChanged packet, Player sendingPlayer)
         {
-            player.AddCells(packet.Added);
-            player.RemoveCells(packet.Removed);
+            sendingPlayer.AddCells(packet.Added);
+            sendingPlayer.RemoveCells(packet.Removed);
 
-            SendNewlyVisibleEntities(player, packet.Added);
+            SendNewlyVisibleEntities(sendingPlayer, packet.Added);
 
-            List<SimulatedEntity> ownershipChanges = entitySimulation.CalculateSimulationChangesFromCellSwitch(player, packet.Added, packet.Removed);
+            List<SimulatedEntity> ownershipChanges = entitySimulation.CalculateSimulationChangesFromCellSwitch(sendingPlayer, packet.Added, packet.Removed);
             BroadcastSimulationChanges(ownershipChanges);
         }
 
@@ -38,8 +38,7 @@ namespace NitroxServer.Communication.Packets.Processors
 
             if (newlyVisibleEntities.Count > 0)
             {
-                CellEntities cellEntities = new CellEntities(newlyVisibleEntities);
-                player.SendPacket(cellEntities);
+                player.SendPacket(new CellEntities(newlyVisibleEntities));
             }
         }
 
@@ -48,8 +47,7 @@ namespace NitroxServer.Communication.Packets.Processors
             if (ownershipChanges.Count > 0)
             {
                 // TODO: This should be moved to `SimulationOwnership`
-                SimulationOwnershipChange ownershipChange = new SimulationOwnershipChange(ownershipChanges);
-                playerManager.SendPacketToAllPlayers(ownershipChange);
+                playerManager.SendPacketToAllPlayers(new SimulationOwnershipChange(ownershipChanges));
             }
         }
     }

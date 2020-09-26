@@ -19,7 +19,7 @@ namespace NitroxServer.Communication.Packets.Processors
             this.entities = entities;
         }
 
-        public override void Process(PingRenamed packet, Player player)
+        public override void Process(PingRenamed packet, Player sendingPlayer)
         {
             Optional<Entity> beaconEntity = entities.GetEntityById(packet.Id);
             if (!beaconEntity.HasValue)
@@ -28,8 +28,8 @@ namespace NitroxServer.Communication.Packets.Processors
                 return;
             }
 
-            Log.Info($"Received ping rename: {packet} by player: {player}");
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            Log.Info($"Received ping rename: {packet} by player: {sendingPlayer}");
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
 
             // Persist label change on server for future players
             beaconEntity.Value.SerializedGameObject = packet.BeaconGameObjectSerialized;

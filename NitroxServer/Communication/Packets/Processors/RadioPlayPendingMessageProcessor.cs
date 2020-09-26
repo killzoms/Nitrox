@@ -1,4 +1,4 @@
-using NitroxModel.Packets;
+﻿using NitroxModel.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
 using NitroxServer.GameLogic;
 using NitroxServer.GameLogic.Unlockables;
@@ -16,10 +16,10 @@ namespace NitroxServer
             this.playerManager = playerManager;
         }
 
-        public override void Process(RadioPlayPendingMessage packet, Player player)
+        public override void Process(RadioPlayPendingMessage packet, Player sendingPlayer)
         {
             storyGoalData.RemovedLatestRadioMessage();
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

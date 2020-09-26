@@ -4,7 +4,7 @@ using NitroxServer.GameLogic;
 
 namespace NitroxServer_Subnautica.Communication.Packets.Processors
 {
-    class CyclopsDamagePointRepairedProcessor : AuthenticatedPacketProcessor<CyclopsDamagePointRepaired>
+    public class CyclopsDamagePointRepairedProcessor : AuthenticatedPacketProcessor<CyclopsDamagePointRepaired>
     {
         private readonly PlayerManager playerManager;
 
@@ -13,9 +13,9 @@ namespace NitroxServer_Subnautica.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(CyclopsDamagePointRepaired packet, NitroxServer.Player simulatingPlayer)
+        public override void Process(CyclopsDamagePointRepaired packet, NitroxServer.Player player)
         {
-            playerManager.SendPacketToOtherPlayers(packet, simulatingPlayer);
+            playerManager.SendPacketToOtherPlayers(packet, player);
         }
     }
 }

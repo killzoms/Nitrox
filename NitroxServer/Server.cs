@@ -91,7 +91,7 @@ namespace NitroxServer
             Log.Info($"Loaded save\n{SaveSummary}");
 
             Log.Info("Nitrox Server Started");
-            Log.Info("To get help for commands, run help in console or /help in chatbox\n");
+            Log.Info("To get help for commands, run help in console or /help in chat-box\n");
 
             PauseServer();
 

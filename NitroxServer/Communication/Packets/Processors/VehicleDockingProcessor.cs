@@ -8,7 +8,7 @@ using NitroxServer.GameLogic.Vehicles;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class VehicleDockingProcessor : AuthenticatedPacketProcessor<VehicleDocking>
+    public class VehicleDockingProcessor : AuthenticatedPacketProcessor<VehicleDocking>
     {
         private readonly PlayerManager playerManager;
         private readonly VehicleManager vehicleManager;
@@ -19,7 +19,7 @@ namespace NitroxServer.Communication.Packets.Processors
             this.vehicleManager = vehicleManager;
         }
 
-        public override void Process(VehicleDocking packet, Player player)
+        public override void Process(VehicleDocking packet, Player sendingPlayer)
         {
             Optional<VehicleModel> vehicle = vehicleManager.GetVehicleModel(packet.VehicleId);
 
@@ -29,10 +29,8 @@ namespace NitroxServer.Communication.Packets.Processors
                 return;
             }
 
-            VehicleModel vehicleModel = vehicle.Value;
-            vehicleModel.DockingBayId = Optional.Of(packet.DockId);
-
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            vehicle.Value.DockingBayId = Optional.Of(packet.DockId);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

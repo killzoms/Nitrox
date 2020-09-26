@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using AssetsTools.NET;
-using NitroxServer.Serialization.Resources.Datastructures;
-using NitroxServer_Subnautica.Serialization.Resources.Parsers.Monobehaviours;
+using NitroxServer.Serialization.Resources.DataStructures;
+using NitroxServer_Subnautica.Serialization.Resources.Parsers.MonoBehaviours;
 using static NitroxServer_Subnautica.Serialization.Resources.Parsers.MonoscriptAssetParser;
 
 namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
 {
-    public class MonobehaviourAssetParser : AssetParser
+    public class MonoBehaviourAssetParser : AssetParser
     {
-        public static Dictionary<AssetIdentifier, MonobehaviourAsset> MonobehavioursByAssetId = new Dictionary<AssetIdentifier, MonobehaviourAsset>();
+        private static Dictionary<AssetIdentifier, MonobehaviourAsset> monoBehavioursByAssetId { get; } = new Dictionary<AssetIdentifier, MonobehaviourAsset>();
 
-        private Dictionary<string, MonobehaviourParser> monobehaviourParsersByMonoscriptName = new Dictionary<string, MonobehaviourParser>()
+        private readonly Dictionary<string, MonoBehaviourParser> monoBehaviourParsersByMonoscriptName = new Dictionary<string, MonoBehaviourParser>()
         {
             { "WorldEntityData", new WorldEntityDataParser() },
             { "PrefabPlaceholder", new PrefabPlaceholderParser() },
@@ -21,34 +21,34 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
 
         public override void Parse(AssetIdentifier identifier, AssetsFileReader reader, ResourceAssets resourceAssets)
         {
-            MonobehaviourAsset monobehaviour = new MonobehaviourAsset();
+            MonobehaviourAsset monoBehaviour = new MonobehaviourAsset
+            {
+                GameObjectIdentifier = new AssetIdentifier(reader.ReadInt32(), reader.ReadInt64()),
+                Enabled = reader.ReadBoolean()
+            };
 
-            monobehaviour.GameObjectIdentifier = new AssetIdentifier(reader.ReadInt32(), reader.ReadInt64());
-            monobehaviour.Enabled = reader.ReadBoolean();
             reader.Align();
-            monobehaviour.MonoscriptIdentifier = new AssetIdentifier(reader.ReadInt32(), reader.ReadInt64());
-            monobehaviour.Name = reader.ReadCountStringInt32();
+            monoBehaviour.MonoscriptIdentifier = new AssetIdentifier(reader.ReadInt32(), reader.ReadInt64());
+            monoBehaviour.Name = reader.ReadCountStringInt32();
 
-            // Hack - If we have not yet loaded monoscripts then we are currently processing unit monobehaviours 
+            // Hack - If we have not yet loaded Monoscripts then we are currently processing unit MonoBehaviours 
             // that we do not care about.  Monoscripts should be fully loaded before we actually parse anything
             // we do care about in resource.assets.  If this becomes a problem later, we can do two passes and
-            // load monobeahviours in the second pass.
-            if (!MonoscriptAssetParser.MonoscriptsByAssetId.ContainsKey(monobehaviour.MonoscriptIdentifier))
+            // load MonoBehaviours in the second pass.
+            if (!MonoscriptAssetParser.MonoscriptsByAssetId.ContainsKey(monoBehaviour.MonoscriptIdentifier))
             {
                 return;
             }
 
-            MonoscriptAsset monoscript = MonoscriptAssetParser.MonoscriptsByAssetId[monobehaviour.MonoscriptIdentifier];
-            monobehaviour.MonoscriptName = monoscript.Name;
+            MonoscriptAsset monoscript = MonoscriptAssetParser.MonoscriptsByAssetId[monoBehaviour.MonoscriptIdentifier];
+            monoBehaviour.MonoscriptName = monoscript.Name;
 
-            MonobehaviourParser monoResourceParser;
-
-            if (monobehaviourParsersByMonoscriptName.TryGetValue(monoscript.Name, out monoResourceParser))
+            if (monoBehaviourParsersByMonoscriptName.TryGetValue(monoscript.Name, out MonoBehaviourParser monoResourceParser))
             {
-                monoResourceParser.Parse(identifier, monobehaviour.GameObjectIdentifier, reader, resourceAssets);
+                monoResourceParser.Parse(identifier, monoBehaviour.GameObjectIdentifier, reader, resourceAssets);
             }
 
-            MonobehavioursByAssetId.Add(identifier, monobehaviour);
+            monoBehavioursByAssetId.Add(identifier, monoBehaviour);
         }
     }
 }

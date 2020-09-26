@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NitroxModel.Helper;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 using UWE;
 
 namespace NitroxServer_Subnautica.Serialization.Resources
@@ -10,7 +10,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources
         public Dictionary<string, WorldEntityInfo> WorldEntitiesByClassId { get; } = new Dictionary<string, WorldEntityInfo>();
         public Dictionary<string, GameObjectAsset> PrefabsByClassId { get; } = new Dictionary<string, GameObjectAsset>();
         public string LootDistributionsJson { get; set; } = "";
-        public Dictionary<string, PrefabPlaceholdersGroupAsset> PrefabPlaceholderGroupsByGroupClassId = new Dictionary<string, PrefabPlaceholdersGroupAsset>();
+        public Dictionary<string, PrefabPlaceholdersGroupAsset> PrefabPlaceholderGroupsByGroupClassId { get; } = new Dictionary<string, PrefabPlaceholdersGroupAsset>();
 
         public void ValidateMembers()
         {

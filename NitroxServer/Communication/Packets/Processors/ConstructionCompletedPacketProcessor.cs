@@ -16,10 +16,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(ConstructionCompleted packet, Player player)
+        public override void Process(ConstructionCompleted packet, Player sendingPlayer)
         {
             baseManager.BasePieceConstructionCompleted(packet.PieceId, packet.BaseId);
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

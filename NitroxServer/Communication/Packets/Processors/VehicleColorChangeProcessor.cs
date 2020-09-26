@@ -6,7 +6,7 @@ using NitroxServer.GameLogic.Vehicles;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class VehicleColorChangeProcessor : AuthenticatedPacketProcessor<VehicleColorChange>
+    public class VehicleColorChangeProcessor : AuthenticatedPacketProcessor<VehicleColorChange>
     {
         private readonly PlayerManager playerManager;
         private readonly VehicleManager vehicleManager;
@@ -17,12 +17,11 @@ namespace NitroxServer.Communication.Packets.Processors
             this.vehicleManager = vehicleManager;
         }
 
-        public override void Process(VehicleColorChange packet, Player player)
+        public override void Process(VehicleColorChange packet, Player sendingPlayer)
         {
-            vehicleManager.UpdateVehicleColours(packet.Index, packet.Id, packet.HSB);
-            playerManager.SendPacketToOtherPlayers(packet, player);
-
-            Log.Debug("Received packet: " + packet);
+            Log.Debug(packet);
+            vehicleManager.UpdateVehicleColors(packet.Index, packet.Id, packet.HSB);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

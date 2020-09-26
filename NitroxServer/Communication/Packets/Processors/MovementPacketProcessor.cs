@@ -4,7 +4,7 @@ using NitroxServer.GameLogic;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class MovementPacketProcessor : AuthenticatedPacketProcessor<Movement>
+    public class MovementPacketProcessor : AuthenticatedPacketProcessor<Movement>
     {
         private readonly PlayerManager playerManager;
 
@@ -13,10 +13,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(Movement packet, Player player)
+        public override void Process(Movement packet, Player sendingPlayer)
         {
-            player.Position = packet.Position;
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            sendingPlayer.Position = packet.Position;
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace NitroxServer.GameLogic.Vehicles
     public class VehicleData
     {
         [ProtoMember(1)]
-        public List<VehicleModel> Vehicles = new List<VehicleModel>();
+        public List<VehicleModel> Vehicles { get; private set; } = new List<VehicleModel>();
 
         public static VehicleData From(IEnumerable<VehicleModel> vehicles)
         {

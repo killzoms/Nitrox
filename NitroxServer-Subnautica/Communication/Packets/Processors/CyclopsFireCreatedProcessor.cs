@@ -4,7 +4,7 @@ using NitroxServer.GameLogic;
 
 namespace NitroxServer_Subnautica.Communication.Packets.Processors
 {
-    class CyclopsFireCreatedProcessor : AuthenticatedPacketProcessor<CyclopsFireCreated>
+    public class CyclopsFireCreatedProcessor : AuthenticatedPacketProcessor<CyclopsFireCreated>
     {
         private readonly PlayerManager playerManager;
 
@@ -13,9 +13,9 @@ namespace NitroxServer_Subnautica.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(CyclopsFireCreated packet, NitroxServer.Player simulatingPlayer)
+        public override void Process(CyclopsFireCreated packet, NitroxServer.Player player)
         {
-            playerManager.SendPacketToOtherPlayers(packet, simulatingPlayer);
+            playerManager.SendPacketToOtherPlayers(packet, player);
         }
     }
 }

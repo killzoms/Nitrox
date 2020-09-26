@@ -4,7 +4,7 @@ using NitroxServer.GameLogic;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class PlayerStatsProcessor : AuthenticatedPacketProcessor<PlayerStats>
+    public class PlayerStatsProcessor : AuthenticatedPacketProcessor<PlayerStats>
     {
         private readonly PlayerManager playerManager;
 
@@ -13,10 +13,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(PlayerStats packet, Player player)
+        public override void Process(PlayerStats packet, Player sendingPlayer)
         {
-            player.Stats = new NitroxModel.DataStructures.GameLogic.PlayerStatsData(packet.Oxygen, packet.MaxOxygen, packet.Health, packet.Food, packet.Water, packet.InfectionAmount);
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            sendingPlayer.Stats = new NitroxModel.DataStructures.GameLogic.PlayerStatsData(packet.Oxygen, packet.MaxOxygen, packet.Health, packet.Food, packet.Water, packet.InfectionAmount);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

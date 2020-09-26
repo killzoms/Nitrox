@@ -1,4 +1,5 @@
 ﻿using NitroxModel.DataStructures.Util;
+using NitroxModel.Logger;
 using NitroxModel_Subnautica.DataStructures.GameLogic;
 using NitroxModel_Subnautica.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
@@ -7,7 +8,7 @@ using NitroxServer.GameLogic.Vehicles;
 
 namespace NitroxServer_Subnautica.Communication.Packets.Processors
 {
-    class CyclopsChangeShieldModeProcessor : AuthenticatedPacketProcessor<CyclopsChangeShieldMode>
+    public class CyclopsChangeShieldModeProcessor : AuthenticatedPacketProcessor<CyclopsChangeShieldMode>
     {
         private readonly VehicleManager vehicleManager;
         private readonly PlayerManager playerManager;
@@ -25,6 +26,10 @@ namespace NitroxServer_Subnautica.Communication.Packets.Processors
             if (opCyclops.HasValue)
             {
                 opCyclops.Value.ShieldOn = packet.IsOn;
+            }
+            else
+            {
+                Log.Error($"{nameof(CyclopsChangeShieldModeProcessor)}: Can't find server model for cyclops with id {packet.Id}");
             }
 
             playerManager.SendPacketToOtherPlayers(packet, player);

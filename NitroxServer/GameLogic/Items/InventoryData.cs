@@ -9,10 +9,10 @@ namespace NitroxServer.GameLogic.Items
     public class InventoryData
     {
         [ProtoMember(1)]
-        public List<ItemData> InventoryItems = new List<ItemData>();
+        public List<ItemData> InventoryItems { get; set; } = new List<ItemData>();
 
         [ProtoMember(2)]
-        public List<ItemData> StorageSlotItems = new List<ItemData>();
+        public List<ItemData> StorageSlotItems { get; set; } = new List<ItemData>();
 
         private InventoryData()
         {

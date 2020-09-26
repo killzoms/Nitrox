@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Util;
@@ -9,17 +10,16 @@ using NitroxServer.Communication.NetworkingLayer;
 
 namespace NitroxServer
 {
-    public class Player : IProcessorContext
+    public sealed class Player : IProcessorContext, IEquatable<Player>, IEqualityComparer<Player>
     {
         private readonly ThreadSafeCollection<EquippedItemData> equippedItems;
         private readonly ThreadSafeCollection<EquippedItemData> modules;
         private readonly ThreadSafeCollection<AbsoluteEntityCell> visibleCells;
 
-        public NitroxConnection connection { get; set; }
-        public PlayerSettings PlayerSettings => PlayerContext.PlayerSettings;
+        public INitroxConnection Connection { get; set; }
         public PlayerContext PlayerContext { get; set; }
         public ushort Id { get; }
-        public string Name { get; set; }
+        public string Name { get; private set; }
         public bool IsPermaDeath { get; set; }
         public NitroxVector3 Position { get; set; }
         public NitroxId GameObjectId { get; }
@@ -28,14 +28,15 @@ namespace NitroxServer
         public PlayerStatsData Stats { get; set; }
         public NitroxVector3? LastStoredPosition { get; set; }
 
-        public Player(ushort id, string name, bool isPermaDeath, PlayerContext playerContext, NitroxConnection connection, NitroxVector3 position, NitroxId playerId, Optional<NitroxId> subRootId, Perms perms, PlayerStatsData stats, IEnumerable<EquippedItemData> equippedItems,
-                      IEnumerable<EquippedItemData> modules)
+        public Player(ushort id, string name, bool isPermaDeath, PlayerContext playerContext, INitroxConnection connection,
+                      NitroxVector3 position, NitroxId playerId, Optional<NitroxId> subRootId, Perms perms, PlayerStatsData stats,
+                      IEnumerable<EquippedItemData> equippedItems, IEnumerable<EquippedItemData> modules)
         {
             Id = id;
             Name = name;
             IsPermaDeath = isPermaDeath;
             PlayerContext = playerContext;
-            this.connection = connection;
+            Connection = connection;
             Position = position;
             SubRootId = subRootId;
             GameObjectId = playerId;
@@ -45,38 +46,6 @@ namespace NitroxServer
             this.equippedItems = new ThreadSafeCollection<EquippedItemData>(equippedItems);
             this.modules = new ThreadSafeCollection<EquippedItemData>(modules);
             visibleCells = new ThreadSafeCollection<AbsoluteEntityCell>(new HashSet<AbsoluteEntityCell>(), false);
-        }
-
-        public static bool operator ==(Player left, Player right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(Player left, Player right)
-        {
-            return !Equals(left, right);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-            return Equals((Player)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
         }
 
         public void AddCells(IEnumerable<AbsoluteEntityCell> cells)
@@ -137,7 +106,7 @@ namespace NitroxServer
 
         public void SendPacket(Packet packet)
         {
-            connection.SendPacket(packet);
+            Connection.SendPacket(packet);
         }
 
         public void Teleport(NitroxVector3 destination)
@@ -149,14 +118,24 @@ namespace NitroxServer
             LastStoredPosition = playerTeleported.DestinationFrom;
         }
 
+        public bool Equals(Player other)
+        {
+            return Id == other?.Id;
+        }
+
+        public bool Equals(Player x, Player y)
+        {
+            return x?.Id == y?.Id;
+        }
+
+        public int GetHashCode(Player obj)
+        {
+            return Id.GetHashCode();
+        }
+
         public override string ToString()
         {
             return $"[Player - Id: {Id}, Name: {Name}, Perms: {Permissions}, Position: {Position}]";
-        }
-
-        protected bool Equals(Player other)
-        {
-            return Id == other.Id;
         }
     }
 }

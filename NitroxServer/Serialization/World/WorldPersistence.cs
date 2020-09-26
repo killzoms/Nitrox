@@ -17,7 +17,7 @@ using NitroxServer.GameLogic.Items;
 using NitroxServer.GameLogic.Players;
 using NitroxServer.GameLogic.Unlockables;
 using NitroxServer.GameLogic.Vehicles;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 
 namespace NitroxServer.Serialization.World
 {
@@ -50,7 +50,7 @@ namespace NitroxServer.Serialization.World
                     PlayerData = PlayerData.From(world.PlayerManager.GetAllPlayers()),
                     WorldData =
                     {
-                        ParsedBatchCells = world.BatchEntitySpawner.SerializableParsedBatches,
+                        ParsedBatchCells = world.BatchEntitySpawner.GetSerializableParsedBatches(),
                         ServerStartTime = world.TimeKeeper.ServerStartTime,
                         EntityData = EntityData.From(world.EntityManager.GetAllEntities()),
                         VehicleData = VehicleData.From(world.VehicleManager.GetVehicles()),
@@ -194,30 +194,28 @@ namespace NitroxServer.Serialization.World
                                   StoryTimingData storyTimingData,
                                   ServerGameMode gameMode)
         {
-            World world = new World();
-            world.TimeKeeper = new TimeKeeper();
-            world.TimeKeeper.ServerStartTime = serverStartTime;
+            World world = new World
+            {
+                TimeKeeper = new TimeKeeper { ServerStartTime = serverStartTime },
+                SimulationOwnershipData = new SimulationOwnershipData(),
+                PlayerManager = new PlayerManager(players, config),
+                BaseManager = new BaseManager(partiallyConstructedPieces, completedBasePieceHistory),
+                InventoryManager = new InventoryManager(inventoryItems, storageSlotItems),
+                GameData = gameData,
+                EscapePodManager = new EscapePodManager(escapePods),
+                GameMode = gameMode,
+                BatchEntitySpawner = new BatchEntitySpawner(
+                    NitroxServiceLocator.LocateService<EntitySpawnPointFactory>(),
+                    NitroxServiceLocator.LocateService<UweWorldEntityFactory>(),
+                    NitroxServiceLocator.LocateService<UwePrefabFactory>(),
+                    parsedBatchCells,
+                    protoBufSerializer,
+                    NitroxServiceLocator.LocateService<Dictionary<NitroxTechType, IEntityBootstrapper>>(),
+                    NitroxServiceLocator.LocateService<Dictionary<string, PrefabPlaceholdersGroupAsset>>())
+            };
 
-            world.SimulationOwnershipData = new SimulationOwnershipData();
-            world.PlayerManager = new PlayerManager(players, config);
             world.EventTriggerer = new EventTriggerer(world.PlayerManager, storyTimingData.ElapsedTime, storyTimingData.AuroraExplosionTime);
-            world.BaseManager = new BaseManager(partiallyConstructedPieces, completedBasePieceHistory);
-            world.InventoryManager = new InventoryManager(inventoryItems, storageSlotItems);
             world.VehicleManager = new VehicleManager(vehicles, world.InventoryManager);
-            world.GameData = gameData;
-            world.EscapePodManager = new EscapePodManager(escapePods);
-            world.GameMode = gameMode;
-
-            world.BatchEntitySpawner = new BatchEntitySpawner(
-                NitroxServiceLocator.LocateService<EntitySpawnPointFactory>(),
-                NitroxServiceLocator.LocateService<UweWorldEntityFactory>(),
-                NitroxServiceLocator.LocateService<UwePrefabFactory>(),
-                parsedBatchCells,
-                protoBufSerializer,
-                NitroxServiceLocator.LocateService<Dictionary<NitroxTechType, IEntityBootstrapper>>(),
-                NitroxServiceLocator.LocateService<Dictionary<string, PrefabPlaceholdersGroupAsset>>()
-            );
-
             world.EntityManager = new EntityManager(entities, world.BatchEntitySpawner);
 
             HashSet<NitroxTechType> serverSpawnedSimulationWhiteList = NitroxServiceLocator.LocateService<HashSet<NitroxTechType>>();

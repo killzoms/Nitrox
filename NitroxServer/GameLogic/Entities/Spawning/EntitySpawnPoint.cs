@@ -5,17 +5,14 @@ namespace NitroxServer.GameLogic.Entities.Spawning
 {
     public class EntitySpawnPoint
     {
-        public readonly List<EntitySpawnPoint> Children = new List<EntitySpawnPoint>();
-
-        public NitroxVector3 LocalPosition;
-
-        public NitroxQuaternion LocalRotation;
+        public List<EntitySpawnPoint> Children { get; } = new List<EntitySpawnPoint>();
+        public NitroxVector3 LocalPosition { get; }
+        public NitroxQuaternion LocalRotation { get; }
         public AbsoluteEntityCell AbsoluteEntityCell { get; }
         public NitroxVector3 Scale { get; }
         public string ClassId { get; }
         public string BiomeType { get; }
         public float Density { get; }
-        public bool CanSpawnCreature { get; private set; }
         public List<string> AllowedTypes { get; }
 
         public EntitySpawnPoint Parent { get; set; }
@@ -40,6 +37,6 @@ namespace NitroxServer.GameLogic.Entities.Spawning
             LocalRotation = localRotation;
         }
 
-        public override string ToString() => $"[EntitySpawnPoint - {AbsoluteEntityCell}, Local Position: {LocalPosition}, Local Rotation: {LocalRotation}, Scale: {Scale}, Class Id: {ClassId}, Biome Type: {BiomeType}, Density: {Density}, Can Spawn Creature: {CanSpawnCreature}]";
+        public override string ToString() => $"[EntitySpawnPoint - {AbsoluteEntityCell}, Local Position: {LocalPosition}, Local Rotation: {LocalRotation}, Scale: {Scale}, Class Id: {ClassId}, Biome Type: {BiomeType}, Density: {Density}]";
     }
 }

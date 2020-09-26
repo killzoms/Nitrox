@@ -109,11 +109,11 @@ namespace NitroxServer_Subnautica
             }
 
             // Read assemblies as bytes as to not lock the file so that Nitrox can patch assemblies while server is running.
-            using (FileStream stream = new FileStream(dllPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (MemoryStream mstream = new MemoryStream())
+            using (FileStream fileStream = new FileStream(dllPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                stream.CopyTo(mstream);
-                Assembly assembly = Assembly.Load(mstream.ToArray());
+                fileStream.CopyTo(memoryStream);
+                Assembly assembly = Assembly.Load(memoryStream.ToArray());
                 resolvedAssemblyCache[dllPath] = assembly;
                 return assembly;
             }
@@ -134,12 +134,13 @@ namespace NitroxServer_Subnautica
          */
         private static void ConfigureCultureInfo()
         {
-            CultureInfo cultureInfo = new CultureInfo("en-US");
-
-            // Although we loaded the en-US cultureInfo, let's make sure to set these incase the
+            // Although we loaded the en-US cultureInfo, let's make sure to set these in case the
             // default was overriden by the user.
-            cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
-            cultureInfo.NumberFormat.NumberGroupSeparator = ",";
+            CultureInfo cultureInfo = new CultureInfo("en-US")
+            {
+                NumberFormat = { NumberDecimalSeparator = ".",
+                    NumberGroupSeparator = "," }
+            };
 
             Thread.CurrentThread.CurrentCulture = cultureInfo;
             Thread.CurrentThread.CurrentUICulture = cultureInfo;
@@ -148,16 +149,16 @@ namespace NitroxServer_Subnautica
         private static void CatchExitEvent()
         {
             // Catch Exit Event
-            PlatformID platid = Environment.OSVersion.Platform;
+            PlatformID platId = Environment.OSVersion.Platform;
 
             // using *nix signal system to catch Ctrl+C
-            if (platid == PlatformID.Unix || platid == PlatformID.MacOSX || platid == PlatformID.Win32NT || (int)platid == 128) // mono = 128
+            if (platId == PlatformID.Unix || platId == PlatformID.MacOSX || platId == PlatformID.Win32NT || (int)platId == 128) // mono = 128
             {
                 Console.CancelKeyPress += OnCtrlCPressed;
             }
 
             // better catch using WinAPI. This will handled process kill
-            if (platid == PlatformID.Win32NT)
+            if (platId == PlatformID.Win32NT)
             {
                 SetConsoleCtrlHandler(consoleCtrlCheckDelegate, true);
             }

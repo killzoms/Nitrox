@@ -4,7 +4,7 @@ using NitroxModel_Subnautica.DataStructures;
 
 namespace NitroxServer_Subnautica.GameLogic.Entities
 {
-    public class SimulationWhitelist
+    public static class SimulationWhitelist
     {
         /*
          * We don't want to give out simulation to all entities that the server sent out

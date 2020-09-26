@@ -51,7 +51,7 @@ namespace NitroxServer.GameLogic.Entities
 
         public Optional<Entity> GetEntityById(NitroxId id)
         {
-            Entity entity = null;
+            Entity entity;
 
             lock (entitiesById)
             {
@@ -145,7 +145,7 @@ namespace NitroxServer.GameLogic.Entities
                     }
                     else
                     {
-                        Log.Info("Entity Already Exists for Id: " + entity.Id + " Item: " + entity.TechType);
+                        Log.Info($"Entity Already Exists for Id: {entity.Id} Item: {entity.TechType}");
                     }
                 }
             }
@@ -153,9 +153,7 @@ namespace NitroxServer.GameLogic.Entities
             {
                 lock (phasingEntitiesByAbsoluteCell)
                 {
-                    List<Entity> phasingEntitiesInCell = null;
-
-                    if (!phasingEntitiesByAbsoluteCell.TryGetValue(entity.AbsoluteEntityCell, out phasingEntitiesInCell))
+                    if (!phasingEntitiesByAbsoluteCell.TryGetValue(entity.AbsoluteEntityCell, out List<Entity> phasingEntitiesInCell))
                     {
                         phasingEntitiesInCell = phasingEntitiesByAbsoluteCell[entity.AbsoluteEntityCell] = new List<Entity>();
                     }
@@ -187,9 +185,7 @@ namespace NitroxServer.GameLogic.Entities
                 {
                     lock (phasingEntitiesByAbsoluteCell)
                     {
-                        List<Entity> entities;
-
-                        if (phasingEntitiesByAbsoluteCell.TryGetValue(entity.AbsoluteEntityCell, out entities))
+                        if (phasingEntitiesByAbsoluteCell.TryGetValue(entity.AbsoluteEntityCell, out List<Entity> entities))
                         {
                             entities.Remove(entity);
                         }

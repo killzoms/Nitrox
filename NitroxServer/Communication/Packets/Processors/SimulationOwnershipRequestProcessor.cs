@@ -4,7 +4,7 @@ using NitroxServer.GameLogic;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class SimulationOwnershipRequestProcessor : AuthenticatedPacketProcessor<SimulationOwnershipRequest>
+    public class SimulationOwnershipRequestProcessor : AuthenticatedPacketProcessor<SimulationOwnershipRequest>
     {
         private readonly PlayerManager playerManager;
         private readonly SimulationOwnershipData simulationOwnershipData;
@@ -15,18 +15,18 @@ namespace NitroxServer.Communication.Packets.Processors
             this.simulationOwnershipData = simulationOwnershipData;
         }
 
-        public override void Process(SimulationOwnershipRequest ownershipRequest, Player player)
+        public override void Process(SimulationOwnershipRequest packet, Player sendingPlayer)
         {
-            bool aquiredLock = simulationOwnershipData.TryToAcquire(ownershipRequest.Id, player, ownershipRequest.LockType);
+            bool aquiredLock = simulationOwnershipData.TryToAcquire(packet.Id, sendingPlayer, packet.LockType);
 
             if (aquiredLock)
             {
-                SimulationOwnershipChange simulationOwnershipChange = new SimulationOwnershipChange(ownershipRequest.Id, player.Id, ownershipRequest.LockType);
-                playerManager.SendPacketToOtherPlayers(simulationOwnershipChange, player);
+                SimulationOwnershipChange simulationOwnershipChange = new SimulationOwnershipChange(packet.Id, sendingPlayer.Id, packet.LockType);
+                playerManager.SendPacketToOtherPlayers(simulationOwnershipChange, sendingPlayer);
             }
 
-            SimulationOwnershipResponse responseToPlayer = new SimulationOwnershipResponse(ownershipRequest.Id, aquiredLock, ownershipRequest.LockType);
-            player.SendPacket(responseToPlayer);
+            SimulationOwnershipResponse responseToPlayer = new SimulationOwnershipResponse(packet.Id, aquiredLock, packet.LockType);
+            sendingPlayer.SendPacket(responseToPlayer);
         }
     }
 }

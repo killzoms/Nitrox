@@ -4,7 +4,7 @@ using NitroxServer.GameLogic;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class ModuleAddedProcessor : AuthenticatedPacketProcessor<ModuleAdded>
+    public class ModuleAddedProcessor : AuthenticatedPacketProcessor<ModuleAdded>
     {
         private readonly PlayerManager playerManager;
 
@@ -13,10 +13,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(ModuleAdded packet, Player player)
+        public override void Process(ModuleAdded packet, Player sendingPlayer)
         {
-            player.AddModule(packet.EquippedItemData);
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            sendingPlayer.AddModule(packet.EquippedItemData);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

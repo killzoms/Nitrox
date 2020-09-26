@@ -2,9 +2,9 @@
 {
     public class NitroxEntitySlot
     {
-        public string[] AllowedTypes;
+        public string[] AllowedTypes { get; }
 
-        public string BiomeType;
+        public string BiomeType { get; }
 
         public NitroxEntitySlot(string biomeType, string[] allowedTypes)
         {

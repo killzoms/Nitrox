@@ -184,80 +184,56 @@ namespace NitroxServer.Serialization
     [ProtoContract]
     public class CellsFileHeader
     {
-        public override string ToString()
-        {
-            return string.Format("(version={0}, numCells={1})", Version, NumCells);
-        }
-
         [ProtoMember(1)]
-        public int Version;
+        public int Version { get; }
 
         [ProtoMember(2)]
-        public int NumCells;
+        public int NumCells { get; }
+
+        public override string ToString() => $"(version={Version}, numCells={NumCells})";
     }
 
     [ProtoContract]
     public class CellHeader
     {
-        public override string ToString()
-        {
-            return $"(cellId={CellId}, level={Level})";
-        }
-
         [ProtoMember(1)]
         public NitroxInt3 CellId;
 
         [ProtoMember(2)]
-        public int Level;
+        public int Level { get; }
+
+        public override string ToString() => $"(cellId={CellId}, level={Level})";
     }
 
     [ProtoContract]
     public class CellHeaderEx
     {
-        public override string ToString()
-        {
-            return string.Format("(cellId={0}, level={1}, dataLength={2}, legacyDataLength={3}, waiterDataLength={4})", new object[]
-            {
-                CellId,
-                Level,
-                DataLength,
-                LegacyDataLength,
-                WaiterDataLength
-            });
-        }
-
         [ProtoMember(1)]
         public NitroxInt3 CellId;
 
         [ProtoMember(2)]
-        public int Level;
+        public int Level { get; }
 
         [ProtoMember(3)]
-        public int DataLength;
+        public int DataLength { get; }
 
         [ProtoMember(4)]
-        public int LegacyDataLength;
+        public int LegacyDataLength { get; }
 
         [ProtoMember(5)]
-        public int WaiterDataLength;
+        public int WaiterDataLength { get; }
+
+        public override string ToString() => $"(cellId={CellId}, level={Level}, dataLength={DataLength}, legacyDataLength={LegacyDataLength}, waiterDataLength={WaiterDataLength})";
     }
 
     [ProtoContract]
     public class StreamHeader
     {
         [ProtoMember(1)]
-        public int Signature
-        {
-            get;
-            set;
-        }
+        public int Signature { get; private set; }
 
         [ProtoMember(2)]
-        public int Version
-        {
-            get;
-            set;
-        }
+        public int Version { get; private set; }
 
         public void Reset()
         {
@@ -265,98 +241,51 @@ namespace NitroxServer.Serialization
             Version = 0;
         }
 
-        public override string ToString()
-        {
-            return string.Format("(UniqueIdentifier={0}, Version={1})", Signature, Version);
-        }
+        public override string ToString() => $"(UniqueIdentifier={Signature}, Version={Version})";
     }
 
     [ProtoContract]
     public class LoopHeader
     {
         [ProtoMember(1)]
-        public int Count
-        {
-            get;
-            set;
-        }
+        public int Count { get; private set; }
 
         public void Reset()
         {
             Count = 0;
         }
-
-        public override string ToString()
-        {
-            return string.Format("(Count={0})", Count);
-        }
+        public override string ToString() => $"(Count={Count})";
     }
 
     [ProtoContract]
     public class GameObjectData
     {
         [ProtoMember(1)]
-        public bool CreateEmptyObject
-        {
-            get;
-            set;
-        }
+        public bool CreateEmptyObject { get; private set; }
 
         [ProtoMember(2)]
-        public bool IsActive
-        {
-            get;
-            set;
-        }
+        public bool IsActive { get; private set; }
 
         [ProtoMember(3)]
-        public int Layer
-        {
-            get;
-            set;
-        }
+        public int Layer { get; private set; }
 
         [ProtoMember(4)]
-        public string Tag
-        {
-            get;
-            set;
-        }
+        public string Tag { get; private set; }
 
         [ProtoMember(6)]
-        public string Id
-        {
-            get;
-            set;
-        }
+        public string Id { get; private set; }
 
         [ProtoMember(7)]
-        public string ClassId
-        {
-            get;
-            set;
-        }
+        public string ClassId { get; private set; }
 
         [ProtoMember(8)]
-        public string Parent
-        {
-            get;
-            set;
-        }
+        public string Parent { get; private set; }
 
         [ProtoMember(9)]
-        public bool OverridePrefab
-        {
-            get;
-            set;
-        }
+        public bool OverridePrefab { get; private set; }
 
         [ProtoMember(10)]
-        public bool MergeObject
-        {
-            get;
-            set;
-        }
+        public bool MergeObject { get; private set; }
 
         public void Reset()
         {
@@ -371,39 +300,17 @@ namespace NitroxServer.Serialization
             MergeObject = false;
         }
 
-        public override string ToString()
-        {
-            return string.Format("(CreateEmptyObject={0}, IsActive={1}, Layer={2}, Tag={3}, Id={4}, ClassId={5}, Parent={6}, OverridePrefab={7}, MergeObject={8})", new object[]
-            {
-                CreateEmptyObject,
-                IsActive,
-                Layer,
-                Tag,
-                Id,
-                ClassId,
-                Parent,
-                OverridePrefab,
-                MergeObject
-            });
-        }
+        public override string ToString() => $"(CreateEmptyObject={CreateEmptyObject}, IsActive={IsActive}, Layer={Layer}, Tag={Tag}, Id={Id}, ClassId={ClassId}, Parent={Parent}, OverridePrefab={OverridePrefab}, MergeObject={MergeObject})";
     }
 
     [ProtoContract]
     public class ComponentHeader
     {
         [ProtoMember(1)]
-        public string TypeName
-        {
-            get;
-            set;
-        }
+        public string TypeName { get; private set; }
 
         [ProtoMember(2)]
-        public bool IsEnabled
-        {
-            get;
-            set;
-        }
+        public bool IsEnabled { get; private set; }
 
         public void Reset()
         {
@@ -411,10 +318,6 @@ namespace NitroxServer.Serialization
             IsEnabled = false;
         }
 
-        public override string ToString()
-        {
-            return string.Format("(TypeName={0}, IsEnabled={1})", TypeName, IsEnabled);
-        }
+        public override string ToString() => $"(TypeName={TypeName}, IsEnabled={IsEnabled})";
     }
-
 }

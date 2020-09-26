@@ -1,4 +1,5 @@
 ﻿using NitroxModel.DataStructures.Util;
+using NitroxModel.Logger;
 using NitroxModel_Subnautica.DataStructures.GameLogic;
 using NitroxModel_Subnautica.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
@@ -7,7 +8,7 @@ using NitroxServer.GameLogic.Vehicles;
 
 namespace NitroxServer_Subnautica.Communication.Packets.Processors
 {
-    class CyclopsChangeSonarModeProcessor : AuthenticatedPacketProcessor<CyclopsChangeSonarMode>
+    public class CyclopsChangeSonarModeProcessor : AuthenticatedPacketProcessor<CyclopsChangeSonarMode>
     {
         private readonly VehicleManager vehicleManager;
         private readonly PlayerManager playerManager;
@@ -21,9 +22,14 @@ namespace NitroxServer_Subnautica.Communication.Packets.Processors
         public override void Process(CyclopsChangeSonarMode packet, NitroxServer.Player player)
         {
             Optional<CyclopsModel> opCyclops = vehicleManager.GetVehicleModel<CyclopsModel>(packet.Id);
+
             if (opCyclops.HasValue)
             {
                 opCyclops.Value.SonarOn = packet.IsOn;
+            }
+            else
+            {
+                Log.Error($"{nameof(CyclopsChangeSonarModeProcessor)}: Can't find server model for cyclops with id {packet.Id}");
             }
 
             playerManager.SendPacketToOtherPlayers(packet, player);

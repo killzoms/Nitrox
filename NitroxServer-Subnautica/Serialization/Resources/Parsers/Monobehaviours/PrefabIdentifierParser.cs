@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using AssetsTools.NET;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 
-namespace NitroxServer_Subnautica.Serialization.Resources.Parsers.Monobehaviours
+namespace NitroxServer_Subnautica.Serialization.Resources.Parsers.MonoBehaviours
 {
-    public class PrefabIdentifierParser : MonobehaviourParser
+    public class PrefabIdentifierParser : MonoBehaviourParser
     {
         public static Dictionary<AssetIdentifier, string> ClassIdByGameObjectId { get; } = new Dictionary<AssetIdentifier, string>();
 

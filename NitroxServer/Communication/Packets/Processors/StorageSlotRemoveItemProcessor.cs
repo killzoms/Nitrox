@@ -5,7 +5,7 @@ using NitroxServer.GameLogic.Items;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class StorageSlotRemoveItemProcessor : AuthenticatedPacketProcessor<StorageSlotItemRemove>
+    public class StorageSlotRemoveItemProcessor : AuthenticatedPacketProcessor<StorageSlotItemRemove>
     {
         private readonly PlayerManager playerManager;
         private readonly InventoryManager inventoryManager;
@@ -16,12 +16,12 @@ namespace NitroxServer.Communication.Packets.Processors
             this.inventoryManager = inventoryManager;
         }
 
-        public override void Process(StorageSlotItemRemove packet, Player player)
+        public override void Process(StorageSlotItemRemove packet, Player sendingPlayer)
         {
             // Only need to send to other players, if an synced item was really removed
             if (inventoryManager.StorageItemRemoved(packet.OwnerId))
             {
-                playerManager.SendPacketToOtherPlayers(packet, player);
+                playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
             }
         }
     }

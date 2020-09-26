@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using AssetsTools.NET;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 using NitroxServer_Subnautica.Serialization.Resources.Parsers.Text;
 
 namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
 {
-    class TextAssetParser : AssetParser
+    public class TextAssetParser : AssetParser
     {
-        private Dictionary<string, AssetParser> textParsersByAssetName = new Dictionary<string, AssetParser>()
+        private readonly Dictionary<string, AssetParser> textParsersByAssetName = new Dictionary<string, AssetParser>()
         {
             { "EntityDistributions", new EntityDistributionsParser() }
         };
@@ -16,9 +16,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
         {
             string assetName = reader.ReadCountStringInt32();
 
-            AssetParser textResourceParser;
-
-            if (textParsersByAssetName.TryGetValue(assetName, out textResourceParser))
+            if (textParsersByAssetName.TryGetValue(assetName, out AssetParser textResourceParser))
             {
                 textResourceParser.Parse(identifier, reader, resourceAssets);
             }

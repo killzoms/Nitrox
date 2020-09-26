@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using NitroxModel.DataStructures.Util;
 using NitroxServer.GameLogic.Entities;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 using NitroxServer_Subnautica.Serialization.Resources.Parsers;
-using NitroxServer_Subnautica.Serialization.Resources.Parsers.Monobehaviours;
+using NitroxServer_Subnautica.Serialization.Resources.Parsers.MonoBehaviours;
 
 namespace NitroxServer_Subnautica.Serialization.Resources.Processing
 {
@@ -12,7 +12,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Processing
      * Subnautica spawns certain types of items using PrefabPlaceholderGroups.  These internally have a 
      * list of PrefabPlaceholders that can spawn an item. When Nitrox spawns items, it will need to do a 
      * lookup every time it identifies a PrefabPlaceholderGroup to replace it with the resulting entities.
-     * We surpress the client from doing this as we don't want virtual entities that the server does not
+     * We suppress the client from doing this as we don't want virtual entities that the server does not
      * know about.
      */
     public class PrefabPlaceholderExtractor
@@ -21,9 +21,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Processing
         {
             foreach (GameObjectAsset placeholderGroup in GameObjectAssetParser.GameObjectsByAssetId.Values)
             {
-                List<AssetIdentifier> prefabPlaceholders;
-
-                if (!PrefabPlaceholdersGroupParser.PrefabPlaceholderIdsByGameObjectId.TryGetValue(placeholderGroup.Identifier, out prefabPlaceholders))
+                if (!PrefabPlaceholdersGroupParser.PrefabPlaceholderIdsByGameObjectId.TryGetValue(placeholderGroup.Identifier, out List<AssetIdentifier> prefabPlaceholders))
                 {
                     continue;
                 }
@@ -66,9 +64,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Processing
             {
                 TransformAsset childTransform = TransformAssetParser.TransformsByAssetId[childTransformId];
 
-                string childClassId;
-
-                PrefabIdentifierParser.ClassIdByGameObjectId.TryGetValue(childTransform.GameObjectIdentifier, out childClassId);
+                PrefabIdentifierParser.ClassIdByGameObjectId.TryGetValue(childTransform.GameObjectIdentifier, out string childClassId);
 
                 children.Add(CreatePrefabAsset(childTransform.GameObjectIdentifier, childClassId));
             }
@@ -80,26 +76,23 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Processing
         {
             AssetIdentifier prefabId = PrefabIdentifierParser.GameObjectIdByClassId[classId];
             GameObjectAsset gameObject = GameObjectAssetParser.GameObjectsByAssetId[prefabId];
-            NitroxEntitySlot entitySlot;
 
-            EntitySlotParser.EntitySlotsByIdentifier.TryGetValue(gameObject.Identifier, out entitySlot);
+            EntitySlotParser.EntitySlotsByIdentifier.TryGetValue(gameObject.Identifier, out NitroxEntitySlot entitySlot);
 
             return Optional.OfNullable(entitySlot);
         }
 
-        private TransformAsset GetTransform(GameObjectAsset gameObjectAsset)
+        private static TransformAsset GetTransform(GameObjectAsset gameObjectAsset)
         {
             foreach (AssetIdentifier componentIdentifier in gameObjectAsset.Components)
             {
-                TransformAsset transform;
-
-                if (TransformAssetParser.TransformsByAssetId.TryGetValue(componentIdentifier, out transform))
+                if (TransformAssetParser.TransformsByAssetId.TryGetValue(componentIdentifier, out TransformAsset transform))
                 {
                     return transform;
                 }
             }
 
-            throw new Exception("No transform found for " + gameObjectAsset.Identifier);
+            throw new KeyNotFoundException($"No transform found for {gameObjectAsset.Identifier}");
         }
     }
 }

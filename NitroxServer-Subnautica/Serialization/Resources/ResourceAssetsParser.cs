@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using AssetsTools.NET;
 using NitroxModel.Discovery;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 using NitroxServer_Subnautica.Serialization.Resources.Parsers;
 using NitroxServer_Subnautica.Serialization.Resources.Processing;
 
@@ -24,7 +24,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources
             { 1, new GameObjectAssetParser()},
             { 4, new TransformAssetParser()},
             { 49, new TextAssetParser() },
-            { 114, new MonobehaviourAssetParser() },
+            { 114, new MonoBehaviourAssetParser() },
             { 115, new MonoscriptAssetParser() },
 
             // 224 is RectTransform. We don't currently directly interpret it; however, we want to parse it so that
@@ -82,9 +82,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources
 
                     AssetIdentifier identifier = new AssetIdentifier(fileId, assetFileInfo.index);
 
-                    AssetParser assetParser;
-
-                    if (assetParsersByClassId.TryGetValue(assetFileInfo.curFileType, out assetParser))
+                    if (assetParsersByClassId.TryGetValue(assetFileInfo.curFileType, out AssetParser assetParser))
                     {
                         assetParser.Parse(identifier, reader, resourceAssets);
                     }
@@ -105,7 +103,6 @@ namespace NitroxServer_Subnautica.Serialization.Resources
             using (AssetsFileReader reader = new AssetsFileReader(resStream))
             {
                 AssetsFile file = new AssetsFile(reader);
-                AssetsFileTable resourcesFileTable = new AssetsFileTable(file);
 
                 int fileId = 1;
 

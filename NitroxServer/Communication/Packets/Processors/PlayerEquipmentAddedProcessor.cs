@@ -14,17 +14,13 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(PlayerEquipmentAdded packet, Player player)
+        public override void Process(PlayerEquipmentAdded packet, Player sendingPlayer)
         {
-            string playerName = player.Name;
             EquippedItemData equippedItem = packet.EquippedItem;
+            RemotePlayerEquipmentAdded equipmentAdded = new RemotePlayerEquipmentAdded(sendingPlayer.Id, packet.TechType);
 
-            player.AddEquipment(equippedItem);
-
-            ushort playerId = player.Id;
-            RemotePlayerEquipmentAdded equipmentAdded = new RemotePlayerEquipmentAdded(playerId, packet.TechType);
-
-            playerManager.SendPacketToOtherPlayers(equipmentAdded, player);
+            sendingPlayer.AddEquipment(equippedItem);
+            playerManager.SendPacketToOtherPlayers(equipmentAdded, sendingPlayer);
         }
     }
 }

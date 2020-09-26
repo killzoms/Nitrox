@@ -14,11 +14,9 @@ namespace NitroxServer_Subnautica.GameLogic.Entities.Spawning.EntityBootstrapper
             parentEntity.ChildEntities.Add(crashFish);
         }
 
-        private Entity SpawnChild(Entity parentEntity, DeterministicBatchGenerator deterministicBatchGenerator, TechType techType, string classId)
+        private static Entity SpawnChild(Entity parentEntity, DeterministicBatchGenerator deterministicBatchGenerator, TechType techType, string classId)
         {
-            NitroxId id = deterministicBatchGenerator.NextId();
-
-            return new Entity(new NitroxVector3(0, 0, 0), new NitroxQuaternion(0, 0, 0, 1), new NitroxVector3(1, 1, 1), techType.ToDto(), parentEntity.Level, classId, true, id, null, parentEntity);
+            return new Entity(new NitroxVector3(0, 0, 0), new NitroxQuaternion(0, 0, 0, 1), new NitroxVector3(1, 1, 1), techType.ToDto(), parentEntity.Level, classId, true, deterministicBatchGenerator.NextId(), null, parentEntity);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace NitroxServer.GameLogic
     public class EscapePodData
     {
         [ProtoMember(1)]
-        public List<EscapePodModel> EscapePods;
+        public List<EscapePodModel> EscapePods { get; private set; }
 
         public static EscapePodData From(List<EscapePodModel> escapePods)
         {

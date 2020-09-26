@@ -7,15 +7,15 @@ namespace NitroxServer.GameLogic
 {
     public class EscapePodManager
     {
-        public const int ESCAPE_POD_X_OFFSET = 40;
+        private const int ESCAPE_POD_X_OFFSET = 40;
 
-        public ThreadSafeCollection<EscapePodModel> EscapePods { get; }
+        private readonly ThreadSafeCollection<EscapePodModel> escapePods;
         private readonly ThreadSafeDictionary<ushort, EscapePodModel> escapePodsByPlayerId = new ThreadSafeDictionary<ushort, EscapePodModel>();
         private EscapePodModel podForNextPlayer;
 
         public EscapePodManager(List<EscapePodModel> escapePods)
         {
-            EscapePods = new ThreadSafeCollection<EscapePodModel>(escapePods);
+            this.escapePods = new ThreadSafeCollection<EscapePodModel>(escapePods);
 
             InitializePodForNextPlayer();
             InitializeEscapePodsByPlayerId();
@@ -44,24 +44,24 @@ namespace NitroxServer.GameLogic
 
         public List<EscapePodModel> GetEscapePods()
         {
-            return EscapePods.ToList();
+            return escapePods.ToList();
         }
 
         public void RepairEscapePod(NitroxId id)
         {
-            EscapePodModel escapePod = EscapePods.Find(ep => ep.Id == id);
+            EscapePodModel escapePod = escapePods.Find(ep => ep.Id.Equals(id));
             escapePod.Damaged = false;
         }
 
         public void RepairEscapePodRadio(NitroxId id)
         {
-            EscapePodModel escapePod = EscapePods.Find(ep => ep.RadioId == id);
+            EscapePodModel escapePod = escapePods.Find(ep => ep.RadioId.Equals(id));
             escapePod.RadioDamaged = false;
         }
-        
+
         private EscapePodModel CreateNewEscapePod()
         {
-            int totalEscapePods = EscapePods.Count;
+            int totalEscapePods = escapePods.Count;
 
             EscapePodModel escapePod = new EscapePodModel();
             escapePod.InitEscapePodModel(new NitroxId(),
@@ -73,14 +73,14 @@ namespace NitroxServer.GameLogic
                                          true,
                                          true);
 
-            EscapePods.Add(escapePod);
+            escapePods.Add(escapePod);
 
             return escapePod;
         }
 
         private void InitializePodForNextPlayer()
         {
-            foreach (EscapePodModel pod in EscapePods)
+            foreach (EscapePodModel pod in escapePods)
             {
                 if (!pod.IsFull())
                 {
@@ -95,7 +95,7 @@ namespace NitroxServer.GameLogic
         private void InitializeEscapePodsByPlayerId()
         {
             escapePodsByPlayerId.Clear();
-            foreach (EscapePodModel pod in EscapePods)
+            foreach (EscapePodModel pod in escapePods)
             {
                 foreach (ushort playerId in pod.AssignedPlayers)
                 {

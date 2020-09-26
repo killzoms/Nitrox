@@ -17,12 +17,12 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(SignChanged packet, Player player)
+        public override void Process(SignChanged packet, Player sendingPlayer)
         {
             SignMetadata signMetadata = packet.SignMetadata;
-            baseManager.UpdateBasePieceMetadata(signMetadata.Id, signMetadata);
 
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            baseManager.UpdateBasePieceMetadata(signMetadata.Id, signMetadata);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

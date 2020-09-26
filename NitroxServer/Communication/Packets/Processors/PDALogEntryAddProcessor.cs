@@ -17,10 +17,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.pdaState = pdaState;
         }
 
-        public override void Process(PDALogEntryAdd packet, Player player)
+        public override void Process(PDALogEntryAdd packet, Player sendingPlayer)
         {
             pdaState.AddPDALogEntry(new PDALogEntry(packet.Key, packet.Timestamp));
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

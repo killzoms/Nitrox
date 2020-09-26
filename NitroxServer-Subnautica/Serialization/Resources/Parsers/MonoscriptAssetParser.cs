@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using AssetsTools.NET;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 
 namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
 {
@@ -10,8 +10,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
 
         public override void Parse(AssetIdentifier identifier, AssetsFileReader reader, ResourceAssets resourceAssets)
         {
-            MonoscriptAsset monoscriptAsset = new MonoscriptAsset();
-            monoscriptAsset.Name = reader.ReadCountStringInt32();
+            MonoscriptAsset monoscriptAsset = new MonoscriptAsset { Name = reader.ReadCountStringInt32() };
 
             MonoscriptsByAssetId.Add(identifier, monoscriptAsset);
         }

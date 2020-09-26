@@ -14,10 +14,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(ChatMessage packet, Player player)
+        public override void Process(ChatMessage packet, Player sendingPlayer)
         {
-            Log.Info(string.Format("<{0}>: {1}", player.Name, packet.Text));
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            Log.Info($"<{sendingPlayer.Name}>: {packet.Text}");
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

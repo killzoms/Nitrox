@@ -8,7 +8,7 @@ using NitroxServer.GameLogic.Entities.Spawning;
 namespace NitroxServer.ConsoleCommands
 {
     /// <summary>
-    ///     Mainly used for testing but can be used to pregen the world
+    ///     Mainly used for testing but can be used to pre generate the world
     /// </summary>
     internal class LoadBatchCommand : Command
     {

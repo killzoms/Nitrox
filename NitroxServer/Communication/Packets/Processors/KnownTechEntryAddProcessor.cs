@@ -16,10 +16,10 @@ namespace NitroxServer.Communication.Packets.Processors
             this.pdaStateData = pdaStateData;
         }
 
-        public override void Process(KnownTechEntryAdd packet, Player player)
+        public override void Process(KnownTechEntryAdd packet, Player sendingPlayer)
         {
             pdaStateData.AddKnownTechType(packet.TechType);
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 

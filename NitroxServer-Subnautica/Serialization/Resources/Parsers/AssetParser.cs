@@ -1,5 +1,5 @@
 ﻿using AssetsTools.NET;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 
 namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
 {

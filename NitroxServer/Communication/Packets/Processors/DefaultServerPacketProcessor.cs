@@ -26,14 +26,13 @@ namespace NitroxServer.Communication.Packets.Processors
             this.playerManager = playerManager;
         }
 
-        public override void Process(Packet packet, Player player)
+        public override void Process(Packet packet, Player sendingPlayer)
         {
             if (!loggingPacketBlackList.Contains(packet.GetType()))
             {
-                Log.Debug("Using default packet processor for: " + packet.ToString() + " and player " + player.Id);
+                Log.Debug($"Using default packet processor for: {packet} and player {sendingPlayer.Id}");
             }
-
-            playerManager.SendPacketToOtherPlayers(packet, player);
+            playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
         }
     }
 }

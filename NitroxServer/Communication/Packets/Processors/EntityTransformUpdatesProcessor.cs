@@ -8,7 +8,7 @@ using NitroxServer.GameLogic.Entities;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class EntityTransformUpdatesProcessor : AuthenticatedPacketProcessor<EntityTransformUpdates>
+    public class EntityTransformUpdatesProcessor : AuthenticatedPacketProcessor<EntityTransformUpdates>
     {
         private readonly PlayerManager playerManager;
         private readonly EntityManager entityManager;
@@ -19,20 +19,20 @@ namespace NitroxServer.Communication.Packets.Processors
             this.entityManager = entityManager;
         }
 
-        public override void Process(EntityTransformUpdates packet, Player simulatingPlayer)
+        public override void Process(EntityTransformUpdates packet, Player sendingPlayer)
         {
-            Dictionary<Player, List<EntityTransformUpdate>> visibleUpdatesByPlayer = InitializeVisibleUpdateMapWithOtherPlayers(simulatingPlayer);
+            Dictionary<Player, List<EntityTransformUpdate>> visibleUpdatesByPlayer = InitializeVisibleUpdateMapWithOtherPlayers(sendingPlayer);
             AssignVisibleUpdatesToPlayers(packet.Updates, visibleUpdatesByPlayer);
             SendUpdatesToPlayers(visibleUpdatesByPlayer);
         }
 
-        private Dictionary<Player, List<EntityTransformUpdate>> InitializeVisibleUpdateMapWithOtherPlayers(Player simulatingPlayer)
+        private Dictionary<Player, List<EntityTransformUpdate>> InitializeVisibleUpdateMapWithOtherPlayers(Player sendingPlayer)
         {
             Dictionary<Player, List<EntityTransformUpdate>> visibleUpdatesByPlayer = new Dictionary<Player, List<EntityTransformUpdate>>();
 
             foreach (Player player in playerManager.GetConnectedPlayers())
             {
-                if (!player.Equals(simulatingPlayer))
+                if (!player.Equals(sendingPlayer))
                 {
                     visibleUpdatesByPlayer[player] = new List<EntityTransformUpdate>();
                 }
@@ -56,12 +56,9 @@ namespace NitroxServer.Communication.Packets.Processors
 
                 foreach (KeyValuePair<Player, List<EntityTransformUpdate>> playerUpdates in visibleUpdatesByPlayer)
                 {
-                    Player player = playerUpdates.Key;
-                    List<EntityTransformUpdate> visibleUpdates = playerUpdates.Value;
-
-                    if (player.HasCellLoaded(currentCell.Value))
+                    if (playerUpdates.Key.HasCellLoaded(currentCell.Value))
                     {
-                        visibleUpdates.Add(update);
+                        playerUpdates.Value.Add(update);
                     }
                 }
             }
@@ -71,13 +68,10 @@ namespace NitroxServer.Communication.Packets.Processors
         {
             foreach (KeyValuePair<Player, List<EntityTransformUpdate>> playerUpdates in visibleUpdatesByPlayer)
             {
-                Player player = playerUpdates.Key;
-                List<EntityTransformUpdate> updates = playerUpdates.Value;
-
-                if (updates.Count > 0)
+                if (playerUpdates.Value.Count > 0)
                 {
-                    EntityTransformUpdates updatesPacket = new EntityTransformUpdates(updates);
-                    player.SendPacket(updatesPacket);
+                    EntityTransformUpdates updatesPacket = new EntityTransformUpdates(playerUpdates.Value);
+                    playerUpdates.Key.SendPacket(updatesPacket);
                 }
             }
         }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using NitroxModel.DataStructures;
-using NitroxModel.DataStructures.GameLogic;
+using System.Linq;
 using NitroxModel.DataStructures.Util;
 using ProtoBufNet;
 
@@ -12,13 +11,13 @@ namespace NitroxServer.GameLogic.Players
         public const short VERSION = 2;
 
         [ProtoMember(1)]
-        public List<PersistedPlayerData> Players = new List<PersistedPlayerData>();
+        private List<PersistedPlayerData> players = new List<PersistedPlayerData>();
 
         public List<Player> GetPlayers()
         {
             List<Player> boPlayers = new List<Player>();
 
-            foreach (PersistedPlayerData playerData in Players)
+            foreach (PersistedPlayerData playerData in players)
             {
                 Player player = new Player(playerData.Id,
                                            playerData.Name,
@@ -40,63 +39,21 @@ namespace NitroxServer.GameLogic.Players
 
         public static PlayerData From(IEnumerable<Player> players)
         {
-            List<PersistedPlayerData> persistedPlayers = new List<PersistedPlayerData>();
-
-            foreach (Player player in players)
+            List<PersistedPlayerData> persistedPlayers = players.Select(player => new PersistedPlayerData
             {
-                PersistedPlayerData persistedPlayer = new PersistedPlayerData();
-                persistedPlayer.Name = player.Name;
-                persistedPlayer.EquippedItems = player.GetEquipment();
-                persistedPlayer.Modules = player.GetModules();
-                persistedPlayer.Id = player.Id;
-                persistedPlayer.SpawnPosition = player.Position;
-                persistedPlayer.CurrentStats = player.Stats;
-                persistedPlayer.SubRootId = player.SubRootId.OrElse(null);
-                persistedPlayer.Permissions = player.Permissions;
-                persistedPlayer.NitroxId = player.GameObjectId;
-                persistedPlayer.IsPermaDeath = player.IsPermaDeath;
+                Name = player.Name,
+                EquippedItems = player.GetEquipment(),
+                Modules = player.GetModules(),
+                Id = player.Id,
+                SpawnPosition = player.Position,
+                CurrentStats = player.Stats,
+                SubRootId = player.SubRootId.OrElse(null),
+                Permissions = player.Permissions,
+                NitroxId = player.GameObjectId,
+                IsPermaDeath = player.IsPermaDeath
+            }).ToList();
 
-                persistedPlayers.Add(persistedPlayer);
-            }
-
-            PlayerData playerData = new PlayerData();
-            playerData.Players = persistedPlayers;
-
-            return playerData;
-        }
-
-        [ProtoContract]
-        public class PersistedPlayerData
-        {
-            [ProtoMember(1)]
-            public string Name { get; set; }
-
-            [ProtoMember(2)]
-            public List<EquippedItemData> EquippedItems { get; set; } = new List<EquippedItemData>();
-
-            [ProtoMember(3)]
-            public List<EquippedItemData> Modules { get; set; } = new List<EquippedItemData>();
-
-            [ProtoMember(4)]
-            public ushort Id { get; set; }
-
-            [ProtoMember(5)]
-            public NitroxVector3 SpawnPosition { get; set; }
-
-            [ProtoMember(6)]
-            public PlayerStatsData CurrentStats { get; set; }
-
-            [ProtoMember(7)]
-            public NitroxId SubRootId { get; set; }
-
-            [ProtoMember(8)]
-            public Perms Permissions { get; set; } = Perms.PLAYER;
-
-            [ProtoMember(9)]
-            public NitroxId NitroxId { get; set; }
-
-            [ProtoMember(10)]
-            public bool IsPermaDeath { get; set; }
+            return new PlayerData { players = persistedPlayers };
         }
     }
 }

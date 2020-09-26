@@ -7,10 +7,9 @@ namespace NitroxServer.Communication.Packets.Processors
 {
     public class BedEnterProcessor : AuthenticatedPacketProcessor<BedEnter>
     {
-        public override void Process(BedEnter packet, Player player)
+        public override void Process(BedEnter packet, Player sendingPlayer)
         {
-            TimeKeeper timeKeeper = NitroxServiceLocator.LocateService<TimeKeeper>();
-            timeKeeper.SkipTime();
+            NitroxServiceLocator.LocateService<TimeKeeper>().SkipTime();
         }
     }
 }

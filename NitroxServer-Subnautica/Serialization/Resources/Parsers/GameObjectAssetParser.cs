@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using AssetsTools.NET;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 
 namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
 {
@@ -10,8 +10,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
 
         public override void Parse(AssetIdentifier identifier, AssetsFileReader reader, ResourceAssets resourceAssets)
         {
-            GameObjectAsset gameObjectAsset = new GameObjectAsset();
-            gameObjectAsset.Identifier = identifier;
+            GameObjectAsset gameObjectAsset = new GameObjectAsset { Identifier = identifier };
 
             uint componentCount = reader.ReadUInt32();
 

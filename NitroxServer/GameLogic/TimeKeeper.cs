@@ -7,13 +7,11 @@ namespace NitroxServer.GameLogic
     public class TimeKeeper
     {
         // Values taken directly from hardcoded subnautica values
-        private static readonly DateTime SUBNAUTICA_FUTURE_START_DATE = new DateTime(2287, 5, 7, 9, 36, 0);
-
-        private static readonly float SUBNAUTICA_BEGIN_TIME_OFFSET = 1200f /
-                                                                     86400f *
-                                                                     (3600f * SUBNAUTICA_FUTURE_START_DATE.Hour +
-                                                                      60f * SUBNAUTICA_FUTURE_START_DATE.Minute +
-                                                                      SUBNAUTICA_FUTURE_START_DATE.Second);
+        private static readonly DateTime subnauticaFutureStartDate = new DateTime(2287, 5, 7, 9, 36, 0);
+        private static readonly float subnauticaBeginTimeOffset = 1200f / 86400f *
+                                                                  (3600f * subnauticaFutureStartDate.Hour +
+                                                                   60f * subnauticaFutureStartDate.Minute +
+                                                                   subnauticaFutureStartDate.Second);
 
         // Discrepancy value for player based time modifications
         private float correctionValue;
@@ -52,13 +50,6 @@ namespace NitroxServer.GameLogic
             }
         }
 
-        private float CurrentTime
-        {
-            get
-            {
-                TimeSpan interval = DateTime.UtcNow - ServerStartTime;
-                return SUBNAUTICA_BEGIN_TIME_OFFSET + Convert.ToSingle(interval.TotalSeconds) + correctionValue;
-            }
-        }
+        private float CurrentTime => subnauticaBeginTimeOffset + Convert.ToSingle((DateTime.UtcNow - ServerStartTime).TotalSeconds) + correctionValue;
     }
 }

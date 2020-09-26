@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using AssetsTools.NET;
 using NitroxServer.GameLogic.Entities;
-using NitroxServer.Serialization.Resources.Datastructures;
+using NitroxServer.Serialization.Resources.DataStructures;
 
-namespace NitroxServer_Subnautica.Serialization.Resources.Parsers.Monobehaviours
+namespace NitroxServer_Subnautica.Serialization.Resources.Parsers.MonoBehaviours
 {
-    public class EntitySlotParser : MonobehaviourParser
+    public class EntitySlotParser : MonoBehaviourParser
     {
-        public static Dictionary<AssetIdentifier, NitroxEntitySlot> EntitySlotsByIdentifier = new Dictionary<AssetIdentifier, NitroxEntitySlot>();
+        public static Dictionary<AssetIdentifier, NitroxEntitySlot> EntitySlotsByIdentifier { get; } = new Dictionary<AssetIdentifier, NitroxEntitySlot>();
 
         public override void Parse(AssetIdentifier identifier, AssetIdentifier gameObjectIdentifier, AssetsFileReader reader, ResourceAssets resourceAssets)
         {

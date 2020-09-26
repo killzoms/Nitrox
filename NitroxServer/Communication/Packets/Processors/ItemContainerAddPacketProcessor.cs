@@ -5,7 +5,7 @@ using NitroxServer.GameLogic.Items;
 
 namespace NitroxServer.Communication.Packets.Processors
 {
-    class ItemContainerAddPacketProcessor : AuthenticatedPacketProcessor<ItemContainerAdd>
+    public class ItemContainerAddPacketProcessor : AuthenticatedPacketProcessor<ItemContainerAdd>
     {
         private readonly PlayerManager playerManager;
         private readonly InventoryManager inventoryManager;
@@ -16,12 +16,12 @@ namespace NitroxServer.Communication.Packets.Processors
             this.inventoryManager = inventoryManager;
         }
 
-        public override void Process(ItemContainerAdd packet, Player player)
+        public override void Process(ItemContainerAdd packet, Player sendingPlayer)
         {
             inventoryManager.ItemAdded(packet.ItemData);
-            if (!packet.ItemData.ContainerId.Equals(player.GameObjectId))
+            if (!packet.ItemData.ContainerId.Equals(sendingPlayer.GameObjectId))
             {
-                playerManager.SendPacketToOtherPlayers(packet, player);
+                playerManager.SendPacketToOtherPlayers(packet, sendingPlayer);
             }
         }
     }

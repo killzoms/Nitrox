@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace NitroxServer.Exceptions
 {
     [Serializable]
-    internal class DuplicateRegistrationException : Exception
+    public class DuplicateRegistrationException : Exception
     {
         public DuplicateRegistrationException()
         {

@@ -66,7 +66,7 @@ namespace NitroxServer.GameLogic.Vehicles
             }
         }
 
-        public void UpdateVehicleColours(int index, NitroxId id, NitroxVector3 hsb)
+        public void UpdateVehicleColors(int index, NitroxId id, NitroxVector3 hsb)
         {
             if (vehiclesById.ContainsKey(id))
             {
@@ -87,8 +87,7 @@ namespace NitroxServer.GameLogic.Vehicles
 
         public Optional<VehicleModel> GetVehicleModel(NitroxId id)
         {
-            VehicleModel vehicleModel;
-            vehiclesById.TryGetValue(id, out vehicleModel);
+            vehiclesById.TryGetValue(id, out VehicleModel vehicleModel);
             return Optional.OfNullable(vehicleModel);
         }
 

@@ -10,16 +10,18 @@ namespace NitroxServer.GameLogic.Bases
         public const short VERSION = 2;
 
         [ProtoMember(1)]
-        public List<BasePiece> PartiallyConstructedPieces = new List<BasePiece>();
+        public List<BasePiece> PartiallyConstructedPieces { get; private set; } = new List<BasePiece>();
 
         [ProtoMember(2)]
-        public List<BasePiece> CompletedBasePieceHistory = new List<BasePiece>();
+        public List<BasePiece> CompletedBasePieceHistory { get; private set; } = new List<BasePiece>();
 
         public static BaseData From(List<BasePiece> partiallyConstructedPieces, List<BasePiece> completedBasePieceHistory)
         {
-            BaseData baseData = new BaseData();
-            baseData.PartiallyConstructedPieces = partiallyConstructedPieces;
-            baseData.CompletedBasePieceHistory = completedBasePieceHistory;
+            BaseData baseData = new BaseData
+            {
+                PartiallyConstructedPieces = partiallyConstructedPieces,
+                CompletedBasePieceHistory = completedBasePieceHistory
+            };
 
             return baseData;
         }

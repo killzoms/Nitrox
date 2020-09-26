@@ -6,38 +6,37 @@ using static NitroxServer_Subnautica.GameLogic.Entities.Spawning.EntityBootstrap
 
 namespace NitroxServer_Subnautica.GameLogic.Entities.Spawning.EntityBootstrappers
 {
-    class ReefbackBootstrapper : IEntityBootstrapper
+    public class ReefbackBootstrapper : IEntityBootstrapper
     {
-        private float creatureProbabiltySum = 0;
+        private readonly float creatureProbabilitySum;
 
         public ReefbackBootstrapper()
         {
             foreach (ReefbackEntity creature in SpawnableCreatures)
             {
-                creatureProbabiltySum += creature.probability;
+                creatureProbabilitySum += creature.Probability;
             }
         }
 
         public void Prepare(Entity parentEntity, DeterministicBatchGenerator deterministicBatchGenerator)
         {
-            for(int spawnPointCounter = 0; spawnPointCounter < LocalCreatureSpawnPoints.Count; spawnPointCounter++)
+            foreach (NitroxVector3 localSpawnPosition in LocalCreatureSpawnPoints)
             {
-                NitroxVector3 localSpawnPosition = LocalCreatureSpawnPoints[spawnPointCounter];
-                float targetProbabilitySum = (float)deterministicBatchGenerator.NextDouble() * creatureProbabiltySum;
+                float targetProbabilitySum = (float)deterministicBatchGenerator.NextDouble() * creatureProbabilitySum;
                 float probabilitySum = 0;
 
                 foreach (ReefbackEntity creature in SpawnableCreatures)
                 {
-                    probabilitySum += creature.probability;
+                    probabilitySum += creature.Probability;
 
-                    if(probabilitySum >= targetProbabilitySum)
+                    if (probabilitySum >= targetProbabilitySum)
                     {
-                        int totalToSpawn = deterministicBatchGenerator.NextInt(creature.minNumber, creature.maxNumber + 1);
+                        int totalToSpawn = deterministicBatchGenerator.NextInt(creature.MinNumber, creature.MaxNumber + 1);
 
-                        for(int i = 0; i < totalToSpawn; i++)
+                        for (int i = 0; i < totalToSpawn; i++)
                         {
                             NitroxId id = deterministicBatchGenerator.NextId();
-                            Entity child = new Entity(localSpawnPosition, new NitroxQuaternion(0, 0, 0, 1), new NitroxVector3(1, 1, 1), creature.techType.ToDto(), parentEntity.Level, creature.classId, true, id, null, parentEntity);
+                            Entity child = new Entity(localSpawnPosition, new NitroxQuaternion(0, 0, 0, 1), new NitroxVector3(1, 1, 1), creature.TechType.ToDto(), parentEntity.Level, creature.ClassId, true, id, null, parentEntity);
                             parentEntity.ChildEntities.Add(child);
                         }
 

@@ -40,7 +40,7 @@ namespace NitroxServer
                             .SingleInstance();
         }
 
-        private void RegisterWorld(ContainerBuilder containerBuilder)
+        private static void RegisterWorld(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterType<WorldPersistence>().SingleInstance();
 
@@ -58,7 +58,7 @@ namespace NitroxServer
             containerBuilder.Register(c => c.Resolve<World>().GameData.StoryGoals).SingleInstance();
         }
 
-        private void RegisterGameSpecificServices(ContainerBuilder containerBuilder, Assembly assembly)
+        private static void RegisterGameSpecificServices(ContainerBuilder containerBuilder, Assembly assembly)
         {
             containerBuilder
                 .RegisterAssemblyTypes(assembly)

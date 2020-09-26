@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace NitroxServer_Subnautica.GameLogic.Entities.Spawning
 {
     public static class SlotsHelper
     {
-        private static Dictionary<EntitySlotData.EntitySlotType, EntitySlot.Type> typeMapping = new Dictionary<EntitySlotData.EntitySlotType, EntitySlot.Type>
+        private static readonly Dictionary<EntitySlotData.EntitySlotType, EntitySlot.Type> typeMapping = new Dictionary<EntitySlotData.EntitySlotType, EntitySlot.Type>
             {
                 { EntitySlotData.EntitySlotType.Small, EntitySlot.Type.Small },
                 { EntitySlotData.EntitySlotType.Medium, EntitySlot.Type.Medium },
@@ -15,19 +16,18 @@ namespace NitroxServer_Subnautica.GameLogic.Entities.Spawning
 
         public static List<EntitySlot.Type> GetEntitySlotTypes(IEntitySlot entitySlot)
         {
-            if (entitySlot is EntitySlot)
+            switch (entitySlot)
             {
-                return ((EntitySlot)entitySlot).allowedTypes;
+                case EntitySlot slot:
+                    return slot.allowedTypes;
+                case EntitySlotData data:
+                    return ConvertSlotTypes(data.allowedTypes);
+                default:
+                    throw new InvalidEnumArgumentException($"Unknown EntitySlotType {entitySlot.GetType()}");
             }
-            else if (entitySlot is EntitySlotData)
-            {
-                return ConvertSlotTypes(((EntitySlotData)entitySlot).allowedTypes);
-            }
-
-            throw new System.Exception("Unknown EntitySlotType " + entitySlot.GetType());
         }
 
-        public static List<EntitySlot.Type> ConvertSlotTypes(EntitySlotData.EntitySlotType entitySlotType)
+        private static List<EntitySlot.Type> ConvertSlotTypes(EntitySlotData.EntitySlotType entitySlotType)
         {
             List<EntitySlot.Type> slotsTypes = new List<EntitySlot.Type>();
 

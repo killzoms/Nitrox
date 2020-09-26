@@ -4,12 +4,13 @@ using System.Linq;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.Logger;
+using NitroxServer.Exceptions;
 
 namespace NitroxServer.GameLogic.Entities
 {
     public class EntitySimulation
     {
-        private const SimulationLockType DEFAULT_ENTITY_SIMULATION_LOCKTYPE = SimulationLockType.TRANSIENT;
+        private const SimulationLockType DEFAULT_ENTITY_SIMULATION_LOCK_TYPE = SimulationLockType.TRANSIENT;
 
         private readonly EntityManager entityManager;
         private readonly PlayerManager playerManager;
@@ -48,12 +49,12 @@ namespace NitroxServer.GameLogic.Entities
 
         public SimulatedEntity AssignNewEntityToPlayer(Entity entity, Player player)
         {
-            if (simulationOwnershipData.TryToAcquire(entity.Id, player, DEFAULT_ENTITY_SIMULATION_LOCKTYPE))
+            if (simulationOwnershipData.TryToAcquire(entity.Id, player, DEFAULT_ENTITY_SIMULATION_LOCK_TYPE))
             {
-                return new SimulatedEntity(entity.Id, player.Id, true, DEFAULT_ENTITY_SIMULATION_LOCKTYPE);
+                return new SimulatedEntity(entity.Id, player.Id, true, DEFAULT_ENTITY_SIMULATION_LOCK_TYPE);
             }
 
-            throw new Exception("New entity was already being simulated by someone else: " + entity.Id);
+            throw new DuplicateRegistrationException($"New entity was already being simulated by someone else: {entity.Id}");
         }
 
         private void AssignLoadedCellEntitySimulation(Player player, AbsoluteEntityCell[] addedCells, List<SimulatedEntity> ownershipChanges)
@@ -62,7 +63,7 @@ namespace NitroxServer.GameLogic.Entities
 
             foreach (Entity entity in entities)
             {
-                ownershipChanges.Add(new SimulatedEntity(entity.Id, player.Id, true, DEFAULT_ENTITY_SIMULATION_LOCKTYPE));
+                ownershipChanges.Add(new SimulatedEntity(entity.Id, player.Id, true, DEFAULT_ENTITY_SIMULATION_LOCK_TYPE));
             }
         }
 
@@ -74,10 +75,10 @@ namespace NitroxServer.GameLogic.Entities
                 {
                     bool isOtherPlayer = player != oldPlayer;
 
-                    if (isOtherPlayer && player.CanSee(entity) && simulationOwnershipData.TryToAcquire(entity.Id, player, DEFAULT_ENTITY_SIMULATION_LOCKTYPE))
+                    if (isOtherPlayer && player.CanSee(entity) && simulationOwnershipData.TryToAcquire(entity.Id, player, DEFAULT_ENTITY_SIMULATION_LOCK_TYPE))
                     {
                         Log.Info("Player " + player.Name + " has taken over simulating " + entity.Id);
-                        ownershipChanges.Add(new SimulatedEntity(entity.Id, player.Id, true, DEFAULT_ENTITY_SIMULATION_LOCKTYPE));
+                        ownershipChanges.Add(new SimulatedEntity(entity.Id, player.Id, true, DEFAULT_ENTITY_SIMULATION_LOCK_TYPE));
                         return;
                     }
                 }
@@ -96,7 +97,7 @@ namespace NitroxServer.GameLogic.Entities
                     {
                         bool isSpawnedByServerAndWhitelisted = entity.SpawnedByServer && serverSpawnedSimulationWhiteList.Contains(entity.TechType);
                         bool isEligibleForSimulation = isSpawnedByServerAndWhitelisted || !entity.SpawnedByServer;
-                        return cell.Level <= entity.Level && isEligibleForSimulation && simulationOwnershipData.TryToAcquire(entity.Id, player, DEFAULT_ENTITY_SIMULATION_LOCKTYPE);
+                        return cell.Level <= entity.Level && isEligibleForSimulation && simulationOwnershipData.TryToAcquire(entity.Id, player, DEFAULT_ENTITY_SIMULATION_LOCK_TYPE);
                     }));
             }
 
