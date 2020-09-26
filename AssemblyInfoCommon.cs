@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 // UNIQUE: [assembly: AssemblyTitle("")]
 // UNIQUE: [assembly: AssemblyDescription("")]
 // UNIQUE: [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Nitrox")]
 // UNIQUE: [assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]

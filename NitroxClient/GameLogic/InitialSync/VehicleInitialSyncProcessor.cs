@@ -4,7 +4,7 @@ using NitroxClient.GameLogic.InitialSync.Base;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 
 namespace NitroxClient.GameLogic.InitialSync
 {

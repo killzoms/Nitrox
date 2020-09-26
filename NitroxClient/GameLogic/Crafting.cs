@@ -3,7 +3,7 @@ using NitroxClient.MonoBehaviours;
 using NitroxModel.DataStructures;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 using UnityEngine;
 
 namespace NitroxClient.GameLogic

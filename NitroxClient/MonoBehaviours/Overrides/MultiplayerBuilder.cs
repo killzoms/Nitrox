@@ -10,6 +10,8 @@ using NitroxModel_Subnautica.DataStructures.GameLogic.Buildings.Rotation;
 using NitroxModel_Subnautica.DataStructures.GameLogic.Buildings.Rotation.Metadata;
 using NitroxModel_Subnautica.DataStructures;
 using NitroxModel_Subnautica.Helper.Int3;
+using NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation.Metadata;
+using NitroxModel.Subnautica.Helper;
 using UnityEngine;
 using UWE;
 

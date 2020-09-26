@@ -6,7 +6,7 @@ using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
-using NitroxModel_Subnautica.Helper;
+using NitroxModel.Subnautica.Helper;
 using UnityEngine;
 
 namespace NitroxClient.GameLogic

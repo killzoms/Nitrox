@@ -21,9 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		SharedConfig.targets = SharedConfig.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NitroxModel-Subnautica", "NitroxModel-Subnautica\NitroxModel-Subnautica.csproj", "{0A377218-6B36-4522-89A3-A39CFC999209}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NitroxModel.Subnautica", "NitroxModel.Subnautica\NitroxModel.Subnautica.csproj", "{0A377218-6B36-4522-89A3-A39CFC999209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NitroxServer-Subnautica", "NitroxServer-Subnautica\NitroxServer-Subnautica.csproj", "{EFF1D7A5-EFD6-413A-8D5F-DC2408E4C9B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NitroxServer.Subnautica", "NitroxServer.Subnautica\NitroxServer.Subnautica.csproj", "{EFF1D7A5-EFD6-413A-8D5F-DC2408E4C9B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NitroxLauncher", "NitroxLauncher\NitroxLauncher.csproj", "{E4A81E18-ABA0-4A8B-82FA-E4255BB2EF09}"
 EndProject
@@ -31,11 +31,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiteNetLib", "LiteNetLib\Li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nitrox.Bootloader", "Nitrox.Bootloader\Nitrox.Bootloader.csproj", "{E4226522-9189-410B-93B2-792942FBD588}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Nitrox.Subnautica.Assets", "Nitrox.Subnautica.Assets\Nitrox.Subnautica.Assets.shproj", "{0763D551-B1A8-4960-B88A-98833F957936}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Nitrox.SubnauticaAssets", "Nitrox.SubnauticaAssets\Nitrox.SubnauticaAssets.shproj", "{0763D551-B1A8-4960-B88A-98833F957936}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Nitrox.Subnautica.Assets\Nitrox.Subnautica.Assets.projitems*{0763d551-b1a8-4960-b88a-98833f957936}*SharedItemsImports = 13
+		Nitrox.SubnauticaAssets\Nitrox.SubnauticaAssets.projitems*{0763d551-b1a8-4960-b88a-98833f957936}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NitroxClient.GameLogic.PlayerModel.Abstract;
 using NitroxClient.GameLogic.PlayerModel.ColorSwap.Strategy;
 using NitroxClient.Unity.Helper;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 using UnityEngine;
 using static NitroxClient.GameLogic.PlayerModel.PlayerEquipmentConstants;
 

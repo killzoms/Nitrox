@@ -6,7 +6,7 @@ using NitroxModel.Core;
 using NitroxModel.DataStructures;
 using NitroxModel.Helper;
 using NitroxModel.Packets;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 using UnityEngine;
 
 namespace NitroxPatcher.Patches.Dynamic

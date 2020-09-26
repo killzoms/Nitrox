@@ -7,7 +7,7 @@ using NitroxModel.Core;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Logger;
-using NitroxModel_Subnautica.DataStructures.GameLogic;
+using NitroxModel.Subnautica.DataStructures.GameLogic;
 
 namespace NitroxPatcher.Patches.Dynamic
 {

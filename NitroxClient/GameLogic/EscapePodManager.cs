@@ -9,7 +9,7 @@ using NitroxModel.DataStructures.Util;
 using NitroxModel.DataStructures;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Helper;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 
 namespace NitroxClient.GameLogic
 {

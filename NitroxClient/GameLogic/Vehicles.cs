@@ -13,9 +13,9 @@ using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
-using NitroxModel_Subnautica.DataStructures;
-using NitroxModel_Subnautica.DataStructures.GameLogic;
-using NitroxModel_Subnautica.Helper;
+using NitroxModel.Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures.GameLogic;
+using NitroxModel.Subnautica.Helper;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

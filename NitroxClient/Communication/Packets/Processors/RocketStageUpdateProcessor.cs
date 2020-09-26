@@ -4,7 +4,7 @@ using NitroxClient.MonoBehaviours;
 using NitroxClient.Unity.Helper;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
-using NitroxModel_Subnautica.Packets;
+using NitroxModel.Subnautica.Packets;
 using Story;
 using UnityEngine;
 

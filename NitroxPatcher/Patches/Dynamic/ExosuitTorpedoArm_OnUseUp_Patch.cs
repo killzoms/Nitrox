@@ -3,7 +3,7 @@ using System.Reflection;
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxModel.Core;
-using NitroxModel_Subnautica.Packets;
+using NitroxModel.Subnautica.Packets;
 
 namespace NitroxPatcher.Patches.Dynamic
 {

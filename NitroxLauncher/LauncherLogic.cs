@@ -236,7 +236,7 @@ namespace NitroxLauncher
             }
 
             string launcherDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            string serverPath = Path.Combine(launcherDir, "NitroxServer-Subnautica.exe");
+            string serverPath = Path.Combine(launcherDir, "NitroxServer.Subnautica.exe");
             ProcessStartInfo startInfo = new ProcessStartInfo(serverPath) { WorkingDirectory = launcherDir };
 
             if (!standalone)

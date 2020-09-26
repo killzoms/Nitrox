@@ -4,7 +4,7 @@ using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
-using NitroxModel_Subnautica.Helper;
+using NitroxModel.Subnautica.Helper;
 using UnityEngine;
 
 namespace NitroxClient.MonoBehaviours

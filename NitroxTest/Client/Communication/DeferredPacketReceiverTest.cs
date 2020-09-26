@@ -4,6 +4,7 @@ using NitroxClient.Communication;
 using NitroxClient.Map;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.Packets;
+using NitroxModel.Subnautica.Helper;
 using NitroxTest.Model;
 
 namespace NitroxTest.Client.Communication
@@ -27,7 +28,7 @@ namespace NitroxTest.Client.Communication
         public void TestInitialize()
         {
             packetReceiver = new PacketReceiver();
-            NitroxModel.Helper.Map.Main = new NitroxModel_Subnautica.Helper.SubnauticaMap();
+            NitroxModel.Helper.Map.Main = new SubnauticaMap();
 
             loadedCell = new AbsoluteEntityCell(loadedActionPosition, CELL_LEVEL);
             unloadedCell = new AbsoluteEntityCell(unloadedActionPosition, CELL_LEVEL);

@@ -3,7 +3,7 @@ using NitroxClient.Communication.Abstract;
 using NitroxClient.MonoBehaviours.Gui.Chat;
 using NitroxClient.Unity.Helper;
 using NitroxModel.Packets;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -13,9 +13,9 @@ using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
 using UnityEngine;
-using NitroxModel_Subnautica.DataStructures;
 using NitroxClient.GameLogic.Bases.Spawning;
 using NitroxModel.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 
 namespace NitroxClient.MonoBehaviours
 {

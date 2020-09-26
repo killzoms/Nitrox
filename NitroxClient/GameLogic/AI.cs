@@ -1,7 +1,7 @@
 ﻿using NitroxClient.Communication.Abstract;
 using NitroxModel.DataStructures;
-using NitroxModel_Subnautica.DataStructures.GameLogic.Creatures.Actions;
-using NitroxModel_Subnautica.Packets;
+using NitroxModel.Subnautica.DataStructures.GameLogic.Creatures.Actions;
+using NitroxModel.Subnautica.Packets;
 
 namespace NitroxClient.GameLogic
 {

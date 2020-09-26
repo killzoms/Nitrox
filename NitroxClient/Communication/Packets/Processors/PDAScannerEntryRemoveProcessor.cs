@@ -3,7 +3,7 @@ using System.Reflection;
 using NitroxClient.Communication.Abstract;
 using NitroxClient.Communication.Packets.Processors.Abstract;
 using NitroxModel.Packets;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 
 namespace NitroxClient.Communication.Packets.Processors
 {

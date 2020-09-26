@@ -13,7 +13,7 @@ using NitroxModel.Core;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.MultiplayerSession;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -345,7 +345,7 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
 
                 if (ServerIp.Equals("127.0.0.1"))
                 {
-                    if (Process.GetProcessesByName("NitroxServer-Subnautica").Length == 0)
+                    if (Process.GetProcessesByName("NitroxServer.Subnautica").Length == 0)
                     {
                         Log.InGame("Start your server first to join your self-hosted world");
                     }

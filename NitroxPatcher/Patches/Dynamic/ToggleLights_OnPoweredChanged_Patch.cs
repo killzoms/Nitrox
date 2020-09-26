@@ -4,7 +4,7 @@ using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
-using NitroxModel_Subnautica.DataStructures.GameLogic;
+using NitroxModel.Subnautica.DataStructures.GameLogic;
 
 namespace NitroxPatcher.Patches.Dynamic
 {

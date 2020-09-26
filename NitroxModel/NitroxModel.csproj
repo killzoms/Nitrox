@@ -31,14 +31,14 @@
       <HintPath>..\Packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="LZ4">
-      <HintPath>..\Nitrox.Subnautica.Assets\LZ4.dll</HintPath>
+      <HintPath>..\Nitrox.SubnauticaAssets\LZ4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.7.2\lib\net40-client\NLog.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
-      <HintPath>..\Nitrox.Subnautica.Assets\protobuf-net.dll</HintPath>
+      <HintPath>..\Nitrox.SubnauticaAssets\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

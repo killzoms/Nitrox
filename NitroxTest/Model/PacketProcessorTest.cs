@@ -13,7 +13,7 @@ using NitroxServer;
 using NitroxServer.Communication.Packets;
 using NitroxServer.Communication.Packets.Processors;
 using NitroxServer.Communication.Packets.Processors.Abstract;
-using NitroxServer_Subnautica;
+using NitroxServer.Subnautica;
 
 namespace NitroxTest.Model
 {

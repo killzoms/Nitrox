@@ -1,6 +1,6 @@
 ﻿using NitroxClient.Communication.Abstract;
 using NitroxModel.Packets;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 
 namespace NitroxClient.GameLogic
 {

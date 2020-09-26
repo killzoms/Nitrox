@@ -6,7 +6,7 @@ namespace NitroxModel.Server
     public class ServerConfig
     {
         private readonly ServerConfigItem<ServerGameMode> gameModeSetting;
-        private readonly ServerConfigItem<ServerSerializerMode> serverSerializerModeSetting;
+        private readonly ServerConfigItem<ServerSerializerMode> saveFileSerializerSetting;
         private readonly ServerConfigItem<bool> disableConsoleSetting, disableAutoSaveSetting;
         private readonly ServerConfigItem<int> portSetting, saveIntervalSetting, maxConnectionsSetting;
         private readonly ServerConfigItem<string> saveNameSetting, serverPasswordSetting, adminPasswordSetting;
@@ -26,7 +26,7 @@ namespace NitroxModel.Server
         )
         { }
 
-        public ServerConfig(int port, int saveInterval, int maxConnection, bool disableConsole, bool disableAutoSave, string saveName, string serverPassword, string adminPassword, ServerGameMode gameMode, ServerSerializerMode serverSerializerMode)
+        public ServerConfig(int port, int saveInterval, int maxConnection, bool disableConsole, bool disableAutoSave, string saveName, string serverPassword, string adminPassword, ServerGameMode gameMode, ServerSerializerMode saveFileSerializerMode)
         {
             portSetting = new ServerConfigItem<int>("Port", port);
             saveIntervalSetting = new ServerConfigItem<int>("SaveInterval", saveInterval);
@@ -37,7 +37,7 @@ namespace NitroxModel.Server
             serverPasswordSetting = new ServerConfigItem<string>("ServerPassword", serverPassword);
             adminPasswordSetting = new ServerConfigItem<string>("AdminPassword", adminPassword);
             gameModeSetting = new ServerConfigItem<ServerGameMode>("GameMode", gameMode);
-            serverSerializerModeSetting = new ServerConfigItem<ServerSerializerMode>("ServerSerializerMode", serverSerializerMode);
+            saveFileSerializerSetting = new ServerConfigItem<ServerSerializerMode>("SaveFileSerializer", saveFileSerializerMode);
 
             //We don't want to custom those values for now
             oxygenSetting = new ServerConfigItem<float>("StartOxygen", 45);
@@ -129,8 +129,8 @@ namespace NitroxModel.Server
 
         public ServerSerializerMode SerializerModeEnum
         {
-            get => serverSerializerModeSetting.Value;
-            set => serverSerializerModeSetting.Value = value;
+            get => saveFileSerializerSetting.Value;
+            set => saveFileSerializerSetting.Value = value;
         }
 
         public PlayerStatsData DefaultPlayerStats => new PlayerStatsData(oxygenSetting.Value, maxOxygenSetting.Value, healthSetting.Value, foodSetting.Value, waterSetting.Value, infectionSetting.Value);

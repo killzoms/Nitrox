@@ -4,7 +4,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxClient.GameLogic.PlayerPreferences;
 using NitroxModel.MultiplayerSession;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 using NSubstitute;
 using UnityEngine;
 
