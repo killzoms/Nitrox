@@ -28,9 +28,8 @@ namespace NitroxClient.GameLogic
 
         public bool HasExclusiveLock(NitroxId id)
         {
-            SimulationLockType activeLockType;
 
-            if (simulatedIdsByLockType.TryGetValue(id, out activeLockType))
+            if (simulatedIdsByLockType.TryGetValue(id, out SimulationLockType activeLockType))
             {
                 return (activeLockType == SimulationLockType.EXCLUSIVE);
             }
@@ -54,9 +53,8 @@ namespace NitroxClient.GameLogic
                 SimulateEntity(id, lockType);
             }
 
-            LockRequestCompleted requestCompleted = null;
 
-            if (completeFunctionsById.TryGetValue(id, out requestCompleted) && requestCompleted != null)
+            if (completeFunctionsById.TryGetValue(id, out LockRequestCompleted requestCompleted) && requestCompleted != null)
             {
                 completeFunctionsById.Remove(id);
                 requestCompleted(id, lockAquired);

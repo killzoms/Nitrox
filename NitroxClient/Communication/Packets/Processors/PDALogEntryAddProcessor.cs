@@ -23,9 +23,8 @@ namespace NitroxClient.Communication.Packets.Processors
 
                 if (!entries.ContainsKey(packet.Key))
                 {
-                    PDALog.EntryData entryData;
 
-                    if (!PDALog.GetEntryData(packet.Key, out entryData))
+                    if (!PDALog.GetEntryData(packet.Key, out PDALog.EntryData entryData))
                     {
                         entryData = new PDALog.EntryData();
                         entryData.key = packet.Key;

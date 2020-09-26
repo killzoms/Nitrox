@@ -5,7 +5,6 @@ using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
 using NitroxModel.Subnautica.Packets;
-using UnityEngine;
 using static Rocket;
 
 namespace NitroxPatcher.Patches.Dynamic

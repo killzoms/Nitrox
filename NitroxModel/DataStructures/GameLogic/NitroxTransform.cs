@@ -12,11 +12,11 @@ namespace NitroxModel.DataStructures.GameLogic
 
         [ProtoMember(2)]
         public NitroxQuaternion LocalRotation;
-        
+
         [ProtoMember(3)]
         public NitroxVector3 LocalScale;
 
-        public NitroxMatrix4x4 localToWorldMatrix 
+        public NitroxMatrix4x4 localToWorldMatrix
         {
             get
             {
@@ -29,7 +29,7 @@ namespace NitroxModel.DataStructures.GameLogic
         public Entity Entity;
         public NitroxVector3 Position
         {
-            get 
+            get
             {
                 NitroxMatrix4x4 matrix = Parent?.localToWorldMatrix ?? NitroxMatrix4x4.Identity;
                 return matrix.MultiplyPoint(LocalPosition);

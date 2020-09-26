@@ -53,9 +53,8 @@ namespace NitroxClient.GameLogic.Spawning
 
         private GameObject CreateGameObject(TechType techType, string classId)
         {
-            GameObject prefab;
             IPrefabRequest prefabRequest = PrefabDatabase.GetPrefabAsync(classId);
-            if (!prefabRequest.TryGetPrefab(out prefab))
+            if (!prefabRequest.TryGetPrefab(out GameObject prefab))
             {
                 prefab = CraftData.GetPrefabForTechType(techType, false);
 

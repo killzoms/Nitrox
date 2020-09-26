@@ -3,8 +3,8 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxClient.Communication.Abstract;
 using NitroxClient.Communication.MultiplayerSession.ConnectionState;
-using NitroxModel.Packets;
 using NitroxModel.Exceptions;
+using NitroxModel.Packets;
 using NSubstitute;
 
 namespace NitroxTest.Client.Communication.MultiplayerSessionTests.ConnectionStateTests.ConnectionNegotiatingStateTests

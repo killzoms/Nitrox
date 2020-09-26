@@ -60,7 +60,7 @@ namespace NitroxClient.GameLogic
                     parentBaseId = NitroxEntity.GetId(aBase.gameObject);
                 }
             }
-            
+
             Vector3 placedPosition = constructableBase.gameObject.transform.position;
             Transform camera = Camera.main.transform;
             Optional<RotationMetadata> rotationMetadata = rotationMetadataFactory.From(baseGhost);
@@ -90,7 +90,7 @@ namespace NitroxClient.GameLogic
             {
                 Base playerBase = gameObject.GetComponentInParent<Base>();
 
-                if(playerBase != null)
+                if (playerBase != null)
                 {
                     parentId = NitroxEntity.GetId(playerBase.gameObject);
                 }
@@ -112,7 +112,7 @@ namespace NitroxClient.GameLogic
             }
 
             timeSinceLastConstructionChangeEvent = 0.0f;
-            
+
             NitroxId id = NitroxEntity.GetId(gameObject);
 
             if (amount < 0.95f) // Construction complete event handled by function below
@@ -126,7 +126,7 @@ namespace NitroxClient.GameLogic
         {
             NitroxId baseId = null;
             Optional<object> opConstructedBase = TransientLocalObjectManager.Get(TransientObjectType.BASE_GHOST_NEWLY_CONSTRUCTED_BASE_GAMEOBJECT);
-            
+
             NitroxId id = NitroxEntity.GetId(ghost);
 
             Log.Info("Construction complete on " + id + " " + ghost.name);
@@ -136,7 +136,7 @@ namespace NitroxClient.GameLogic
                 GameObject constructedBase = (GameObject)opConstructedBase.Value;
                 baseId = NitroxEntity.GetId(constructedBase);
             }
-            
+
             // For base pieces, we must switch the id from the ghost to the newly constructed piece.
             // Furniture just uses the same game object as the ghost for the final product.
             if (ghost.GetComponent<ConstructableBase>() != null)
@@ -152,16 +152,14 @@ namespace NitroxClient.GameLogic
                 // however, there may still be pieces were the ghost base's target offset is authoratitive due to incorrect game object positioning.
                 if (latestCell == default(Int3) || cellTransform == null)
                 {
-                    Vector3 worldPosition;
-                    float distance;
 
-                    latestBase.GetClosestCell(ghost.transform.position, out latestCell, out worldPosition, out distance);
+                    latestBase.GetClosestCell(ghost.transform.position, out latestCell, out Vector3 worldPosition, out float distance);
                     cellTransform = latestBase.GetCellObject(latestCell);
                     Validate.NotNull(cellTransform, "Unable to find cell transform at " + latestCell);
                 }
 
                 GameObject finishedPiece = null;
-                
+
                 // There can be multiple objects in a cell (such as a corridor with hatces built into it)
                 // we look for a object that is able to be deconstucted that hasn't been tagged yet.
                 foreach (Transform child in cellTransform)
@@ -175,7 +173,7 @@ namespace NitroxClient.GameLogic
                         break;
                     }
                 }
-                
+
                 Validate.NotNull(finishedPiece, "Could not find finished piece in cell " + latestCell);
 
                 Log.Info("Setting id to finished piece: " + finishedPiece.name + " " + id);

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Buildings.Metadata;
-using NitroxModel.DataStructures;
-using System.Linq;
 using NitroxModel.DataStructures.Util;
 using System;
 

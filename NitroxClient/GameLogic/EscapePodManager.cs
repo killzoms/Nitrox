@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using NitroxClient.Communication.Abstract;
+using NitroxClient.MonoBehaviours;
 using NitroxClient.Unity.Helper;
+using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.Util;
+using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
-using UnityEngine;
-using NitroxModel.DataStructures.Util;
-using NitroxModel.DataStructures;
-using NitroxClient.MonoBehaviours;
-using NitroxModel.Helper;
 using NitroxModel.Subnautica.DataStructures;
+using UnityEngine;
 
 namespace NitroxClient.GameLogic
 {

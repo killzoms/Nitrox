@@ -1,10 +1,10 @@
-﻿using NitroxModel.DataStructures.GameLogic;
-using NitroxServer.GameLogic.Entities.Spawning;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using NitroxModel.DataStructures;
+using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Logger;
-using NitroxModel.DataStructures;
+using NitroxServer.GameLogic.Entities.Spawning;
 
 namespace NitroxServer.GameLogic.Entities
 {

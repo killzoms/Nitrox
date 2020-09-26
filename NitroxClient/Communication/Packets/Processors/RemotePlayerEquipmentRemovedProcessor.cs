@@ -18,8 +18,7 @@ namespace NitroxClient.Communication.Packets.Processors
         {
             ushort playerId = packet.PlayerId;
 
-            RemotePlayer player;
-            if (!playerManager.TryFind(playerId, out player))
+            if (!playerManager.TryFind(playerId, out RemotePlayer player))
             {
                 return;
             }

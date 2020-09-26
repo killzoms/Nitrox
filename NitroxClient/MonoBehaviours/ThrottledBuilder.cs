@@ -3,19 +3,19 @@ using System.Linq;
 using System.Reflection;
 using NitroxClient.Communication.Abstract;
 using NitroxClient.GameLogic.Bases;
+using NitroxClient.GameLogic.Bases.Spawning;
 using NitroxClient.GameLogic.Helper;
 using NitroxClient.MonoBehaviours.Overrides;
 using NitroxClient.Unity.Helper;
 using NitroxModel.Core;
+using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
-using UnityEngine;
-using NitroxClient.GameLogic.Bases.Spawning;
-using NitroxModel.DataStructures;
 using NitroxModel.Subnautica.DataStructures;
+using UnityEngine;
 
 namespace NitroxClient.MonoBehaviours
 {

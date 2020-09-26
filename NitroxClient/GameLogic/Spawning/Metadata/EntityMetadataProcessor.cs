@@ -34,9 +34,8 @@ namespace NitroxClient.GameLogic.Spawning.Metadata
 
         public static Optional<EntityMetadataProcessor> FromMetaData(EntityMetadata metadata)
         {
-            Optional<EntityMetadataProcessor> processor;
 
-            if (metadata != null && processorsByType.TryGetValue(metadata.GetType(), out processor))
+            if (metadata != null && processorsByType.TryGetValue(metadata.GetType(), out Optional<EntityMetadataProcessor> processor))
             {
                 return processor;
             }
