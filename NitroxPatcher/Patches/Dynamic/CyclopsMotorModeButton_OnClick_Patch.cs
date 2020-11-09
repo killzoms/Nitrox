@@ -5,6 +5,7 @@ using NitroxClient.MonoBehaviours;
 using NitroxClient.Unity.Helper;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
+using NitroxModel.Helper;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
@@ -12,13 +13,13 @@ namespace NitroxPatcher.Patches.Dynamic
     {
         private static readonly MethodInfo targetMethod = typeof(CyclopsMotorModeButton).GetMethod(nameof(CyclopsMotorModeButton.OnClick), BindingFlags.Public | BindingFlags.Instance);
 
-        public static bool Prefix(CyclopsMotorModeButton __instance, ref SubRoot ___subRoot, ref bool ___hudActive, out bool __state)
+        public static bool Prefix(CyclopsMotorModeButton __instance, ref SubRoot ___subRoot, out bool __state)
         {
             if (___subRoot != null && ___subRoot == Player.main.currentSub)
             {
                 CyclopsHelmHUDManager cyclopsHUD = ___subRoot.gameObject.RequireComponentInChildren<CyclopsHelmHUDManager>();
-                // To show the Cyclops HUD every time "hudActive" have to be true. "hornObject" is a good indicator to check if the player piloting the cyclops.
-                if (___hudActive)
+                // To show the Cyclops HUD every time "hudActive" has to be true. "hornObject" is a good indicator to check if the player is piloting the cyclops.
+                if ((bool)cyclopsHUD.ReflectionGet("hudActive"))
                 {
                     __state = cyclopsHUD.hornObject.activeSelf;
                     return cyclopsHUD.hornObject.activeSelf;
@@ -29,7 +30,7 @@ namespace NitroxPatcher.Patches.Dynamic
             return false;
         }
 
-        public static void Postfix(CyclopsMotorModeButton __instance, bool __state, ref SubRoot ___subRoot)
+        public static void Postfix(CyclopsMotorModeButton __instance, ref SubRoot ___subRoot, bool __state)
         {
             if (__state)
             {

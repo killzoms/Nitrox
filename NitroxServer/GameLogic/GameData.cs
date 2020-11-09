@@ -2,7 +2,7 @@
 using NitroxServer.GameLogic.Unlockables;
 using ProtoBufNet;
 
-namespace NitroxServer.GameLogic.Bases
+namespace NitroxServer.GameLogic
 {
     [Serializable]
     [ProtoContract]

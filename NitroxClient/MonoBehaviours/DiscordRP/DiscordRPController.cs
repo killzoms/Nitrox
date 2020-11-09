@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NitroxClient.MonoBehaviours.Gui.MainMenu;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
@@ -11,6 +11,7 @@ namespace NitroxClient.MonoBehaviours.DiscordRP
     {
         private const string APPLICATION_ID = "405122994348752896";
         private static DiscordRPController main;
+
         private bool showingWindow;
         private DiscordRpc.RichPresence presence;
 
@@ -102,14 +103,14 @@ namespace NitroxClient.MonoBehaviours.DiscordRP
             DiscordRpc.Shutdown();
         }
 
-        public void InitializeInGame(string username, int playerCount, string ipAddressPort)
+        public void InitializeInGame(string username, int playerCount, int maxConnections, string ipAddressPort)
         {
             presence.state = "In game";
             presence.details = "Playing as " + username;
             presence.startTimestamp = 0;
             presence.partyId = "PartyID:" + CheckIP(ipAddressPort);
             presence.partySize = playerCount;
-            presence.partyMax = 100;
+            presence.partyMax = maxConnections;
             presence.joinSecret = CheckIP(ipAddressPort);
             SendRP();
         }

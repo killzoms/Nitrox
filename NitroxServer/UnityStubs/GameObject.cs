@@ -30,9 +30,7 @@ namespace NitroxServer.UnityStubs
 
         public override string ToString()
         {
-            components.TryGetValue(typeof(TransformAsset), out object transform); // Honestly this should never be null every gameObject has a Transform
-
-            return $"Id: {Id}, Class Id: {ClassId}, Transform: {transform as TransformAsset}";
+            return $"Id: {Id}, Class Id: {ClassId}, Transform: {components[typeof(TransformAsset)] as TransformAsset}";
         }
 
         public void AddComponent(object component, Type componentType)

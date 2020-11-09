@@ -11,7 +11,6 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
-    <CodeAnalysisRuleSet>..\.sonarlint\subnauticanitroxcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -20,7 +19,6 @@
     <Optimize>false</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -28,7 +26,6 @@
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\.sonarlint\subnauticanitroxcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -57,9 +54,7 @@
       <HintPath>..\Nitrox.SubnauticaAssets\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -95,14 +90,14 @@
     <Compile Include="Serialization\Resources\Parsers\MonoBehaviours\EntitySlotParser.cs" />
     <Compile Include="Serialization\Resources\Parsers\MonoBehaviours\PrefabIdentifierParser.cs" />
     <Compile Include="Serialization\Resources\Parsers\MonoBehaviours\PrefabPlaceholderParser.cs" />
+	<Compile Include="Serialization\Resources\Parsers\MonoBehaviours\PrefabPlaceholdersGroupParser.cs" />
+    <Compile Include="Serialization\Resources\Parsers\MonoBehaviours\WorldEntityDataParser.cs" />
     <Compile Include="Serialization\Resources\Parsers\MonoScriptAssetParser.cs" />
     <Compile Include="Serialization\Resources\Parsers\Text\EntityDistributionsParser.cs" />
     <Compile Include="Serialization\Resources\Parsers\GameObjectAssetParser.cs" />
-    <Compile Include="Serialization\Resources\Parsers\MonoBehaviours\PrefabPlaceholdersGroupParser.cs" />
     <Compile Include="Serialization\Resources\Parsers\AssetParser.cs" />
     <Compile Include="Serialization\Resources\Parsers\TextAssetParser.cs" />
     <Compile Include="Serialization\Resources\Parsers\TransformAssetParser.cs" />
-    <Compile Include="Serialization\Resources\Parsers\MonoBehaviours\WorldEntityDataParser.cs" />
     <Compile Include="Serialization\Resources\Processing\PrefabPlaceholderExtractor.cs" />
     <Compile Include="Serialization\Resources\ResourceAssets.cs" />
     <Compile Include="Serialization\Resources\ResourceAssetsParser.cs" />

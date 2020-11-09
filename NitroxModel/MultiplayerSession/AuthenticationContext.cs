@@ -17,7 +17,11 @@ namespace NitroxModel.MultiplayerSession
 
         public override string ToString()
         {
+#if DEBUG
             return $"[AuthenticationContext - Username: {Username} ServerPassword: {ServerPassword}]";
+#else
+            return $"[AuthenticationContext - Username: {Username} ServerPassword: *****]";
+#endif
         }
     }
 }

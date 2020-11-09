@@ -14,10 +14,10 @@ namespace NitroxServer.GameLogic.Entities.Spawning
     public class BatchEntitySpawner : IEntitySpawner
     {
         private readonly BatchCellsParser batchCellsParser;
-        private readonly HashSet<Int3> parsedBatches;
+
         private readonly Dictionary<NitroxTechType, IEntityBootstrapper> customBootstrappersByTechType;
         private readonly HashSet<NitroxInt3> emptyBatches = new HashSet<NitroxInt3>();
-        private readonly Dictionary<string, PrefabPlaceholdersGroupAsset> prefabPlaceholderGroupsbyClassId;
+        private readonly Dictionary<string, PrefabPlaceholdersGroupAsset> prefabPlaceholderGroupsByClassId;
         private readonly UwePrefabFactory prefabFactory;
 
         private readonly UweWorldEntityFactory worldEntityFactory;
@@ -43,27 +43,25 @@ namespace NitroxServer.GameLogic.Entities.Spawning
                     empty = new List<NitroxInt3>(emptyBatches);
                 }
 
-            lock (parsedBatchesLock)
-            {
-                parsed = new List<Int3>(parsedBatches);
+                return parsed.Except(empty).ToList();
             }
-
-            lock (emptyBatchesLock)
+            set
             {
                 lock (parsedBatchesLock)
                 {
                     parsedBatches = new HashSet<NitroxInt3>(value);
                 }
             }
+        }
 
         public BatchEntitySpawner(EntitySpawnPointFactory entitySpawnPointFactory, UweWorldEntityFactory worldEntityFactory, UwePrefabFactory prefabFactory, List<NitroxInt3> loadedPreviousParsed, ServerProtoBufSerializer serializer,
                                   Dictionary<NitroxTechType, IEntityBootstrapper> customBootstrappersByTechType, Dictionary<string, PrefabPlaceholdersGroupAsset> prefabPlaceholderGroupsbyClassId)
         {
-            parsedBatches = new HashSet<NitroxInt3>(loadedPreviousParsed);
+            this.parsedBatches = new HashSet<NitroxInt3>(loadedPreviousParsed);
             this.worldEntityFactory = worldEntityFactory;
             this.prefabFactory = prefabFactory;
             this.customBootstrappersByTechType = customBootstrappersByTechType;
-            this.prefabPlaceholderGroupsbyClassId = prefabPlaceholderGroupsbyClassId;
+            this.prefabPlaceholderGroupsByClassId = prefabPlaceholderGroupsbyClassId;
 
             batchCellsParser = new BatchCellsParser(entitySpawnPointFactory, serializer);
         }

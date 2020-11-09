@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NitroxClient.Communication.Packets.Processors.Abstract;
 using NitroxClient.GameLogic.Helper;
 using NitroxClient.MonoBehaviours;
 using NitroxClient.Unity.Helper;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Util;
+using NitroxModel.Exceptions;
 using NitroxModel.Helper;
 using NitroxModel.Packets;
 using UnityEngine;
@@ -23,14 +23,14 @@ namespace NitroxClient.Communication.Packets.Processors
             Optional<GameObject> opGameObject = NitroxEntity.GetObjectFrom(equippedItemData.ContainerId);
             if (!opGameObject.HasValue)
             {
-                throw new InvalidOperationException($"Could not find equipment container for {gameObject.name}");
+                throw new OptionalNullException<GameObject>($"Could not find equipment container for {gameObject.name}");
             }
             Pickupable pickupable = gameObject.RequireComponent<Pickupable>();
             GameObject owner = opGameObject.Value;
             Optional<Equipment> opEquipment = EquipmentHelper.FindEquipmentComponent(owner);
             if (!opEquipment.HasValue)
             {
-                throw new InvalidOperationException($"Could not find equipment type for {gameObject.name}");
+                throw new OptionalNullException<Equipment>($"Could not find equipment type for {gameObject.name}");
             }
 
             Equipment equipment = opEquipment.Value;

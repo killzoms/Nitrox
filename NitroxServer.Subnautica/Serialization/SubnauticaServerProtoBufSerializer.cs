@@ -1,6 +1,7 @@
 ﻿using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Buildings.Rotation;
 using NitroxModel.Subnautica.DataStructures.GameLogic;
+using NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation;
 using NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation.Metadata;
 using NitroxModel.Subnautica.DataStructures.Surrogates;
 using NitroxServer.Serialization;
@@ -43,6 +44,7 @@ namespace NitroxServer.Subnautica.Serialization
             rotationData.AddSubType(50, typeof(CorridorRotationMetadata));
             rotationData.AddSubType(60, typeof(MapRoomRotationMetadata));
             rotationData.AddSubType(70, typeof(BaseModuleRotationMetadata));
+            rotationData.AddSubType(80, typeof(AnchoredFaceRotationMetadata));
         }
     }
 }

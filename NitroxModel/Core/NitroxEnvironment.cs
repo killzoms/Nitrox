@@ -5,12 +5,12 @@ namespace NitroxModel.Core
     public static class NitroxEnvironment
     {
         private static bool hasBeenSet;
-        private static NitroxEnvironmentTypes type = NitroxEnvironmentTypes.NORMAL;
+        private static NitroxEnvironmentType type = NitroxEnvironmentType.NORMAL;
 
-        public static bool IsNormal => type == NitroxEnvironmentTypes.NORMAL;
-        public static bool IsTesting => type == NitroxEnvironmentTypes.TESTING;
+        public static bool IsNormal => type == NitroxEnvironmentType.NORMAL;
+        public static bool IsTesting => type == NitroxEnvironmentType.TESTING;
 
-        public static void Set(NitroxEnvironmentTypes value)
+        public static void Set(NitroxEnvironmentType value)
         {
             if (hasBeenSet)
             {
@@ -20,5 +20,11 @@ namespace NitroxModel.Core
             type = value;
             hasBeenSet = true;
         }
+    }
+
+    public enum NitroxEnvironmentType
+    {
+        NORMAL,
+        TESTING
     }
 }

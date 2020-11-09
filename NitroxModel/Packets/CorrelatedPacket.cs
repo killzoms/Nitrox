@@ -14,7 +14,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[ConstructorBeginCrafting - CorrelationId: {CorrelationId}]";
+            return $"[CorrelatedPacket - CorrelationId: {CorrelationId}]";
         }
     }
 }

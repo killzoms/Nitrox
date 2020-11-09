@@ -1,6 +1,5 @@
 ﻿namespace NitroxClient.Communication.MultiplayerSession
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S4016:Enumeration members should not be named \"Reserved\"", Justification = "<Pending>")]
     public enum MultiplayerSessionConnectionStage
     {
         DISCONNECTED,

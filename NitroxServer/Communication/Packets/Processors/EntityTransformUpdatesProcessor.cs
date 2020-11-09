@@ -56,9 +56,12 @@ namespace NitroxServer.Communication.Packets.Processors
 
                 foreach (KeyValuePair<Player, List<EntityTransformUpdate>> playerUpdates in visibleUpdatesByPlayer)
                 {
-                    if (playerUpdates.Key.HasCellLoaded(currentCell.Value))
+                    Player player = playerUpdates.Key;
+                    List<EntityTransformUpdate> visibleUpdates = playerUpdates.Value;
+
+                    if (player.HasCellLoaded(currentCell.Value))
                     {
-                        playerUpdates.Value.Add(update);
+                        visibleUpdates.Add(update);
                     }
                 }
             }
@@ -68,10 +71,13 @@ namespace NitroxServer.Communication.Packets.Processors
         {
             foreach (KeyValuePair<Player, List<EntityTransformUpdate>> playerUpdates in visibleUpdatesByPlayer)
             {
-                if (playerUpdates.Value.Count > 0)
+                Player player = playerUpdates.Key;
+                List<EntityTransformUpdate> updates = playerUpdates.Value;
+
+                if (updates.Count > 0)
                 {
-                    EntityTransformUpdates updatesPacket = new EntityTransformUpdates(playerUpdates.Value);
-                    playerUpdates.Key.SendPacket(updatesPacket);
+                    EntityTransformUpdates updatesPacket = new EntityTransformUpdates(updates);
+                    player.SendPacket(updatesPacket);
                 }
             }
         }

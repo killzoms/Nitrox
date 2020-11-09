@@ -85,10 +85,10 @@ namespace NitroxClient.GameLogic
             }
         }
 
-        public NitroxId GetCyclopsLockerId(Transform ownerTransform)
+        public static NitroxId GetCyclopsLockerId(Transform ownerTransform)
         {
             string lockerId = ownerTransform.gameObject.name.Substring(7, 1);
-            GameObject locker = ownerTransform.parent.gameObject.FindChild("submarine_locker_01_0" + lockerId);
+            GameObject locker = ownerTransform.parent.gameObject.FindChild($"submarine_locker_01_0{lockerId}");
             if (!locker)
             {
                 throw new IndexOutOfRangeException($"Could not find Locker Object: submarine_locker_01_0{lockerId}");
@@ -102,7 +102,7 @@ namespace NitroxClient.GameLogic
             return NitroxEntity.GetId(storageContainer.gameObject);
         }
 
-        public NitroxId GetEscapePodStorageId(Transform ownerTransform)
+        public static NitroxId GetEscapePodStorageId(Transform ownerTransform)
         {
             StorageContainer sc = ownerTransform.parent.gameObject.RequireComponentInChildren<StorageContainer>();
             return NitroxEntity.GetId(sc.gameObject);

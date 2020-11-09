@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NitroxModel.DataStructures.GameLogic;
 
-namespace NitroxModel.DataStructures.JsonConverter
+namespace NitroxServer.Serialization.JsonConverter
 {
     public class Vector3Converter : JsonConverter<NitroxVector3>
     {

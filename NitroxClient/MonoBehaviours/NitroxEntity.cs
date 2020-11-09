@@ -87,11 +87,11 @@ namespace NitroxClient.MonoBehaviours
             }
         }
 
-        public void OnProtoSerializeObjectTree(ProtobufSerializer serializer)
+        public void OnProtoSerializeObjectTree(ProtobufSerializer _)
         {
         }
 
-        public void OnProtoDeserializeObjectTree(ProtobufSerializer serializer)
+        public void OnProtoDeserializeObjectTree(ProtobufSerializer _)
         {
             gameObjectsById[Id] = gameObject;
         }

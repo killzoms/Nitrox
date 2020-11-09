@@ -19,10 +19,7 @@ namespace NitroxModel.Packets
 
         public SimulationOwnershipChange(SimulatedEntity entity)
         {
-            Entities = new List<SimulatedEntity>
-            {
-                entity
-            };
+            Entities = new List<SimulatedEntity>{entity};
         }
 
         public SimulationOwnershipChange(List<SimulatedEntity> entities)

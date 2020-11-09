@@ -8,6 +8,8 @@ namespace NitroxClient.Communication.Packets.Processors
 {
     public class PDALogEntryAddProcessor : ClientPacketProcessor<PDALogEntryAdd>
     {
+        private readonly FieldInfo pdaLogEntriesField = typeof(PDALog).GetField("entries", BindingFlags.NonPublic | BindingFlags.Static);
+
         private readonly IPacketSender packetSender;
 
         public PDALogEntryAddProcessor(IPacketSender packetSender)
@@ -19,21 +21,25 @@ namespace NitroxClient.Communication.Packets.Processors
         {
             using (packetSender.Suppress<PDALogEntryAddProcessor>())
             {
-                Dictionary<string, PDALog.Entry> entries = (Dictionary<string, PDALog.Entry>)(typeof(PDALog).GetField("entries", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null));
+                Dictionary<string, PDALog.Entry> entries = (Dictionary<string, PDALog.Entry>)pdaLogEntriesField.GetValue(null);
 
                 if (!entries.ContainsKey(packet.Key))
                 {
 
                     if (!PDALog.GetEntryData(packet.Key, out PDALog.EntryData entryData))
                     {
-                        entryData = new PDALog.EntryData();
-                        entryData.key = packet.Key;
-                        entryData.type = PDALog.EntryType.Invalid;
+                        entryData = new PDALog.EntryData
+                        {
+                            key = packet.Key,
+                            type = PDALog.EntryType.Invalid
+                        };
                     }
 
-                    PDALog.Entry entry = new PDALog.Entry();
-                    entry.data = entryData;
-                    entry.timestamp = packet.Timestamp;
+                    PDALog.Entry entry = new PDALog.Entry
+                    {
+                        data = entryData,
+                        timestamp = packet.Timestamp
+                    };
                     entries.Add(entryData.key, entry);
                 }
             }

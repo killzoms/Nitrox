@@ -20,7 +20,7 @@ namespace NitroxClient.GameLogic
          * we want to suppress the escape pod's awake method so it doesn't override
          * EscapePod.main to the new escape pod.
          */
-        private static readonly int lifepodDamage = Animator.StringToHash("lifepod_damage");
+        private static readonly int animatorLifepodDamage = Animator.StringToHash("lifepod_damage");
 
         public static bool SuppressEscapePodAwakeMethod { get; private set; }
 
@@ -127,7 +127,7 @@ namespace NitroxClient.GameLogic
             else
             {
                 EscapePod.main.liveMixin.health = EscapePod.main.liveMixin.maxHealth;
-                EscapePod.main.animator.SetFloat(lifepodDamage, 1.0f);
+                EscapePod.main.animator.SetFloat(animatorLifepodDamage, 1.0f);
             }
 
             if (radio)
@@ -142,7 +142,7 @@ namespace NitroxClient.GameLogic
             {
                 EscapePod pod = escapePodsById[id].GetComponent<EscapePod>();
                 pod.liveMixin.health = pod.liveMixin.maxHealth;
-                pod.animator.SetFloat(lifepodDamage, 1.0f);
+                pod.animator.SetFloat(animatorLifepodDamage, 1.0f);
                 pod.fixPanelGoal.Trigger();
                 pod.fixPanelPowerUp.Play();
             }

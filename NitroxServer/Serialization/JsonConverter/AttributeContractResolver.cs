@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using ProtoBufNet;
 
-namespace NitroxModel.DataStructures.JsonConverter
+namespace NitroxServer.Serialization.JsonConverter
 {
     public class AttributeContractResolver : DefaultContractResolver
     {
@@ -20,7 +20,12 @@ namespace NitroxModel.DataStructures.JsonConverter
         //IDictionary to JsonArray
         protected override JsonContract CreateContract(Type objectType)
         {
-            return objectType.GetInterfaces().Any(i => i == typeof(IDictionary) || i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>)) ? base.CreateArrayContract(objectType) : base.CreateContract(objectType);
+            if (objectType.GetInterfaces().Any(i => i == typeof(IDictionary) || i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
+            {
+                return base.CreateArrayContract(objectType);
+            }
+
+            return base.CreateContract(objectType);
         }
     }
 

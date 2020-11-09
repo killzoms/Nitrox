@@ -81,6 +81,7 @@ namespace NitroxModel.Core
         public static Optional<object> LocateOptionalService(Type serviceType)
         {
             CheckServiceResolutionViability();
+
             return Optional.OfNullable(CurrentLifetimeScope.ResolveOptional(serviceType));
         }
 

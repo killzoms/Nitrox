@@ -330,7 +330,7 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
         {
             if (multiplayerClient == null)
             {
-                multiplayerClient = new GameObject { name = "Multiplayer Client" };
+                multiplayerClient = new GameObject("Multiplayer Client");
                 multiplayerClient.AddComponent<Multiplayer>();
                 multiplayerSession.ConnectionStateChanged += SessionConnectionStateChangedHandler;
             }
@@ -373,7 +373,7 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
 
             if (string.IsNullOrEmpty(playerName))
             {
-                NotifyUser("Please enter a player name and colour before trying to join a server");
+                NotifyUser("Please enter a player name and color before trying to join a server");
                 return;
             }
 

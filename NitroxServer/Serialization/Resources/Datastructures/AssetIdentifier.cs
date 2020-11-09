@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace NitroxServer.Serialization.Resources.DataStructures
+﻿namespace NitroxServer.Serialization.Resources.DataStructures
 {
-    public sealed class AssetIdentifier : IEquatable<AssetIdentifier>, IEqualityComparer<AssetIdentifier>
+    public sealed class AssetIdentifier
     {
         public int FileId { get; }
         public long IndexId { get; }
@@ -14,17 +11,14 @@ namespace NitroxServer.Serialization.Resources.DataStructures
             IndexId = indexId;
         }
 
-        public bool Equals(AssetIdentifier other)
+        public override bool Equals(object obj)
         {
+            AssetIdentifier other = obj as AssetIdentifier;
+
             return FileId == other?.FileId && IndexId == other.IndexId;
         }
 
-        public bool Equals(AssetIdentifier x, AssetIdentifier y)
-        {
-            return x?.FileId == y?.FileId && x?.IndexId == y?.IndexId;
-        }
-
-        public int GetHashCode(AssetIdentifier obj)
+        public override int GetHashCode()
         {
             unchecked
             {

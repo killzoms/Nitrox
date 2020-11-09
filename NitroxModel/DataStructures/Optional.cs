@@ -160,6 +160,8 @@ namespace NitroxModel.DataStructures.Util
         }
     }
 
+    public struct OptionalEmpty { }
+
     public static class Optional
     {
         internal static readonly Dictionary<Type, Func<object, bool>> valueConditions = new Dictionary<Type, Func<object, bool>>();

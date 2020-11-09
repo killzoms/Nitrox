@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Buildings.Metadata;
 using NitroxModel.DataStructures.Util;
-using System;
 
 namespace NitroxServer.GameLogic.Bases
 {
@@ -16,6 +16,7 @@ namespace NitroxServer.GameLogic.Bases
 
         public BaseManager(List<BasePiece> partiallyConstructedPieces, List<BasePiece> completedBasePieceHistory)
         {
+            this.completedBasePieceHistory = completedBasePieceHistory;
             partiallyConstructedPiecesById = partiallyConstructedPieces.ToDictionary(piece => piece.Id);
 
             int highestPartialIndex = partiallyConstructedPieces.Any() ? partiallyConstructedPieces.Max(piece => piece.BuildIndex) : 0;

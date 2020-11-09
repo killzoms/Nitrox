@@ -17,13 +17,15 @@ namespace NitroxClient.GameLogic.InitialSync
     {
         private readonly IPacketSender packetSender;
         private readonly BuildThrottlingQueue buildEventQueue;
+        private readonly BasePieceSpawnPrioritizer basePieceSpawnPrioritizer;
 
         private bool completed;
 
-        public BuildingInitialSyncProcessor(IPacketSender packetSender, BuildThrottlingQueue buildEventQueue)
+        public BuildingInitialSyncProcessor(IPacketSender packetSender, BuildThrottlingQueue buildEventQueue, BasePieceSpawnPrioritizer basePieceSpawnPrioritizer)
         {
             this.packetSender = packetSender;
             this.buildEventQueue = buildEventQueue;
+            this.basePieceSpawnPrioritizer = basePieceSpawnPrioritizer;
 
             DependentProcessors.Add(typeof(CyclopsInitialAsyncProcessor));
         }
@@ -41,7 +43,8 @@ namespace NitroxClient.GameLogic.InitialSync
             }
             else
             {
-                QueueUpPieces(packet.BasePieces);
+                List<BasePiece> prioritizedBasePieces = basePieceSpawnPrioritizer.OrderBasePiecesByPriority(basePieces);
+                QueueUpPieces(prioritizedBasePieces);
                 ThrottledBuilder.Instance.QueueDrained += FinishedCompletedBuildings;
             }
 

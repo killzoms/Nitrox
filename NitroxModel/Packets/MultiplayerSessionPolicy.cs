@@ -28,7 +28,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[MultiplayerSessionPolicy - RequiresServerPassword: {RequiresServerPassword}, DisableConsole: {DisableConsole}, AuthenticationAuthority: {AuthenticationAuthority}, NitroxVersionAllowed: {NitroxVersionAllowed}]";
+            return $"[MultiplayerSessionPolicy - RequiresServerPassword: {RequiresServerPassword}, DisableConsole: {DisableConsole}, AuthenticationAuthority: {AuthenticationAuthority}, NitroxVersionAllowed: {NitroxVersionAllowed}, Base: {base.ToString()}]";
         }
     }
 }

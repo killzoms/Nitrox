@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using NitroxClient.Communication;
+using NitroxClient.Communication.Abstract;
 using NitroxClient.Map;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.Packets;
-using NitroxClient.Communication.Abstract;
+using NitroxModel.Subnautica.DataStructures;
 using UnityEngine;
-using NitroxModel_Subnautica.DataStructures;
 
 namespace NitroxClient.GameLogic
 {
@@ -19,8 +18,8 @@ namespace NitroxClient.GameLogic
         private bool cellsPendingSync;
         private float timeWhenCellsBecameOutOfSync;
 
-        private List<AbsoluteEntityCell> added = new List<AbsoluteEntityCell>();
-        private List<AbsoluteEntityCell> removed = new List<AbsoluteEntityCell>();
+        private readonly List<AbsoluteEntityCell> added = new List<AbsoluteEntityCell>();
+        private readonly List<AbsoluteEntityCell> removed = new List<AbsoluteEntityCell>();
 
         public Terrain(IMultiplayerSession multiplayerSession, IPacketSender packetSender, VisibleCells visibleCells)
         {

@@ -17,9 +17,10 @@ namespace NitroxServer.Communication.Packets.Processors
         public override void Process(PlayerEquipmentRemoved packet, Player sendingPlayer)
         {
             NitroxId itemId = packet.EquippedItemId;
-            RemotePlayerEquipmentRemoved equipmentRemoved = new RemotePlayerEquipmentRemoved(sendingPlayer.Id, packet.TechType);
 
             sendingPlayer.RemoveEquipment(itemId);
+            RemotePlayerEquipmentRemoved equipmentRemoved = new RemotePlayerEquipmentRemoved(sendingPlayer.Id, packet.TechType);
+
             playerManager.SendPacketToOtherPlayers(equipmentRemoved, sendingPlayer);
         }
     }

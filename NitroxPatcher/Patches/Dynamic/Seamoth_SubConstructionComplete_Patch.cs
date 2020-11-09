@@ -31,7 +31,6 @@ namespace NitroxPatcher.Patches.Dynamic
             ToggleLights toggleLights = __instance.gameObject.RequireComponentInChildren<ToggleLights>();
             toggleLights.lightsActive = model.Value.LightOn;
             return model.Value.LightOn;
-            return model.Value.LightOn;
         }
 
         public override void Patch(HarmonyInstance harmony)

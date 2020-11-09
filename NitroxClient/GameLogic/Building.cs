@@ -36,10 +36,10 @@ namespace NitroxClient.GameLogic
             {
                 return;
             }
-            
+
             NitroxId id = NitroxEntity.GetId(constructableBase.gameObject);
             NitroxId parentBaseId = null;
-            
+
             if (baseGhost != null)
             {
                 if (baseGhost.TargetBase != null)
@@ -51,8 +51,8 @@ namespace NitroxClient.GameLogic
                     parentBaseId = NitroxEntity.GetId(baseGhost.GhostBase.gameObject);
                 }
             }
-            
-            if(parentBaseId == null)
+
+            if (parentBaseId == null)
             {
                 Base aBase = constructableBase.gameObject.GetComponentInParent<Base>();
                 if (aBase != null)
@@ -184,7 +184,7 @@ namespace NitroxClient.GameLogic
                 BasePieceSpawnProcessor customSpawnProcessor = BasePieceSpawnProcessor.From(finishedPiece.GetComponent<BaseDeconstructable>());
                 customSpawnProcessor.SpawnPostProcess(latestBase, latestCell, finishedPiece);
             }
-            
+
             Log.Info("Construction Completed " + id + " in base " + baseId);
 
             ConstructionCompleted constructionCompleted = new ConstructionCompleted(id, baseId);

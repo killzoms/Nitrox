@@ -37,7 +37,7 @@ namespace NitroxClient.GameLogic.PlayerPreferences
 
         public bool Equals(PlayerPreference other)
         {
-            if (ReferenceEquals(null, other))
+            if (other is null)
             {
                 return false;
             }
@@ -62,7 +62,12 @@ namespace NitroxClient.GameLogic.PlayerPreferences
                 return true;
             }
 
-            return obj.GetType() == GetType() && Equals((PlayerPreference)obj);
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((PlayerPreference)obj);
         }
 
         public override int GetHashCode()

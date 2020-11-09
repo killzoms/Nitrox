@@ -35,10 +35,10 @@ namespace NitroxClient.Communication.Packets.Processors
             this.packet = packet;
             loadingMultiplayerWaitItem = WaitScreen.Add("Syncing Multiplayer World");
             cumulativeProcessorsRan = 0;
-            Multiplayer.Instance.StartCoroutine(ProcessInitialSyncPacket());
+            Multiplayer.Instance.StartCoroutine(ProcessInitialSyncPacket(this, null));
         }
 
-        private IEnumerator ProcessInitialSyncPacket()
+        private IEnumerator ProcessInitialSyncPacket(object sender, EventArgs eventArgs)
         {
             // Some packets should not fire during game session join but only afterwards so that initialized/spawned game objects don't trigger packet sending again. 
             using (packetSender.Suppress<PingRenamed>())

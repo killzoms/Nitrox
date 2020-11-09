@@ -106,9 +106,9 @@ namespace NitroxClient
             containerBuilder.RegisterType<MobileVehicleBay>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<Interior>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<NitroxConsole>().InstancePerLifetimeScope();
-            containerBuilder.RegisterType<VisibleCellManager>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<Terrain>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<BuildThrottlingQueue>().InstancePerLifetimeScope();
-            containerBuilder.RegisterType<BasePieceSpawnPrioritizer>().InstancePerLifetimeScope();            
+            containerBuilder.RegisterType<BasePieceSpawnPrioritizer>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<KnownTechEntry>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<ExosuitModuleEvent>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<SeamothModulesEvent>().InstancePerLifetimeScope();

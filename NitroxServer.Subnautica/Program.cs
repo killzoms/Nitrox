@@ -83,11 +83,6 @@ namespace NitroxServer.Subnautica
         {
             string dllFileName = args.Name.Split(',')[0];
 
-            if (dllFileName.Contains(".resources"))
-            {
-                return null;
-            }
-
             if (!dllFileName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
             {
                 dllFileName += ".dll";
@@ -137,8 +132,7 @@ namespace NitroxServer.Subnautica
             // default was overriden by the user.
             CultureInfo cultureInfo = new CultureInfo("en-US")
             {
-                NumberFormat = { NumberDecimalSeparator = ".",
-                    NumberGroupSeparator = "," }
+                NumberFormat = { NumberDecimalSeparator = ".", NumberGroupSeparator = "," }
             };
 
             Thread.CurrentThread.CurrentCulture = cultureInfo;

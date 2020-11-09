@@ -31,7 +31,7 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public override string ToString()
         {
-            return $"[Vector4 - {X}, {Y}, {Z}, {W}]";
+            return $"[{X}, {Y}, {Z}, {W}]";
         }
     }
 }

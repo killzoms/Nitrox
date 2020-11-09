@@ -30,18 +30,10 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public static NitroxQuaternion Normalize(NitroxQuaternion value)
         {
-            NitroxQuaternion ans = new NitroxQuaternion();
-
             float ls = value.X * value.X + value.Y * value.Y + value.Z * value.Z + value.W * value.W;
-
             float invNorm = 1.0f / (float)Math.Sqrt((double)ls);
 
-            ans.X = value.X * invNorm;
-            ans.Y = value.Y * invNorm;
-            ans.Z = value.Z * invNorm;
-            ans.W = value.W * invNorm;
-
-            return ans;
+            return new NitroxQuaternion(value.X * invNorm, value.Y * invNorm, value.Z * invNorm, value.W * invNorm);
         }
 
         public static NitroxQuaternion LookRotation(NitroxVector3 forward, NitroxVector3 up)
@@ -150,37 +142,32 @@ namespace NitroxModel.DataStructures.GameLogic
                 lhs.W * rhs.W - lhs.X * rhs.X - lhs.Y * rhs.Y - lhs.Z * rhs.Z);
         }
 
-        public override string ToString()
-        {
-            return "[Quaternion - {" + X + ", " + Y + ", " + Z + "," + W + "}]";
-        }
-
         public static NitroxQuaternion CreateFromYawPitchRoll(float yaw, float pitch, float roll)
         {
             //  Roll first, about axis the object is facing, then
             //  pitch upward, then yaw to face into the new heading
-            float sr, cr, sp, cp, sy, cy;
 
             float halfRoll = roll * 0.5f;
-            sr = (float)Math.Sin(halfRoll);
-            cr = (float)Math.Cos(halfRoll);
+            float sr = (float)Math.Sin(halfRoll);
+            float cr = (float)Math.Cos(halfRoll);
 
             float halfPitch = pitch * 0.5f;
-            sp = (float)Math.Sin(halfPitch);
-            cp = (float)Math.Cos(halfPitch);
+            float sp = (float)Math.Sin(halfPitch);
+            float cp = (float)Math.Cos(halfPitch);
 
             float halfYaw = yaw * 0.5f;
-            sy = (float)Math.Sin(halfYaw);
-            cy = (float)Math.Cos(halfYaw);
+            float sy = (float)Math.Sin(halfYaw);
+            float cy = (float)Math.Cos(halfYaw);
 
-            NitroxQuaternion result = new NitroxQuaternion();
+            return new NitroxQuaternion(cy * sp * cr + sy * cp * sr,
+                                        sy * cp * cr - cy * sp * sr,
+                                        cy * cp * sr - sy * sp * cr,
+                                        cy * cp * cr + sy * sp * sr);
+        }
 
-            result.X = cy * sp * cr + sy * cp * sr;
-            result.Y = sy * cp * cr - cy * sp * sr;
-            result.Z = cy * cp * sr - sy * sp * cr;
-            result.W = cy * cp * cr + sy * sp * sr;
-
-            return result;
+        public override string ToString()
+        {
+            return $"[Quaternion - {{{X}, {Y}, {Z},{W}}}]";
         }
     }
 }

@@ -37,6 +37,16 @@ namespace NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation
                         rotationMetadata = new BaseModuleRotationMetadata(cell, direction);
                         break;
                     }
+                case BaseAddFaceGhost baseAddFaceGhost:
+                    {
+                        if (baseAddFaceGhost.anchoredFace.HasValue)
+                        {
+                            Base.Face anchoredFace = baseAddFaceGhost.anchoredFace.Value;
+
+                            rotationMetadata = new AnchoredFaceRotationMetadata(anchoredFace.cell, (int)anchoredFace.direction, (int)baseAddFaceGhost.faceType);
+                        }
+                        break;
+                    }
             }
 
             return Optional.OfNullable(rotationMetadata);

@@ -17,7 +17,7 @@ namespace NitroxModel.Packets
         }
         public override string ToString()
         {
-            return $"[MultiplayerSessionReservationRequest - PlayerSettings: {PlayerSettings}, AuthenticationContext: {AuthenticationContext}]";
+            return $"[MultiplayerSessionReservationRequest - PlayerSettings: {PlayerSettings}, AuthenticationContext: {AuthenticationContext}, Base: {base.ToString()}]";
         }
     }
 }

@@ -100,7 +100,7 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
 
         public static void OpenJoinServerMenu(string serverIp)
         {
-            IPEndPoint endpoint = ResolveIp(serverIp) ?? ResolveHostName(serverIp);
+            IPEndPoint endpoint = ResolveHostName(serverIp) ?? ResolveIpv4(serverIp);
             if (endpoint == null)
             {
                 Log.InGame($"Unable to resolve remote address: {serverIp}");
@@ -174,10 +174,9 @@ namespace NitroxClient.MonoBehaviours.Gui.MainMenu
 
         private static IPEndPoint ResolveHostName(string hostname)
         {
-            Match match = Regex.Match(hostname, @"^\s*([a-zA-Z\.]*)\:?(\d{2,5})?\s*$");
+            Match match = Regex.Match(hostname, @"^\s*([a-zA-Z\.]*)\:?(\d{2,5})?\s*$"); // Pattern test url: https://regex101.com/r/kgTvQX/1
             if (!match.Success)
             {
-                Log.ErrorSensitive("Hostname {hostname} has an invalid format", hostname);
                 return null;
             }
 

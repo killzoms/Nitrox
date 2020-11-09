@@ -22,6 +22,7 @@ namespace NitroxServer.Subnautica.Communication.Packets.Processors
         public override void Process(CyclopsToggleFloodLights packet, NitroxServer.Player player)
         {
             Optional<CyclopsModel> opCyclops = vehicleManager.GetVehicleModel<CyclopsModel>(packet.Id);
+
             if (opCyclops.HasValue)
             {
                 opCyclops.Value.FloodLightsOn = packet.IsOn;

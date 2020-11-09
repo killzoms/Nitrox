@@ -9,8 +9,8 @@ namespace NitroxPatcher.Patches.Persistent
     public class CellManager_TryLoadCacheBatchCells_Patch : NitroxPatch, IPersistentPatch
     {
         private static readonly MethodInfo targetMethod = typeof(CellManager).GetMethod(nameof(CellManager.TryLoadCacheBatchCells), BindingFlags.Public | BindingFlags.Instance);
-        private static readonly MethodInfo largeWorldPathPrefixMethod = typeof(LargeWorldStreamer).GetProperty("pathPrefix", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
-        private static readonly MethodInfo largeWorldFallbackPrefixMethod = typeof(LargeWorldStreamer).GetProperty("fallbackPrefix", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
+        private static readonly object largeWorldPathPrefixMethod = typeof(LargeWorldStreamer).GetProperty("pathPrefix", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
+        private static readonly object largeWorldFallbackPrefixMethod = typeof(LargeWorldStreamer).GetProperty("fallbackPrefix", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {

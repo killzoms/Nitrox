@@ -15,7 +15,7 @@ namespace NitroxClient.Communication.Packets.Processors
 
         public override void Process(VehicleCreated packet)
         {
-            vehicles.CreateVehicle(packet.CreatedVehicle);
+            vehicles.CreateVehicle(packet.Vehicle);
         }
     }
 }

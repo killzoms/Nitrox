@@ -75,7 +75,7 @@ namespace NitroxClient.GameLogic.PlayerModel.ColorSwap
             {
                 //TODO: We need to handle job cancellation during stabilization to ensure that the client shuts down gracefully.
 
-                throw new ArgumentException(@"Cannot execute a null task.", nameof(state));
+                throw new ArgumentException(@"Cannot execute a null task.", nameof(task));
             }
 
             task.Invoke(this);

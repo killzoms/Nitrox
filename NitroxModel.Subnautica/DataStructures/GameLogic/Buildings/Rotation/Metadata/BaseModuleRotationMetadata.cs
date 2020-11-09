@@ -1,9 +1,9 @@
 ﻿using System;
+using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic.Buildings.Rotation;
-using NitroxModel.Subnautica.Helper;
 using ProtoBufNet;
 
-namespace NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation.Metadata
+namespace NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation
 {
     [Serializable]
     [ProtoContract]
@@ -11,7 +11,7 @@ namespace NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation.Met
     {
         // Base modules anchor based on a face.  This can be constructed via these two attributes.
         [ProtoMember(1)]
-        public NitroxModel.DataStructures.Int3 Cell { get; set; }
+        public NitroxInt3 Cell { get; set; }
 
         [ProtoMember(2)]
         public int Direction { get; set; }
@@ -23,13 +23,13 @@ namespace NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation.Met
 
         public BaseModuleRotationMetadata(Int3 cell, int direction) : base(typeof(BaseAddModuleGhost))
         {
-            Cell = cell.Model();
+            Cell = cell.ToDto();
             Direction = direction;
         }
 
         public override string ToString()
         {
-            return "[BaseModuleRotationMetadata cell: " + Cell + " direction: " + Direction + " ]";
+            return $"[BaseModuleRotationMetadata - Cell: {Cell}, Direction: {Direction}]";
         }
     }
 }

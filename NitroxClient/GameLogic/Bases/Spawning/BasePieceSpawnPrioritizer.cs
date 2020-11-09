@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NitroxModel.DataStructures.GameLogic;
-using NitroxModel_Subnautica.DataStructures;
+using NitroxModel.Subnautica.DataStructures;
 
 namespace NitroxClient.GameLogic.Bases.Spawning
 {
@@ -65,20 +65,14 @@ namespace NitroxClient.GameLogic.Bases.Spawning
                               .ThenBy(piece => piece.IsFurniture) // Ensure base building block go before furniture
                               .ThenBy(piece => ComputeBasePiecePriority(piece))    // Ensure remaining pieces are prioritized by above order. 
                               .ThenBy(piece => piece.BuildIndex)
-                              .ToList();                              
+                              .ToList();
         }
 
         private int ComputeBasePiecePriority(BasePiece basePiece)
         {
             TechType techType = basePiece.TechType.ToUnity();
-            int position;
 
-            if (PiecesToPriority.TryGetValue(techType, out position))
-            {
-                return position;
-            }
-
-            return int.MaxValue;
+            return PiecesToPriority.TryGetValue(techType, out int position) ? position : int.MaxValue;
         }
     }
 }

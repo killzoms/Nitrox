@@ -14,14 +14,17 @@ namespace NitroxModel.Packets
     [Serializable]
     public abstract class Packet
     {
-        private static readonly SurrogateSelector surrogateSelector = new SurrogateSelector();
-        private static readonly StreamingContext streamingContext = new StreamingContext(StreamingContextStates.All); // Our surrogates can be safely used in every context.
+        private static readonly SurrogateSelector surrogateSelector;
+        private static readonly StreamingContext streamingContext;
         private static readonly BinaryFormatter serializer;
 
         private static readonly string[] blacklistedAssemblies = { "NLog" };
 
         static Packet()
         {
+            surrogateSelector = new SurrogateSelector();
+            streamingContext = new StreamingContext(StreamingContextStates.All); // Our surrogates can be safely used in every context.
+
             IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
                                                .Where(assembly => !blacklistedAssemblies.Contains(assembly.GetName().Name))
                                                .SelectMany(a => a.GetTypes()

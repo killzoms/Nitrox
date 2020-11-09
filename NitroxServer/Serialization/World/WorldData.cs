@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NitroxModel.DataStructures;
 using NitroxServer.GameLogic;
-using NitroxServer.GameLogic.Bases;
 using NitroxServer.GameLogic.Entities;
 using NitroxServer.GameLogic.Items;
 using NitroxServer.GameLogic.Vehicles;

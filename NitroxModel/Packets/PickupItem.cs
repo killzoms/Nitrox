@@ -36,7 +36,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[PickupItem - ItemPosition: {ItemPosition}, Id: {Id}, TechType: {TechType}]";
+            return $"[PickupItem - Id: {Id}, ItemPosition: {ItemPosition}, TechType: {TechType}]";
         }
     }
 }

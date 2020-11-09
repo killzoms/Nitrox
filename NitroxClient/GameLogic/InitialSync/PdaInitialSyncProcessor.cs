@@ -13,6 +13,10 @@ namespace NitroxClient.GameLogic.InitialSync
 {
     public class PdaInitialSyncProcessor : InitialSyncProcessor
     {
+        private readonly FieldInfo pdaScannerCompleteField = typeof(PDAScanner).GetField("complete", BindingFlags.NonPublic | BindingFlags.Static);
+        private readonly FieldInfo pdaScannerPartialField = typeof(PDAScanner).GetField("partial", BindingFlags.NonPublic | BindingFlags.Static);
+        private readonly FieldInfo pdaScannerEntriesField = typeof(PDALog).GetField("entries", BindingFlags.NonPublic | BindingFlags.Static);
+
         private readonly IPacketSender packetSender;
 
         public PdaInitialSyncProcessor(IPacketSender packetSender)
@@ -58,7 +62,7 @@ namespace NitroxClient.GameLogic.InitialSync
 
         private void SetPDAEntryComplete(List<NitroxTechType> pdaEntryComplete)
         {
-            HashSet<TechType> complete = (HashSet<TechType>)(typeof(PDAScanner).GetField("complete", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null));
+            HashSet<TechType> complete = (HashSet<TechType>)pdaScannerCompleteField.GetValue(null);
 
             foreach (NitroxTechType item in pdaEntryComplete)
             {
@@ -71,7 +75,7 @@ namespace NitroxClient.GameLogic.InitialSync
 
         private void SetPDAEntryPartial(List<PDAEntry> entries)
         {
-            List<PDAScanner.Entry> partial = (List<PDAScanner.Entry>)(typeof(PDAScanner).GetField("partial", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null));
+            List<PDAScanner.Entry> partial = (List<PDAScanner.Entry>)pdaScannerPartialField.GetValue(null);
 
             foreach (PDAEntry entry in entries)
             {
@@ -100,14 +104,18 @@ namespace NitroxClient.GameLogic.InitialSync
 
             using (packetSender.Suppress<PDALogEntryAdd>())
             {
-                Dictionary<string, PDALog.Entry> entries = (Dictionary<string, PDALog.Entry>)(typeof(PDALog).GetField("entries", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null));
+                Dictionary<string, PDALog.Entry> entries = (Dictionary<string, PDALog.Entry>)pdaScannerEntriesField.GetValue(null);
 
                 foreach (PDALogEntry logEntry in logEntries)
                 {
                     if (!entries.ContainsKey(logEntry.Key))
                     {
                         PDALog.GetEntryData(logEntry.Key, out PDALog.EntryData entryData);
-                        PDALog.Entry entry = new PDALog.Entry { data = entryData, timestamp = logEntry.Timestamp };
+                        PDALog.Entry entry = new PDALog.Entry
+                        {
+                            data = entryData,
+                            timestamp = logEntry.Timestamp
+                        };
                         entries.Add(entryData.key, entry);
 
                         if (entryData.key == "Story_AuroraWarning4")

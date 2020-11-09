@@ -112,10 +112,5 @@ namespace NitroxModel.Subnautica.DataStructures
             }
             return result;
         }
-
-        public static Vector3 AsVector3(this NitroxModel.DataStructures.Int3 v)
-        {
-            return new Vector3(v.X, v.Y, v.Z);
-        }
     }
 }

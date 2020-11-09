@@ -7,17 +7,17 @@ namespace NitroxModel.Packets
     public class VehicleCreated : Packet
     {
         public string PlayerName { get; }
-        public VehicleModel CreatedVehicle { get; }
+        public VehicleModel Vehicle { get; }
 
         public VehicleCreated(VehicleModel createdVehicle, string playerName)
         {
-            CreatedVehicle = createdVehicle;
+            Vehicle = createdVehicle;
             PlayerName = playerName;
         }
 
         public override string ToString()
         {
-            return $"[VehicleCreated - PlayerName: {PlayerName}, CreatedVehicle: {CreatedVehicle}]";
+            return $"[VehicleCreated - PlayerName: {PlayerName}, Vehicle: {Vehicle}]";
         }
     }
 }

@@ -53,18 +53,19 @@ namespace NitroxClient.GameLogic.PlayerModel.ColorSwap
             Color[] armsTexturePixels = pixelIndex[REINFORCED_SUIT_ARMS_INDEX_KEY];
             Color[] glovePixelIndexes = pixelIndex[REINFORCED_GLOVES_INDEX_KEY];
 
-            GameObject playerModel = nitroxPlayer.PlayerModel;
+            SkinnedMeshRenderer reinforcedSuitRenderer = nitroxPlayer.PlayerModel.GetRenderer(REINFORCED_SUIT_GAME_OBJECT_NAME);
+            Material renderMaterial = reinforcedSuitRenderer.material;
+            Material renderMaterial1 = reinforcedSuitRenderer.materials[1];
 
-            SkinnedMeshRenderer reinforcedSuitRenderer = playerModel.GetRenderer(REINFORCED_SUIT_GAME_OBJECT_NAME);
-            reinforcedSuitRenderer.material.UpdateMainTextureColors(suitPixelIndexes);
-            reinforcedSuitRenderer.material.SetTexture(mainTex, reinforcedSuitRenderer.material.mainTexture);
-            reinforcedSuitRenderer.material.SetTexture(specTex, reinforcedSuitRenderer.material.mainTexture);
+            renderMaterial.UpdateMainTextureColors(suitPixelIndexes);
+            renderMaterial.SetTexture(mainTex, renderMaterial.mainTexture);
+            renderMaterial.SetTexture(specTex, renderMaterial.mainTexture);
 
-            reinforcedSuitRenderer.materials[1].UpdateMainTextureColors(armsTexturePixels);
-            reinforcedSuitRenderer.materials[1].SetTexture(mainTex, reinforcedSuitRenderer.materials[1].mainTexture);
-            reinforcedSuitRenderer.materials[1].SetTexture(specTex, reinforcedSuitRenderer.materials[1].mainTexture);
+            renderMaterial1.UpdateMainTextureColors(armsTexturePixels);
+            renderMaterial1.SetTexture(mainTex, renderMaterial1.mainTexture);
+            renderMaterial1.SetTexture(specTex, renderMaterial1.mainTexture);
 
-            SkinnedMeshRenderer reinforcedGlovesRenderer = playerModel.GetRenderer(REINFORCED_GLOVES_GAME_OBJECT_NAME);
+            SkinnedMeshRenderer reinforcedGlovesRenderer = nitroxPlayer.PlayerModel.GetRenderer(REINFORCED_GLOVES_GAME_OBJECT_NAME);
             reinforcedGlovesRenderer.material.UpdateMainTextureColors(glovePixelIndexes);
         }
     }

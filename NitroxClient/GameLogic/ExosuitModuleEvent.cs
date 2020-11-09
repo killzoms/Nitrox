@@ -13,8 +13,8 @@ namespace NitroxClient.GameLogic
 {
     public class ExosuitModuleEvent
     {
-        private static readonly int useTool = Animator.StringToHash("use_tool");
-        private static readonly int bash = Animator.StringToHash("bash");
+        private static readonly int animatorUseTool = Animator.StringToHash("use_tool");
+        private static readonly int animatorBash = Animator.StringToHash("bash");
 
         private readonly IPacketSender packetSender;
         private readonly Vehicles vehicles;
@@ -77,30 +77,30 @@ namespace NitroxClient.GameLogic
             BroadcastArmAction(TechType.ExosuitClawArmModule, clawArm, action, null, null);
         }
 
-        public void UseClaw(ExosuitClawArm clawArm, ExosuitArmAction armAction)
+        public static void UseClaw(ExosuitClawArm clawArm, ExosuitArmAction armAction)
         {
             switch (armAction)
             {
                 case ExosuitArmAction.START_USE_TOOL:
-                    clawArm.animator.SetTrigger(useTool);
+                    clawArm.animator.SetTrigger(animatorUseTool);
                     break;
                 case ExosuitArmAction.ALT_HIT:
-                    clawArm.animator.SetTrigger(bash);
+                    clawArm.animator.SetTrigger(animatorBash);
                     clawArm.fxControl.Play(0);
                     break;
             }
         }
 
-        public void UseDrill(ExosuitDrillArm drillArm, ExosuitArmAction armAction)
+        public static void UseDrill(ExosuitDrillArm drillArm, ExosuitArmAction armAction)
         {
             switch (armAction)
             {
                 case ExosuitArmAction.START_USE_TOOL:
-                    drillArm.animator.SetBool(useTool, true);
+                    drillArm.animator.SetBool(animatorUseTool, true);
                     drillArm.loop.Play();
                     break;
                 case ExosuitArmAction.END_USE_TOOL:
-                    drillArm.animator.SetBool(useTool, false);
+                    drillArm.animator.SetBool(animatorUseTool, false);
                     drillArm.ReflectionCall("StopEffects");
                     break;
                 default:
@@ -109,17 +109,17 @@ namespace NitroxClient.GameLogic
             }
         }
 
-        public void UseGrappling(ExosuitGrapplingArm grapplingArm, ExosuitArmAction armAction, Vector3? opHitVector)
+        public static void UseGrappling(ExosuitGrapplingArm grapplingArm, ExosuitArmAction armAction, Vector3? opHitVector)
         {
             switch (armAction)
             {
                 case ExosuitArmAction.END_USE_TOOL:
-                    grapplingArm.animator.SetBool(useTool, false);
+                    grapplingArm.animator.SetBool(animatorUseTool, false);
                     grapplingArm.ReflectionCall("ResetHook");
                     break;
                 case ExosuitArmAction.START_USE_TOOL:
                     {
-                        grapplingArm.animator.SetBool(useTool, true);
+                        grapplingArm.animator.SetBool(animatorUseTool, true);
                         if (!grapplingArm.rope.isLaunching)
                         {
                             grapplingArm.rope.LaunchHook(35f);
@@ -149,7 +149,7 @@ namespace NitroxClient.GameLogic
             }
         }
 
-        public void UseTorpedo(ExosuitTorpedoArm torpedoArm, ExosuitArmAction armAction, Vector3? opVector, Quaternion? opRotation)
+        public static void UseTorpedo(ExosuitTorpedoArm torpedoArm, ExosuitArmAction armAction, Vector3? opVector, Quaternion? opRotation)
         {
             switch (armAction)
             {
@@ -172,15 +172,13 @@ namespace NitroxClient.GameLogic
 
                         // Copied from SeamothModuleActionProcessor. We need to synchronize both methods
                         GameObject gameObject = UnityEngine.Object.Instantiate(torpedoType.prefab);
-                        Transform component = gameObject.GetComponent<Transform>();
                         SeamothTorpedo component2 = gameObject.GetComponent<SeamothTorpedo>();
-                        Vector3 zero = Vector3.zero;
                         Rigidbody componentInParent = silo.GetComponentInParent<Rigidbody>();
                         Vector3 rhs = !componentInParent ? Vector3.zero : componentInParent.velocity;
                         float speed = Vector3.Dot(forward, rhs);
                         component2.Shoot(silo.position, rotation, speed, -1f);
 
-                        torpedoArm.animator.SetBool(useTool, true);
+                        torpedoArm.animator.SetBool(animatorUseTool, true);
                         if (container.count == 0)
                         {
                             Utils.PlayFMODAsset(torpedoArm.torpedoDisarmed, torpedoArm.transform, 1f);
@@ -189,10 +187,10 @@ namespace NitroxClient.GameLogic
                         break;
                     }
                 case ExosuitArmAction.END_USE_TOOL:
-                    torpedoArm.animator.SetBool(useTool, false);
+                    torpedoArm.animator.SetBool(animatorUseTool, false);
                     break;
                 default:
-                    Log.Error("Torpedo arm got an arm action he should not get: " + armAction);
+                    Log.Error($"Torpedo arm got an arm action he should not get: {armAction}");
                     break;
             }
         }

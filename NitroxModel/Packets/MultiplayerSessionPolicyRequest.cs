@@ -15,7 +15,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return "[MultiplayerSessionPolicyRequest]";
+            return $"[MultiplayerSessionPolicyRequest - Base: {base.ToString()}]";
         }
     }
 }

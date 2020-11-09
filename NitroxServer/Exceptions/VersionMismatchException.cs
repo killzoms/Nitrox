@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NitroxServer.Serialization.World
+namespace NitroxServer.Exceptions
 {
     [Serializable]
     public class VersionMismatchException : Exception

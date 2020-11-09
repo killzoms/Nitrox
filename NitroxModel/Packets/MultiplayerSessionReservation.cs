@@ -25,7 +25,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[MultiplayerSessionReservation - ReservationState: {ReservationState}, PlayerId: {PlayerId}, ReservationKey: {ReservationKey}]";
+            return $"[MultiplayerSessionReservation - ReservationState: {ReservationState}, PlayerId: {PlayerId}, ReservationKey: {ReservationKey}, Base: {base.ToString()}]";
         }
     }
 }

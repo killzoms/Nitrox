@@ -15,7 +15,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[StorageSlotItemRemove -OwnerId: {OwnerId}]";
+            return $"[StorageSlotItemRemove - OwnerId: {OwnerId}]";
         }
     }
 }

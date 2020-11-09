@@ -23,7 +23,7 @@ namespace NitroxServer.Subnautica.GameLogic.Entities.Spawning
                 case EntitySlotData data:
                     return ConvertSlotTypes(data.allowedTypes);
                 default:
-                    throw new InvalidEnumArgumentException($"Unknown EntitySlotType {entitySlot.GetType()}");
+                    throw new InvalidEnumArgumentException($"[SlotsHelper] Unknown EntitySlotType {entitySlot.GetType()}");
             }
         }
 

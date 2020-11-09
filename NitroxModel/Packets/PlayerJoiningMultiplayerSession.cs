@@ -15,7 +15,7 @@ namespace NitroxModel.Packets
 
         public override string ToString()
         {
-            return $"[PlayerJoiningMultiplayerSession - ReservationKey: {ReservationKey}]";
+            return $"[PlayerJoiningMultiplayerSession - ReservationKey: {ReservationKey}, CorrelationId: {CorrelationId}, Base: {base.ToString()}]";
         }
     }
 }

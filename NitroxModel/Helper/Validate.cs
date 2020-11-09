@@ -48,7 +48,7 @@ namespace NitroxModel.Helper
         {
             if (!b)
             {
-                throw new ArgumentException(nameof(b) + " is false!");
+                throw new ArgumentException($"{nameof(b)} is false!");
             }
         }
 
@@ -64,7 +64,7 @@ namespace NitroxModel.Helper
         {
             if (b)
             {
-                throw new ArgumentException(nameof(b) + " is true!");
+                throw new ArgumentException($"{nameof(b)} is true!");
             }
         }
 

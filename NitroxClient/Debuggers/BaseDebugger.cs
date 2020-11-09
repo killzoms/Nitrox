@@ -264,6 +264,7 @@ namespace NitroxClient.Debuggers
             public DebuggerTab(string name, Action render)
             {
                 Validate.NotNull(name, $"Expected a name for the {nameof(DebuggerTab)}");
+                Validate.NotNull(render, $"Expected an action for the {nameof(DebuggerTab)}");
 
                 Name = name;
                 Render = render;

@@ -10,14 +10,14 @@ namespace NitroxClient.GameLogic
     {
         public delegate void LockRequestCompleted(NitroxId id, bool lockAquired);
 
-        private readonly IMultiplayerSession muliplayerSession;
+        private readonly IMultiplayerSession multiplayerSession;
         private readonly IPacketSender packetSender;
         private readonly Dictionary<NitroxId, SimulationLockType> simulatedIdsByLockType = new Dictionary<NitroxId, SimulationLockType>();
         private readonly Dictionary<NitroxId, LockRequestCompleted> completeFunctionsById = new Dictionary<NitroxId, LockRequestCompleted>();
 
-        public SimulationOwnership(IMultiplayerSession muliplayerSession, IPacketSender packetSender)
+        public SimulationOwnership(IMultiplayerSession multiplayerSession, IPacketSender packetSender)
         {
-            this.muliplayerSession = muliplayerSession;
+            this.multiplayerSession = multiplayerSession;
             this.packetSender = packetSender;
         }
 
@@ -31,7 +31,7 @@ namespace NitroxClient.GameLogic
 
             if (simulatedIdsByLockType.TryGetValue(id, out SimulationLockType activeLockType))
             {
-                return (activeLockType == SimulationLockType.EXCLUSIVE);
+                return activeLockType == SimulationLockType.EXCLUSIVE;
             }
 
             return false;
@@ -39,14 +39,14 @@ namespace NitroxClient.GameLogic
 
         public void RequestSimulationLock(NitroxId id, SimulationLockType lockType, LockRequestCompleted whenCompleted)
         {
-            SimulationOwnershipRequest ownershipRequest = new SimulationOwnershipRequest(muliplayerSession.Reservation.PlayerId, id, lockType);
+            SimulationOwnershipRequest ownershipRequest = new SimulationOwnershipRequest(multiplayerSession.Reservation.PlayerId, id, lockType);
             packetSender.Send(ownershipRequest);
             completeFunctionsById[id] = whenCompleted;
         }
 
         public void ReceivedSimulationLockResponse(NitroxId id, bool lockAquired, SimulationLockType lockType)
         {
-            Log.Info("Received lock response, id: " + id + " " + lockAquired + " " + lockType);
+            Log.Info($"Received lock response, id: {id} {lockAquired} {lockType}");
 
             if (lockAquired)
             {
@@ -61,7 +61,7 @@ namespace NitroxClient.GameLogic
             }
             else
             {
-                Log.Warn("Did not have an outstanding simulation request for " + id + " maybe there were multiple outstanding requests?");
+                Log.Warn($"Did not have an outstanding simulation request for {id} maybe there were multiple outstanding requests?");
             }
         }
 

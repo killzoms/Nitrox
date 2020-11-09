@@ -10,7 +10,7 @@ namespace NitroxTest
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context)
         {
-            NitroxEnvironment.Set(NitroxEnvironmentTypes.TESTING);
+            NitroxEnvironment.Set(NitroxEnvironmentType.TESTING);
             Log.Setup();
         }
     }

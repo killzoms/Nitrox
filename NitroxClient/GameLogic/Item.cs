@@ -35,7 +35,7 @@ namespace NitroxClient.GameLogic
 
         public void PickedUp(Vector3 itemPosition, NitroxId id, TechType techType)
         {
-            Log.Info("PickedUp " + id + " " + techType);
+            Log.Info($"PickedUp {id} {techType}");
             PickupItem pickupItem = new PickupItem(itemPosition.ToDto(), id, techType.ToDto());
             packetSender.Send(pickupItem);
         }
@@ -46,7 +46,7 @@ namespace NitroxClient.GameLogic
             NitroxId id = NitroxEntity.GetId(gameObject);
             byte[] bytes = SerializationHelper.GetBytes(gameObject);
 
-            Log.Debug("Dropping item with id: " + id);
+            Log.Debug($"Dropping item with id: {id}");
 
             DroppedItem droppedItem = new DroppedItem(id, waterparkId, techType.ToDto(), dropPosition.ToDto(), gameObject.transform.rotation.ToDto(), bytes);
             packetSender.Send(droppedItem);
@@ -56,11 +56,11 @@ namespace NitroxClient.GameLogic
         {
             Player player = Utils.GetLocalPlayer().GetComponent<Player>();
 
-            if (player != null)
+            if (player)
             {
                 WaterPark currentWaterPark = player.currentWaterPark;
 
-                if (currentWaterPark != null)
+                if (currentWaterPark)
                 {
                     NitroxId waterParkId = NitroxEntity.GetId(currentWaterPark.gameObject);
                     return Optional.Of(waterParkId);

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
-using NitroxModel.DataStructures.JsonConverter;
 using NitroxModel.Logger;
+using NitroxServer.Serialization.JsonConverter;
 
 namespace NitroxServer.Serialization
 {

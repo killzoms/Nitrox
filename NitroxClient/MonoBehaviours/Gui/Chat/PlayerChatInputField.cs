@@ -40,6 +40,11 @@ namespace NitroxClient.MonoBehaviours.Gui.Chat
 
         private void Update()
         {
+            if (FreezeTime)
+            {
+                return;
+            }
+
             if (selected && InputField.text != "")
             {
                 ResetTimer();
@@ -60,7 +65,7 @@ namespace NitroxClient.MonoBehaviours.Gui.Chat
                     }
                 }
             }
-            else if (!FreezeTime)
+            else
             {
                 timeLeftUntilAutoClose -= Time.unscaledDeltaTime;
                 if (timeLeftUntilAutoClose <= 0)

@@ -61,11 +61,6 @@ namespace NitroxModel.DataStructures.GameLogic
 
         public void SetParent(NitroxTransform parent)
         {
-            if (parent == null)
-            {
-                return;
-            }
-
             Parent = parent;
         }
 

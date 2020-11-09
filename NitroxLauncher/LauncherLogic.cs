@@ -102,7 +102,6 @@ namespace NitroxLauncher
                         MessageBoxOptions.DefaultDesktopOnly);
                 }
 #endif
-
             }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
@@ -162,8 +161,7 @@ namespace NitroxLauncher
 
         public bool NavigationIsOn<TPage>() where TPage : Page
         {
-            MainWindow window = Application.Current.MainWindow as MainWindow;
-            if (window == null)
+            if (!(Application.Current.MainWindow is MainWindow window))
             {
                 return false;
             }

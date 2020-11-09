@@ -6,24 +6,10 @@ namespace NitroxModel.DataStructures.GameLogic
     {
         public float[,] M;
 
-        public override string ToString()
-        {
-            return $"[\n[{M[0, 0]}], [{M[0, 1]}], [{M[0, 2]}], [{M[0, 3]}],\n" +
-                $"[{M[1, 0]}], [{M[1, 1]}], [{M[1, 2]}], [{M[1, 3]}],\n" +
-                $"[{M[2, 0]}], [{M[2, 1]}], [{M[2, 2]}], [{M[2, 3]}],\n" +
-                $"[{M[3, 0]}], [{M[3, 1]}], [{M[3, 2]}], [{M[3, 3]}],\n]";
-        }
-
         public float this[int x, int y]
         {
-            get
-            {
-                return M[x, y];
-            }
-            set
-            {
-                M[x, y] = value;
-            }
+            get => M[x, y];
+            set => M[x, y] = value;
         }
 
         public static NitroxMatrix4x4 Identity => new NitroxMatrix4x4
@@ -34,13 +20,7 @@ namespace NitroxModel.DataStructures.GameLogic
             0f, 0f, 0f, 1f
             );
 
-        public NitroxMatrix4x4 Inverse
-        {
-            get
-            {
-                return Invert(this);
-            }
-        }
+        public NitroxMatrix4x4 Inverse => Invert(this);
 
         public static NitroxMatrix4x4 Invert(NitroxMatrix4x4 matrix)
         {
@@ -105,19 +85,13 @@ namespace NitroxModel.DataStructures.GameLogic
             return result;
         }
 
-        public bool IsIdentity
-        {
-            get
-            {
-                return M[0, 0] == 1f && M[1, 1] == 1f && M[2, 2] == 1f && M[3, 3] == 1f &&
-                    M[0, 1] == 0f && M[0, 2] == 0f && M[0, 3] == 0f &&
-                    M[1, 0] == 0f && M[1, 2] == 0f && M[1, 3] == 0f &&
-                    M[2, 0] == 0f && M[2, 1] == 0f && M[2, 3] == 0f &&
-                    M[3, 0] == 0f && M[3, 1] == 0f && M[3, 2] == 0f;
-            }
-        }
+        public bool IsIdentity =>
+            M[0, 0] == 1f && M[1, 0] == 0f && M[2, 0] == 0f && M[3, 0] == 0f &&
+            M[0, 1] == 0f && M[1, 1] == 1f && M[2, 1] == 0f && M[3, 1] == 0f &&
+            M[0, 2] == 0f && M[1, 2] == 0f && M[2, 2] == 1f && M[3, 2] == 0f &&
+            M[0, 3] == 0f && M[1, 3] == 0f && M[2, 3] == 0f && M[3, 3] == 1f;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S107:Methods should not have too many parameters", Justification = "Cant fix")]
+
         public NitroxMatrix4x4(float m11, float m12, float m13, float m14,
                                float m21, float m22, float m23, float m24,
                                float m31, float m32, float m33, float m34,
@@ -171,7 +145,6 @@ namespace NitroxModel.DataStructures.GameLogic
             return scaleMatrix;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "Explanation")]
         public float GetDeterminant()
         {
             // | a b c d |     | f g h |     | e g h |     | e f h |     | e f g |
@@ -231,28 +204,28 @@ namespace NitroxModel.DataStructures.GameLogic
             float sqy = rot.Y * rot.Y;
             float sqz = rot.Z * rot.Z;
 
-            float invs = 1 / (sqx + sqy + sqz + sqw);
-            rotationMatrix[0, 0] = (sqx - sqy - sqz + sqw) * invs;
-            rotationMatrix[1, 1] = (-sqx + sqy - sqz + sqw) * invs;
-            rotationMatrix[2, 2] = (-sqx - sqy + sqz + sqw) * invs;
+            float inverse = 1 / (sqx + sqy + sqz + sqw);
+            rotationMatrix[0, 0] = (sqx - sqy - sqz + sqw) * inverse;
+            rotationMatrix[1, 1] = (-sqx + sqy - sqz + sqw) * inverse;
+            rotationMatrix[2, 2] = (-sqx - sqy + sqz + sqw) * inverse;
 
             float tmp1 = rot.X * rot.Y;
             float tmp2 = rot.Z * rot.W;
 
-            rotationMatrix[1, 0] = 2 * (tmp1 + tmp2) * invs;
-            rotationMatrix[0, 1] = 2 * (tmp1 - tmp2) * invs;
+            rotationMatrix[1, 0] = 2 * (tmp1 + tmp2) * inverse;
+            rotationMatrix[0, 1] = 2 * (tmp1 - tmp2) * inverse;
 
             tmp1 = rot.X * rot.Z;
             tmp2 = rot.Y * rot.W;
 
-            rotationMatrix[2, 0] = 2 * (tmp1 - tmp2) * invs;
-            rotationMatrix[0, 2] = 2 * (tmp1 + tmp2) * invs;
+            rotationMatrix[2, 0] = 2 * (tmp1 - tmp2) * inverse;
+            rotationMatrix[0, 2] = 2 * (tmp1 + tmp2) * inverse;
 
             tmp1 = rot.Y * rot.Z;
             tmp2 = rot.X * rot.W;
 
-            rotationMatrix[2, 1] = 2 * (tmp1 + tmp2) * invs;
-            rotationMatrix[1, 2] = 2 * (tmp1 - tmp2) * invs;
+            rotationMatrix[2, 1] = 2 * (tmp1 + tmp2) * inverse;
+            rotationMatrix[1, 2] = 2 * (tmp1 - tmp2) * inverse;
 
             return rotationMatrix;
         }
@@ -459,6 +432,14 @@ namespace NitroxModel.DataStructures.GameLogic
             localPosition = ExtractTranslation(ref matrix);
 
             matrix = before;
+        }
+
+        public override string ToString()
+        {
+            return $"[\n[{M[0, 0]}], [{M[0, 1]}], [{M[0, 2]}], [{M[0, 3]}],\n" +
+                   $"[{M[1, 0]}], [{M[1, 1]}], [{M[1, 2]}], [{M[1, 3]}],\n" +
+                   $"[{M[2, 0]}], [{M[2, 1]}], [{M[2, 2]}], [{M[2, 3]}],\n" +
+                   $"[{M[3, 0]}], [{M[3, 1]}], [{M[3, 2]}], [{M[3, 3]}],\n]";
         }
     }
 }

@@ -11,6 +11,10 @@ namespace NitroxClient.Communication.Packets.Processors
 {
     public class PDAScannerEntryAddProcessor : ClientPacketProcessor<PDAEntryAdd>
     {
+        private readonly MethodInfo pdaScannerAddMethod = typeof(PDAScanner).GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(TechType), typeof(int) }, null);
+        private readonly FieldInfo pdaScannerPartialField = typeof(PDAScanner).GetField("partial", BindingFlags.NonPublic | BindingFlags.Static);
+        private readonly FieldInfo pdaScannerCompleteField = typeof(PDAScanner).GetField("complete", BindingFlags.NonPublic | BindingFlags.Static);
+
         private readonly IPacketSender packetSender;
 
         public PDAScannerEntryAddProcessor(IPacketSender packetSender)
@@ -28,8 +32,7 @@ namespace NitroxClient.Communication.Packets.Processors
 
                 if (!PDAScanner.GetPartialEntryByKey(techType, out PDAScanner.Entry entry))
                 {
-                    MethodInfo methodAdd = typeof(PDAScanner).GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(TechType), typeof(int) }, null);
-                    entry = (PDAScanner.Entry)methodAdd.Invoke(null, new object[] { techType, packet.Unlocked });
+                    entry = (PDAScanner.Entry)pdaScannerAddMethod.Invoke(null, new object[] { techType, packet.Unlocked });
 
                 }
 
@@ -39,8 +42,8 @@ namespace NitroxClient.Communication.Packets.Processors
 
                     if (entry.unlocked >= entryData.totalFragments)
                     {
-                        List<PDAScanner.Entry> partial = (List<PDAScanner.Entry>)(typeof(PDAScanner).GetField("partial", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null));
-                        HashSet<TechType> complete = (HashSet<TechType>)(typeof(PDAScanner).GetField("complete", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null));
+                        List<PDAScanner.Entry> partial = (List<PDAScanner.Entry>)pdaScannerPartialField.GetValue(null);
+                        HashSet<TechType> complete = (HashSet<TechType>)pdaScannerCompleteField.GetValue(null);
                         partial.Remove(entry);
                         complete.Add(entry.techType);
                     }
@@ -51,7 +54,7 @@ namespace NitroxClient.Communication.Packets.Processors
                         {
                             float num2 = (float)entry.unlocked / (float)totalFragments;
                             float arg = (float)Mathf.RoundToInt(num2 * 100f);
-                            ErrorMessage.AddError(Language.main.GetFormat("ScannerInstanceScanned", Language.main.Get(entry.techType.AsString(false)), arg, entry.unlocked, totalFragments));
+                            ErrorMessage.AddError(Language.main.GetFormat<string, float, int, int>("ScannerInstanceScanned", Language.main.Get(entry.techType.AsString(false)), arg, entry.unlocked, totalFragments));
                         }
                     }
                 }

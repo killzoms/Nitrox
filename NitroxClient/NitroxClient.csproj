@@ -18,16 +18,12 @@
     <Optimize>false</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>
-    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>
-    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -301,7 +297,7 @@
     <Compile Include="GameLogic\Spawning\DefaultEntitySpawner.cs" />
     <Compile Include="GameLogic\Spawning\IEntitySpawner.cs" />
     <Compile Include="GameLogic\PlayerModel\Equipment\StillSuitVisibilityHandler.cs" />
-    <Compile Include="GameLogic\VisibleCellManager.cs" />
+    <Compile Include="GameLogic\Terrain.cs" />
     <Compile Include="GameLogic\Vehicles.cs" />
     <Compile Include="Map\VisibleCells.cs" />
     <Compile Include="MonoBehaviours\AnimationController.cs" />

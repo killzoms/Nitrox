@@ -9,6 +9,7 @@ using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Logger;
 using NitroxModel.Server;
+using NitroxServer.Exceptions;
 using NitroxServer.GameLogic;
 using NitroxServer.GameLogic.Bases;
 using NitroxServer.GameLogic.Entities;
@@ -50,7 +51,7 @@ namespace NitroxServer.Serialization.World
                     PlayerData = PlayerData.From(world.PlayerManager.GetAllPlayers()),
                     WorldData =
                     {
-                        ParsedBatchCells = world.BatchEntitySpawner.GetSerializableParsedBatches(),
+                        ParsedBatchCells = world.BatchEntitySpawner.SerializableParsedBatches,
                         ServerStartTime = world.TimeKeeper.ServerStartTime,
                         EntityData = EntityData.From(world.EntityManager.GetAllEntities()),
                         VehicleData = VehicleData.From(world.VehicleManager.GetVehicles()),

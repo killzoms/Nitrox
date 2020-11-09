@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="Core\IAutoFacRegistrar.cs" />
     <Compile Include="Core\NitroxEnvironment.cs" />
-    <Compile Include="Core\NitroxEnvironmentTypes.cs" />
     <Compile Include="Core\NitroxServiceLocator.cs" />
     <Compile Include="DataStructures\GameLogic\Entities\Metadata\PrecursorDoorwayMetadata.cs" />
     <Compile Include="DataStructures\GameLogic\Entities\Metadata\PrecursorKeyTerminalMetadata.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="DataStructures\GameLogic\NitroxTechType.cs" />
     <Compile Include="DataStructures\NitroxId.cs" />
     <Compile Include="DataStructures\NitroxInt3.cs" />
-    <Compile Include="DataStructures\OptionalEmpty.cs" />
     <Compile Include="Exceptions\GameObjectNullException.cs" />
     <Compile Include="Exceptions\OptionalEmptyException.cs" />
     <Compile Include="Exceptions\OptionalNullException.cs" />
@@ -119,7 +117,7 @@
     <Compile Include="Networking\NitroxDeliveryMethod.cs" />
     <Compile Include="Packets\EntityMetadataUpdate.cs" />
     <Compile Include="Packets\BedEnter.cs" />
-    <Compile Include="DataStructures\GameLogic\Entities\EntityTransformUpdate.cs" />
+    <Compile Include="Packets\EntityTransformUpdate.cs" />
     <Compile Include="Packets\EscapePodRadioRepair.cs" />
     <Compile Include="Packets\EscapePodRepair.cs" />
     <Compile Include="Packets\IShortString.cs" />
@@ -238,6 +236,5 @@
       <Name>LiteNetLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

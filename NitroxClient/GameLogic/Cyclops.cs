@@ -300,6 +300,7 @@ namespace NitroxClient.GameLogic
             fire.Invoke("CancelFireSuppression", fire.fireSuppressionSystemDuration);
             float doorCloseDuration = 30f;
             fire.gameObject.BroadcastMessage("TemporaryLock", doorCloseDuration, SendMessageOptions.DontRequireReceiver);
+            yield break;
         }
 
 

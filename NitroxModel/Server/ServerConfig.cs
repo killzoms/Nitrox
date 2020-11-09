@@ -14,15 +14,15 @@ namespace NitroxModel.Server
 
         public ServerConfig() : this(
                port: 11000,
-               saveinterval: 120000,
-               maxconnection: 100,
-               disableconsole: false,
-               disableautosave: false,
-               savename: "world",
-               serverpassword: string.Empty,
-               adminpassword: StringHelper.GenerateRandomString(12),
-               gamemode: ServerGameMode.SURVIVAL,
-               serverserializermode: ServerSerializerMode.PROTOBUF
+               saveInterval: 120000,
+               maxConnection: 100,
+               disableConsole: false,
+               disableAutoSave: false,
+               saveName: "world",
+               serverPassword: string.Empty,
+               adminPassword: StringHelper.GenerateRandomString(12),
+               gameMode: ServerGameMode.SURVIVAL,
+               saveFileSerializerMode: ServerSerializerMode.PROTOBUF
         )
         { }
 

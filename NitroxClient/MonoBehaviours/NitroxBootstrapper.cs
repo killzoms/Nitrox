@@ -29,9 +29,7 @@ namespace NitroxClient.MonoBehaviours
 
         private void CreateDebugger()
         {
-            GameObject debugger = new GameObject { name = "Debug manager" };
-            debugger.AddComponent<NitroxDebugManager>();
-            debugger.transform.SetParent(transform);
+            Instantiate(new GameObject("Debug manager"), transform).AddComponent<NitroxDebugManager>();
         }
     }
 }

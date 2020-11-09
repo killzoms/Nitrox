@@ -118,7 +118,7 @@ namespace NitroxServer.Serialization
 
             StreamHeader header = serializer.Deserialize<StreamHeader>(stream);
 
-            if (header == null)
+            if (header is null)
             {
                 return;
             }
@@ -190,7 +190,10 @@ namespace NitroxServer.Serialization
         [ProtoMember(2)]
         public int NumCells { get; }
 
-        public override string ToString() => $"(version={Version}, numCells={NumCells})";
+        public override string ToString()
+        {
+            return $"(version={Version}, numCells={NumCells})";
+        }
     }
 
     [ProtoContract]
@@ -202,7 +205,10 @@ namespace NitroxServer.Serialization
         [ProtoMember(2)]
         public int Level { get; }
 
-        public override string ToString() => $"(cellId={CellId}, level={Level})";
+        public override string ToString()
+        {
+            return $"(cellId={CellId}, level={Level})";
+        }
     }
 
     [ProtoContract]
@@ -223,7 +229,10 @@ namespace NitroxServer.Serialization
         [ProtoMember(5)]
         public int WaiterDataLength { get; }
 
-        public override string ToString() => $"(cellId={CellId}, level={Level}, dataLength={DataLength}, legacyDataLength={LegacyDataLength}, waiterDataLength={WaiterDataLength})";
+        public override string ToString()
+        {
+            return $"(cellId={CellId}, level={Level}, dataLength={DataLength}, legacyDataLength={LegacyDataLength}, waiterDataLength={WaiterDataLength})";
+        }
     }
 
     [ProtoContract]
@@ -241,7 +250,10 @@ namespace NitroxServer.Serialization
             Version = 0;
         }
 
-        public override string ToString() => $"(UniqueIdentifier={Signature}, Version={Version})";
+        public override string ToString()
+        {
+            return $"(UniqueIdentifier={Signature}, Version={Version})";
+        }
     }
 
     [ProtoContract]
@@ -254,7 +266,10 @@ namespace NitroxServer.Serialization
         {
             Count = 0;
         }
-        public override string ToString() => $"(Count={Count})";
+        public override string ToString()
+        {
+            return $"(Count={Count})";
+        }
     }
 
     [ProtoContract]
@@ -300,7 +315,10 @@ namespace NitroxServer.Serialization
             MergeObject = false;
         }
 
-        public override string ToString() => $"(CreateEmptyObject={CreateEmptyObject}, IsActive={IsActive}, Layer={Layer}, Tag={Tag}, Id={Id}, ClassId={ClassId}, Parent={Parent}, OverridePrefab={OverridePrefab}, MergeObject={MergeObject})";
+        public override string ToString()
+        {
+            return $"(CreateEmptyObject={CreateEmptyObject}, IsActive={IsActive}, Layer={Layer}, Tag={Tag}, Id={Id}, ClassId={ClassId}, Parent={Parent}, OverridePrefab={OverridePrefab}, MergeObject={MergeObject})";
+        }
     }
 
     [ProtoContract]
@@ -318,6 +336,9 @@ namespace NitroxServer.Serialization
             IsEnabled = false;
         }
 
-        public override string ToString() => $"(TypeName={TypeName}, IsEnabled={IsEnabled})";
+        public override string ToString()
+        {
+            return $"(TypeName={TypeName}, IsEnabled={IsEnabled})";
+        }
     }
 }
