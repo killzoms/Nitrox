@@ -10,25 +10,25 @@ namespace NitroxPatcher.Patches.Dynamic
 {
     public class Builder_TryPlace_Patch : NitroxPatch, IDynamicPatch
     {
-        private static readonly MethodInfo targetMethod = typeof(Builder).GetMethod(nameof(Builder.TryPlace));
+        private static readonly MethodInfo targetMethod = typeof(Builder).GetMethod(nameof(Builder.TryPlace), BindingFlags.Public | BindingFlags.Static);
 
-        private static readonly MethodInfo baseGhostGetTargetBaseMethod = typeof(BaseGhost).GetMethod("get_TargetBase", BindingFlags.Public | BindingFlags.Instance);
-        private static readonly MethodInfo gameObjectGetTransformMethod = typeof(GameObject).GetMethod("get_transform", BindingFlags.Public | BindingFlags.Instance);
-        private static readonly MethodInfo transformGetPositionMethod = typeof(Transform).GetMethod("get_position", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo baseGhostGetTargetBaseMethod = typeof(BaseGhost).GetMethod("get_TargetBase");
+        private static readonly MethodInfo gameObjectGetTransformMethod = typeof(GameObject).GetMethod("get_transform");
+        private static readonly MethodInfo transformGetPositionMethod = typeof(Transform).GetMethod("get_position");
 
-        private static readonly MethodInfo craftDateGetTechTypeMethod = typeof(CraftData).GetMethod(nameof(CraftData.GetTechType), BindingFlags.Static | BindingFlags.Public, null, new[] { typeof(GameObject) }, null);
-        private static readonly MethodInfo buildingPlaceBasePieceMethod = typeof(Building).GetMethod(nameof(Building.PlaceBasePiece), BindingFlags.Instance | BindingFlags.Public, null, new[] { typeof(BaseGhost), typeof(ConstructableBase), typeof(Base), typeof(TechType), typeof(Quaternion) }, null);
-        private static readonly MethodInfo buildingPlaceFurnitureMethod = typeof(Building).GetMethod(nameof(Building.PlaceFurniture), BindingFlags.Instance | BindingFlags.Public, null, new[] { typeof(GameObject), typeof(TechType), typeof(Vector3), typeof(Quaternion) }, null);
+        private static readonly MethodInfo craftDateGetTechTypeMethod = typeof(CraftData).GetMethod(nameof(CraftData.GetTechType), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(GameObject) }, null);
+        private static readonly MethodInfo buildingPlaceBasePieceMethod = typeof(Building).GetMethod(nameof(Building.PlaceBasePiece), BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(BaseGhost), typeof(ConstructableBase), typeof(Base), typeof(TechType), typeof(Quaternion) }, null);
+        private static readonly MethodInfo buildingPlaceFurnitureMethod = typeof(Building).GetMethod(nameof(Building.PlaceFurniture), BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(GameObject), typeof(TechType), typeof(Vector3), typeof(Quaternion) }, null);
 
-        private static readonly FieldInfo builderPrefabField = typeof(Builder).GetField("prefab", BindingFlags.Static | BindingFlags.NonPublic);
-        private static readonly FieldInfo builderPlaceRotationField = typeof(Builder).GetField("placeRotation", BindingFlags.Static | BindingFlags.NonPublic);
-        private static readonly FieldInfo builderGhostModelField = typeof(Builder).GetField("ghostModel", BindingFlags.Static | BindingFlags.NonPublic);
+        private static readonly FieldInfo builderPrefabField = typeof(Builder).GetField("prefab", BindingFlags.NonPublic | BindingFlags.Static);
+        private static readonly FieldInfo builderPlaceRotationField = typeof(Builder).GetField("placeRotation", BindingFlags.NonPublic | BindingFlags.Static);
+        private static readonly FieldInfo builderGhostModelField = typeof(Builder).GetField("ghostModel", BindingFlags.NonPublic | BindingFlags.Static);
 
         internal static readonly OpCode placeBaseInjectionOpCode = OpCodes.Callvirt;
         internal static readonly object placeBaseInjectionOperand = typeof(BaseGhost).GetMethod("Place");
 
         internal static readonly OpCode placeFurnitureInjectionOpCode = OpCodes.Call;
-        internal static readonly object placeFurnitureInjectionOperand = typeof(SkyEnvironmentChanged).GetMethod(nameof(SkyEnvironmentChanged.Send), BindingFlags.Static | BindingFlags.Public, null, new[] { typeof(GameObject), typeof(Component) }, null);
+        internal static readonly object placeFurnitureInjectionOperand = typeof(SkyEnvironmentChanged).GetMethod(nameof(SkyEnvironmentChanged.Send), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(GameObject), typeof(Component) }, null);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {

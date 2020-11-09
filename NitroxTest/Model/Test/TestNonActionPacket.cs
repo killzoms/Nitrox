@@ -1,7 +1,7 @@
 ﻿using System;
 using NitroxModel.Packets;
 
-namespace NitroxTest.Model
+namespace NitroxTest.Model.Test
 {
     [Serializable]
     public class TestNonActionPacket : Packet

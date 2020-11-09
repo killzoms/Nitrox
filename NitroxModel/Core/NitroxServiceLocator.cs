@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
 using Autofac.Builder;
-using NitroxModel.DataStructures.Util;
+using NitroxModel.DataStructures;
 
 namespace NitroxModel.Core
 {

@@ -1,4 +1,4 @@
-﻿namespace NitroxModel.Packets
+﻿namespace NitroxModel.DataStructures.GameLogic
 {
     public enum StoryEventType
     {

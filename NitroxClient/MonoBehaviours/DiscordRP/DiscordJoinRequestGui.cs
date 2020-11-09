@@ -1,11 +1,10 @@
 ﻿using System.Collections;
-using NitroxClient.MonoBehaviours.DiscordRP;
 using NitroxClient.Unity.Helper;
 using NitroxModel.Subnautica.Helper;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace NitroxClient.MonoBehaviours.Gui.MainMenu
+namespace NitroxClient.MonoBehaviours.DiscordRP
 {
     public class DiscordJoinRequestGui : MonoBehaviour
     {

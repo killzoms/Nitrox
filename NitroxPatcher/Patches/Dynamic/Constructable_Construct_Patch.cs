@@ -2,7 +2,7 @@
 using Harmony;
 using NitroxClient.GameLogic;
 using NitroxModel.Core;
-using NitroxModel.DataStructures.Util;
+using NitroxModel.DataStructures;
 
 namespace NitroxPatcher.Patches.Dynamic
 {

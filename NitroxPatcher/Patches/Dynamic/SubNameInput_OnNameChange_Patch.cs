@@ -4,7 +4,6 @@ using NitroxClient.Communication.Abstract;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
-using NitroxModel.Helper;
 using NitroxModel.Packets;
 using UnityEngine;
 
@@ -14,16 +13,14 @@ namespace NitroxPatcher.Patches.Dynamic
     {
         private static readonly MethodInfo targetMethod = typeof(SubNameInput).GetMethod(nameof(SubNameInput.OnNameChange), BindingFlags.Public | BindingFlags.Instance);
 
-        public static void Postfix(SubNameInput __instance)
+        public static void Postfix(SubNameInput __instance, SubName ___target)
         {
-            SubName subName = (SubName)__instance.ReflectionGet("target");
-
-            if (subName)
+            if (___target)
             {
                 GameObject parentVehicle;
-                Vehicle vehicle = subName.GetComponentInParent<Vehicle>();
-                SubRoot subRoot = subName.GetComponentInParent<SubRoot>();
-                Rocket rocket = subName.GetComponentInParent<Rocket>();
+                Vehicle vehicle = ___target.GetComponentInParent<Vehicle>();
+                SubRoot subRoot = ___target.GetComponentInParent<SubRoot>();
+                Rocket rocket = ___target.GetComponentInParent<Rocket>();
 
                 if (vehicle)
                 {
@@ -39,7 +36,7 @@ namespace NitroxPatcher.Patches.Dynamic
                 }
 
                 NitroxId id = NitroxEntity.GetId(parentVehicle);
-                VehicleNameChange packet = new VehicleNameChange(id, subName.GetName());
+                VehicleNameChange packet = new VehicleNameChange(id, ___target.GetName());
                 NitroxServiceLocator.LocateService<IPacketSender>().Send(packet);
             }
         }

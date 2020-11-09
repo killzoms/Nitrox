@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.DataStructures;
 using UnityEngine;
@@ -15,8 +16,11 @@ namespace NitroxClient.Debuggers
 
         public EntityDebugger() : base(200, null, KeyCode.E, true, false, false, GUI_SkinCreationOptions.DERIVED_COPY)
         {
-            activeTab = AddTab("EntityDebugger", null);
+            activeTab = AddTab("EntityDebugger", RenderNull);
         }
+
+        // BaseDebugger needs a Action for AddTab, so here:
+        private void RenderNull() { }
 
         public override void OnGUI()
         {

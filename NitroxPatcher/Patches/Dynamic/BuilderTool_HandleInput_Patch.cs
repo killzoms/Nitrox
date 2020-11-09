@@ -12,7 +12,7 @@ namespace NitroxPatcher.Patches.Dynamic
     {
         internal static readonly MethodInfo targetMethod = typeof(BuilderTool).GetMethod("HandleInput", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private static readonly MethodInfo componentGetGameObjectMethod = typeof(Component).GetMethod("get_gameObject", BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo componentGetGameObjectMethod = typeof(Component).GetMethod("get_gameObject");
         private static readonly MethodInfo buildingDeconstructionBeginMethod = typeof(Building).GetMethod(nameof(Building.DeconstructionBegin), BindingFlags.Public | BindingFlags.Instance);
 
         internal static readonly OpCode injectionOpCode = OpCodes.Callvirt;

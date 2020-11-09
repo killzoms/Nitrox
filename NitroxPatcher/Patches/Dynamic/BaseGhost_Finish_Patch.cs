@@ -11,7 +11,7 @@ namespace NitroxPatcher.Patches.Dynamic
     public class BaseGhost_Finish_Patch : NitroxPatch, IDynamicPatch
     {
         internal static readonly MethodInfo targetMethod = typeof(BaseGhost).GetMethod(nameof(BaseGhost.Finish), BindingFlags.Public | BindingFlags.Instance);
-        private static readonly MethodInfo objectManagerAddMethod = typeof(TransientLocalObjectManager).GetMethod(nameof(TransientLocalObjectManager.Add), BindingFlags.Static | BindingFlags.Public, null, new[] { TransientLocalObjectManager.TransientObjectType.BASE_GHOST_NEWLY_CONSTRUCTED_BASE_GAMEOBJECT.GetType(), typeof(object) }, null);
+        private static readonly MethodInfo objectManagerAddMethod = typeof(TransientLocalObjectManager).GetMethod(nameof(TransientLocalObjectManager.Add), BindingFlags.Public | BindingFlags.Static, null, new[] { TransientLocalObjectManager.TransientObjectType.BASE_GHOST_NEWLY_CONSTRUCTED_BASE_GAMEOBJECT.GetType(), typeof(object) }, null);
 
         internal static readonly OpCode injectionOpCode = OpCodes.Stfld;
         internal static readonly object injectionOperand = typeof(BaseGhost).GetField("targetBase", BindingFlags.NonPublic | BindingFlags.Instance);

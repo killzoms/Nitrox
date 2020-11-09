@@ -10,11 +10,11 @@ namespace NitroxPatcher.Patches.Dynamic
     {
         private static readonly MethodInfo targetMethod = typeof(IngameMenu).GetMethod(nameof(IngameMenu.QuitGame), BindingFlags.Public | BindingFlags.Instance);
 
-        public static void Prefix()
+        public static bool Prefix()
         {
-            IMultiplayerSession multiplayerSession = NitroxServiceLocator.LocateService<IMultiplayerSession>();
-            multiplayerSession.Disconnect();
+            NitroxServiceLocator.LocateService<IMultiplayerSession>().Disconnect();
             Application.Quit();
+            return false;
         }
 
         public override void Patch(HarmonyInstance harmony)

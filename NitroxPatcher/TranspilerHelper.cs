@@ -12,7 +12,7 @@ namespace NitroxPatcher
     internal static class TranspilerHelper
     {
         private static readonly MethodInfo serviceLocator = typeof(NitroxServiceLocator).GetMethod(nameof(NitroxServiceLocator.LocateService), BindingFlags.Public | BindingFlags.Static, null, new Type[] { }, null);
-        private static readonly PropertyInfo multiplayerActive = typeof(Multiplayer).GetProperty(nameof(Multiplayer.Active), BindingFlags.Public | BindingFlags.Static);
+        private static readonly MethodInfo multiplayerActiveGetMethod = typeof(Multiplayer).GetProperty(nameof(Multiplayer.Active), BindingFlags.Public | BindingFlags.Static).GetGetMethod();
 
         public static CodeInstruction LocateService<T>()
         {
@@ -32,7 +32,7 @@ namespace NitroxPatcher
         /// <returns></returns>
         public static IEnumerable<CodeInstruction> IsMultiplayer(Label jmpLabel, ILGenerator generator)
         {
-            yield return new CodeInstruction(OpCodes.Callvirt, multiplayerActive.GetGetMethod());
+            yield return new CodeInstruction(OpCodes.Callvirt, multiplayerActiveGetMethod);
             yield return new CodeInstruction(OpCodes.Brfalse, jmpLabel); // If false jump to the end of the code block
         }
 
@@ -44,7 +44,7 @@ namespace NitroxPatcher
         /// <returns></returns>
         public static IEnumerable<CodeInstruction> IsNotMultiplayer(Label jmpLabel, ILGenerator generator)
         {
-            yield return new CodeInstruction(OpCodes.Callvirt, multiplayerActive.GetGetMethod());
+            yield return new CodeInstruction(OpCodes.Callvirt, multiplayerActiveGetMethod);
             yield return new CodeInstruction(OpCodes.Brtrue, jmpLabel); // If true jump to the end of the code block
         }
 
@@ -97,7 +97,7 @@ namespace NitroxPatcher
         }
 
         /// <summary>
-        /// Loads the <paramref name="i"/>'th occurence of a local variable of type <typeparamref name="T"/> in <paramref name="method"/>.
+        /// Loads the <paramref name="i"/>'th occurrence of a local variable of type <typeparamref name="T"/> in <paramref name="method"/>.
         /// </summary>
         /// <typeparam name="T">The type to locate</typeparam>
         /// <param name="method">The method in which to locate the local variable</param>

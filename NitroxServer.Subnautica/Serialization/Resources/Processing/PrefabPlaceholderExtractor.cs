@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NitroxModel.DataStructures.Util;
+using NitroxModel.DataStructures;
 using NitroxServer.GameLogic.Entities;
 using NitroxServer.Serialization.Resources.DataStructures;
 using NitroxServer.Subnautica.Serialization.Resources.Parsers;

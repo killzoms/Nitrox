@@ -5,7 +5,7 @@ using System.Security.Principal;
 using System.Windows;
 using NitroxModel.Logger;
 
-namespace NitroxLauncher
+namespace NitroxLauncher.Patching
 {
     public static class AppHelper
     {

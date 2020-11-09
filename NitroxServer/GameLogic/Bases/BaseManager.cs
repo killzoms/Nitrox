@@ -4,7 +4,6 @@ using System.Linq;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Buildings.Metadata;
-using NitroxModel.DataStructures.Util;
 
 namespace NitroxServer.GameLogic.Bases
 {

@@ -1,5 +1,5 @@
-﻿using NitroxModel.DataStructures.GameLogic.Buildings.Rotation;
-using NitroxModel.DataStructures.Util;
+﻿using NitroxModel.DataStructures;
+using NitroxModel.DataStructures.GameLogic.Buildings.Rotation;
 using NitroxModel.Helper;
 using NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation.Metadata;
 

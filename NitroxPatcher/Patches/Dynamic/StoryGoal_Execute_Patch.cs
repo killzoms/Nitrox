@@ -2,6 +2,7 @@
 using Harmony;
 using NitroxClient.Communication.Abstract;
 using NitroxModel.Core;
+using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.Packets;
 using Story;
 

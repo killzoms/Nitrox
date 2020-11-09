@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using NitroxClient.Communication.Abstract;
 using NitroxClient.GameLogic.Bases;
@@ -9,7 +10,6 @@ using NitroxClient.Unity.Helper;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
@@ -54,9 +54,9 @@ namespace NitroxClient.MonoBehaviours
 
             ProcessBuildEventsUntilFrameBlocked();
 
-            if(queueHadItems && buildEvents.Count == 0 && QueueDrained != null)
+            if (queueHadItems && buildEvents.Count == 0)
             {
-                QueueDrained(this, new EventArgs());
+                QueueDrained?.Invoke(this, new EventArgs());
             }
         }
 

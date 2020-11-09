@@ -4,7 +4,6 @@ using NitroxClient.MonoBehaviours;
 using NitroxClient.Unity.Helper;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
@@ -52,9 +51,9 @@ namespace NitroxClient.GameLogic
             {
                 Log.Error("Escape pod did not have a rigid body!");
             }
-            
-                Player.main.transform.position = EscapePod.main.playerSpawn.position;
-                Player.main.transform.rotation = EscapePod.main.playerSpawn.rotation;
+
+            Player.main.transform.position = EscapePod.main.playerSpawn.position;
+            Player.main.transform.rotation = EscapePod.main.playerSpawn.rotation;
             if (firstTimeSpawning)
             {
                 Player.main.currentEscapePod = EscapePod.main;

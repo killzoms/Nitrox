@@ -11,9 +11,8 @@ namespace NitroxPatcher.Patches.Persistent
     public class ProtobufSerializer_Serialize_Patch : NitroxPatch, IPersistentPatch
     {
         private static readonly MethodInfo targetMethod = typeof(ProtobufSerializer).GetMethod("Serialize", BindingFlags.NonPublic | BindingFlags.Instance);
-        /// <summary>
-        ///     This patch is in a hot path so it needs this optimization.
-        /// </summary>
+
+        // This patch is in a hot path so it needs this optimization.
         private static readonly NitroxProtobufSerializer serializer = NitroxServiceLocator.LocateServicePreLifetime<NitroxProtobufSerializer>();
 
         public static bool Prefix(Stream stream, object source, Type type)

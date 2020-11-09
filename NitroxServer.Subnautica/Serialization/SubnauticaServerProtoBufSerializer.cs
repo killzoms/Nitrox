@@ -1,7 +1,6 @@
 ﻿using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Buildings.Rotation;
 using NitroxModel.Subnautica.DataStructures.GameLogic;
-using NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation;
 using NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation.Metadata;
 using NitroxModel.Subnautica.DataStructures.Surrogates;
 using NitroxServer.Serialization;

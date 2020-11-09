@@ -3,7 +3,6 @@ using NitroxClient.Communication.Packets.Processors.Abstract;
 using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.DataStructures;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.Logger;
 using NitroxModel.Packets;
 using UnityEngine;
@@ -64,7 +63,7 @@ namespace NitroxClient.Communication.Packets.Processors
 #if DEBUG
             else
             {
-                Log.Error($"Expected to simulate an unknown entity: {id}");
+                Log.Warn($"Expected to simulate an unknown entity: {id}");
             }
 #endif
         }

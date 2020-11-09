@@ -16,6 +16,7 @@ namespace NitroxPatcher.Patches.Dynamic
         private static VehicleDockingBay vehicleDockingBay;
         private static GUIHand guiHand;
         private static bool skipPrefix;
+
         private const string VEHICLE_BLOCKED_TEXT = "Another player is using this vehicle!";
 
         public static bool Prefix(DockedVehicleHandTarget __instance, GUIHand hand)

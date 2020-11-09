@@ -13,26 +13,24 @@ namespace NitroxServer.Subnautica.Serialization.Resources.Parsers
 
         public override void Parse(AssetIdentifier identifier, AssetsFileReader reader, ResourceAssets resourceAssets)
         {
-            TransformAsset transformAsset = new TransformAsset();
-            transformAsset.Identifier = identifier;
-
-            transformAsset.GameObjectIdentifier = new AssetIdentifier(reader.ReadInt32(), reader.ReadInt64());
-
-            transformAsset.LocalRotation = new NitroxQuaternion(
-                reader.ReadSingle(), // Quaternion X
-                reader.ReadSingle(), // Quaternion Y
-                reader.ReadSingle(), // Quaternion Z
-                reader.ReadSingle()); // Quaternion W
-
-            transformAsset.LocalPosition = new NitroxVector3(
-               reader.ReadSingle(), // Position X
-               reader.ReadSingle(), // Position Y
-               reader.ReadSingle()); // Position Z
-
-            transformAsset.LocalScale = new NitroxVector3(
-               reader.ReadSingle(), // Scale X
-               reader.ReadSingle(), // Scale Y
-               reader.ReadSingle()); // Scale Z
+            TransformAsset transformAsset = new TransformAsset
+            {
+                Identifier = identifier,
+                GameObjectIdentifier = new AssetIdentifier(reader.ReadInt32(), reader.ReadInt64()),
+                LocalRotation = new NitroxQuaternion(
+                    reader.ReadSingle(), // Quaternion X
+                    reader.ReadSingle(), // Quaternion Y
+                    reader.ReadSingle(), // Quaternion Z
+                    reader.ReadSingle()),// Quaternion W
+                LocalPosition = new NitroxVector3(
+                    reader.ReadSingle(), // Position X
+                    reader.ReadSingle(), // Position Y
+                    reader.ReadSingle()),// Position Z
+                LocalScale = new NitroxVector3(
+                    reader.ReadSingle(), // Scale X
+                    reader.ReadSingle(), // Scale Y
+                    reader.ReadSingle()) // Scale Z
+            };
 
             // Children may be parsed out of order so we don't directly assign them to TransformAsset
             // instead, we rely on a call back to index ChildrenIdsByPatentId (same access pattern as

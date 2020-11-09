@@ -1,12 +1,11 @@
-﻿using NitroxModel.DataStructures.Util;
-using System;
+﻿using System;
 using NitroxModel.DataStructures;
 
 namespace NitroxModel.Packets
 {
     [Serializable]
     public class EscapePodChanged : Packet
-    {        
+    {
         public ushort PlayerId { get; }
         public Optional<NitroxId> EscapePodId { get; }
 

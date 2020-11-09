@@ -23,7 +23,7 @@ namespace NitroxPatcher.Patches.Dynamic
 
         public static void Prefix(Base __instance, Transform[] ___cellObjects)
         {
-            if (!__instance && ___cellObjects == null)
+            if (!__instance || ___cellObjects == null)
             {
                 return;
             }
@@ -38,13 +38,11 @@ namespace NitroxPatcher.Patches.Dynamic
 
                         // Ensure there is already a nitrox id, we don't want to go creating one
                         // which happens if you call GetId directly and it is missing.
-                        if (child && child.GetComponent<NitroxEntity>())
+                        if (child && child.TryGetComponent(out NitroxEntity nitroxEntity))
                         {
-                            NitroxId id = NitroxEntity.GetId(child);
                             string key = child.name + child.transform.position;
-                            NitroxIdByObjectKey[key] = id;
-
-                            Log.Debug($"Clearing Base Geometry, storing id for later lookup: {key} {id}");
+                            NitroxIdByObjectKey[key] = nitroxEntity.Id;
+                            Log.Debug($"Clearing Base Geometry, storing id for later lookup: {key} {nitroxEntity.Id}");
                         }
                     }
                 }

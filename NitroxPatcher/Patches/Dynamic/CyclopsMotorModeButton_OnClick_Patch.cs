@@ -13,7 +13,7 @@ namespace NitroxPatcher.Patches.Dynamic
     {
         private static readonly MethodInfo targetMethod = typeof(CyclopsMotorModeButton).GetMethod(nameof(CyclopsMotorModeButton.OnClick), BindingFlags.Public | BindingFlags.Instance);
 
-        public static bool Prefix(CyclopsMotorModeButton __instance, ref SubRoot ___subRoot, out bool __state)
+        public static bool Prefix(CyclopsMotorModeButton __instance, SubRoot ___subRoot, out bool __state)
         {
             if (___subRoot != null && ___subRoot == Player.main.currentSub)
             {
@@ -30,7 +30,7 @@ namespace NitroxPatcher.Patches.Dynamic
             return false;
         }
 
-        public static void Postfix(CyclopsMotorModeButton __instance, ref SubRoot ___subRoot, bool __state)
+        public static void Postfix(CyclopsMotorModeButton __instance, SubRoot ___subRoot, bool __state)
         {
             if (__state)
             {

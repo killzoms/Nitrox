@@ -11,7 +11,7 @@ namespace NitroxPatcher.Patches.Dynamic
     {
         private static readonly MethodInfo targetMethod = typeof(CyclopsEngineChangeState).GetMethod(nameof(CyclopsEngineChangeState.OnClick), BindingFlags.Public | BindingFlags.Instance);
 
-        public static void Postfix(CyclopsEngineChangeState __instance, ref bool ___startEngine)
+        public static void Postfix(CyclopsEngineChangeState __instance, bool ___startEngine)
         {
             NitroxId id = NitroxEntity.GetId(__instance.subRoot.gameObject);
             NitroxServiceLocator.LocateService<Cyclops>().BroadcastToggleEngineState(id, __instance.motorMode.engineOn, ___startEngine);

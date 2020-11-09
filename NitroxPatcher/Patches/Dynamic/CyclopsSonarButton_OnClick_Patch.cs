@@ -11,10 +11,11 @@ namespace NitroxPatcher.Patches.Dynamic
     {
         private static readonly MethodInfo targetMethod = typeof(CyclopsSonarButton).GetMethod(nameof(CyclopsSonarButton.OnClick), BindingFlags.Public | BindingFlags.Instance);
 
-        public static void Postfix(CyclopsSonarButton __instance, ref bool ____sonarActive)
+        public static void Postfix(CyclopsSonarButton __instance)
         {
             NitroxId id = NitroxEntity.GetId(__instance.subRoot.gameObject);
-            NitroxServiceLocator.LocateService<Cyclops>().BroadcastChangeSonarState(id, ____sonarActive);
+            bool activeSonar = Traverse.Create(__instance).Field("sonarActive").GetValue<bool>();
+            NitroxServiceLocator.LocateService<Cyclops>().BroadcastChangeSonarState(id, activeSonar);
         }
 
         public override void Patch(HarmonyInstance harmony)

@@ -17,7 +17,7 @@ namespace NitroxPatcher.Patches.Dynamic
         internal static readonly OpCode injectionOpCode = OpCodes.Callvirt;
         internal static readonly object injectionOperand = typeof(Constructor).GetMethod(nameof(Constructor.SendBuildBots), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(GameObject) }, null);
 
-        private static readonly MethodInfo transientLocalObjectManagerAddMethod = typeof(TransientLocalObjectManager).GetMethod(nameof(Add), BindingFlags.Static | BindingFlags.Public, null, new Type[] { TransientObjectType.CONSTRUCTOR_INPUT_CRAFTED_GAMEOBJECT.GetType(), typeof(object) }, null);
+        private static readonly MethodInfo transientLocalObjectManagerAddMethod = typeof(TransientLocalObjectManager).GetMethod(nameof(Add), BindingFlags.Public | BindingFlags.Static, null, new Type[] { TransientObjectType.CONSTRUCTOR_INPUT_CRAFTED_GAMEOBJECT.GetType(), typeof(object) }, null);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, IEnumerable<CodeInstruction> instructions)
         {

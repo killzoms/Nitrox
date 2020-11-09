@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using ProtoBufNet;
 
-namespace NitroxModel.DataStructures.Util
+namespace NitroxModel.DataStructures
 {
     /// <summary>
     ///     Used to give context on whether the wrapped value is nullable and to improve error logging.

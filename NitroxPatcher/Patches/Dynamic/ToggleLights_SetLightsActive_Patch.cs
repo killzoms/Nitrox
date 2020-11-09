@@ -48,7 +48,7 @@ namespace NitroxPatcher.Patches.Dynamic
                         gameObject = __instance.gameObject;
                         break;
                     }
-                    else if (__instance.GetComponentInParent(t))
+                    if (__instance.GetComponentInParent(t))
                     {
                         type = t;
                         gameObject = __instance.transform.parent.gameObject;
@@ -76,27 +76,5 @@ namespace NitroxPatcher.Patches.Dynamic
         {
             PatchMultiple(harmony, targetMethod, true, true, false);
         }
-
-        //public class LightToggleContainer
-        //{
-        //    public readonly Type ComponentType;
-        //    public readonly bool InParent;
-
-        //    public LightToggleContainer(Type componentType, bool inParent)
-        //    {
-        //        ComponentType = componentType;
-        //        InParent = inParent;
-        //    }
-
-        //    public Component Get(GameObject go)
-        //    {
-        //        if (InParent)
-        //        {
-        //            return go.GetComponentInParent(ComponentType);
-        //        }
-
-        //        return go.GetComponent(ComponentType);
-        //    }
-        //}
     }
 }

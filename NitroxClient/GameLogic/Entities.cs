@@ -5,9 +5,10 @@ using NitroxClient.MonoBehaviours;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Entities.Metadata;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
+#if DEBUG
 using NitroxModel.Logger;
+#endif
 using NitroxModel.Packets;
 using NitroxModel.Subnautica.DataStructures;
 using UnityEngine;
@@ -141,7 +142,7 @@ namespace NitroxClient.GameLogic
             if (!opGameObject.HasValue)
             {
 #if DEBUG
-                Log.Error($"Entity was already spawned but not found(is it in another chunk?) NitroxId: {entity.Id} TechType: {entity.TechType} ClassId: {entity.ClassId} Transform: {entity.Transform}");
+                Log.Warn($"Entity was already spawned but not found(is it in another chunk?) NitroxId: {entity.Id} TechType: {entity.TechType} ClassId: {entity.ClassId} Transform: {entity.Transform}");
 #endif
                 return;
             }

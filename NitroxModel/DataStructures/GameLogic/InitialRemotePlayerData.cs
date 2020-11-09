@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.MultiplayerSession;
 
 namespace NitroxModel.DataStructures.GameLogic

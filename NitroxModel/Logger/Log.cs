@@ -41,7 +41,7 @@ namespace NitroxModel.Logger
             logger = LogManager.GetCurrentClassLogger();
 
             LoggingConfiguration config = new LoggingConfiguration();
-            string layout = $@"[${{date:format=HH\:mm\:ss}} {GetLoggerName()}${{event-properties:item=PlayerName}}][${{level:uppercase=true}}] ${{message}} ${{exception}}";
+            string layout = $@"[${{date:format=HH\:mm\:ss}} {GetLoggerName()}${{event-properties:item=PlayerName}}][${{level:uppercase=true}}] ${{message}} ${{exception:format=Message,StackTrace,Data:maxInnerExceptionLevel=10}}";
 
             // Targets where to log to: File and Console
             ColoredConsoleTarget logConsole = new ColoredConsoleTarget(nameof(logConsole))

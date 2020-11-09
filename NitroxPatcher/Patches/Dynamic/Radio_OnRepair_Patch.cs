@@ -12,7 +12,6 @@ namespace NitroxPatcher.Patches.Dynamic
         public static bool Prefix(Radio __instance)
         {
             NitroxServiceLocator.LocateService<EscapePodManager>().OnRadioRepairedByMe(__instance);
-            NitroxServiceLocator.LocateService<EscapePodManager>().OnRadioRepairedByMe(__instance);
             return true;
         }
 

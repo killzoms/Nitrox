@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.Subnautica.DataStructures;
 using NitroxModel.Subnautica.DataStructures.GameLogic;
 

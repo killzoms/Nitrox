@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NitroxModel.DataStructures.Util;
+using NitroxModel.DataStructures;
 using ProtoBufNet;
 
 namespace NitroxServer.GameLogic.Players

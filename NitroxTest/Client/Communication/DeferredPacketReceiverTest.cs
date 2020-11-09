@@ -5,7 +5,7 @@ using NitroxClient.Map;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.Packets;
 using NitroxModel.Subnautica.Helper;
-using NitroxTest.Model;
+using NitroxTest.Model.Test;
 
 namespace NitroxTest.Client.Communication
 {

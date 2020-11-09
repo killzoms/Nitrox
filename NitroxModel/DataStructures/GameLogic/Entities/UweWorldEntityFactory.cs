@@ -1,6 +1,4 @@
-﻿using NitroxModel.DataStructures.Util;
-
-namespace NitroxModel.DataStructures.GameLogic.Entities
+﻿namespace NitroxModel.DataStructures.GameLogic.Entities
 {
     public abstract class UweWorldEntityFactory
     {

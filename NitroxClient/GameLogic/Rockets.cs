@@ -1,7 +1,6 @@
 ﻿using NitroxClient.Communication.Abstract;
 using NitroxClient.GameLogic.Helper;
 using NitroxModel.DataStructures;
-using NitroxModel.DataStructures.Util;
 using NitroxModel.Logger;
 using NitroxModel.Subnautica.DataStructures.GameLogic;
 using NitroxModel.Subnautica.Packets;

@@ -5,8 +5,6 @@ using NitroxClient.GameLogic;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
-using NitroxModel.DataStructures.Util;
-using NitroxModel.Logger;
 
 namespace NitroxPatcher.Patches.Dynamic
 {
@@ -34,7 +32,7 @@ namespace NitroxPatcher.Patches.Dynamic
         }
 
         public override void Patch(HarmonyInstance harmony)
-        {            
+        {
             PatchPrefix(harmony, TARGET_PROPERTY.GetSetMethod());
         }
     }

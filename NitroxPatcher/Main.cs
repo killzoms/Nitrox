@@ -8,7 +8,7 @@ using Harmony;
 using NitroxClient;
 using NitroxClient.MonoBehaviours;
 using NitroxModel.Core;
-using NitroxModel.DataStructures.Util;
+using NitroxModel.DataStructures;
 using NitroxModel.Helper;
 using NitroxModel.Logger;
 using NitroxPatcher.Modules;
@@ -85,9 +85,16 @@ namespace NitroxPatcher
             foreach (IDynamicPatch patch in container.Resolve<IDynamicPatch[]>())
             {
                 Log.Debug($"Applying dynamic patch {patch.GetType().Name}");
-                patch.Patch(harmony);
+                try
+                {
+                    patch.Patch(harmony);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, $"Applying {patch.GetType().Name} threw an error: ");
+                }
             }
-            Log.Debug("All dynamic patches applied.");
+            Log.Info("All dynamic patches applied.");
             isApplied = true;
         }
 

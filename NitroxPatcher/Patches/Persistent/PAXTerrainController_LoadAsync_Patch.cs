@@ -12,9 +12,9 @@ namespace NitroxPatcher.Patches.Persistent
     public class PAXTerrainController_LoadAsync_Patch : NitroxPatch, IPersistentPatch
     {
         private static readonly Type targetClass = typeof(PAXTerrainController);
-        private static readonly object injectionOperand = typeof(PAXTerrainController).GetMethod("LoadWorldTiles", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly object injectionOperand = targetClass.GetMethod("LoadWorldTiles", BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo largeWorldStreamerFrozenField = typeof(LargeWorldStreamer).GetField(nameof(LargeWorldStreamer.frozen), BindingFlags.Public | BindingFlags.Instance);
-        private static readonly FieldInfo paxTerrainControllerStreamerField = typeof(PAXTerrainController).GetField("streamer", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo paxTerrainControllerStreamerField = targetClass.GetField("streamer", BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly MethodInfo multiplayerSubnauticaLoadingCompletedMethod = typeof(Multiplayer).GetMethod(nameof(Multiplayer.SubnauticaLoadingCompleted), BindingFlags.Public | BindingFlags.Static);
 
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase original, ILGenerator ilGenerator, IEnumerable<CodeInstruction> instructions)

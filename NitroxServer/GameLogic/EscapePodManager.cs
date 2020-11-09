@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
-using NitroxModel.DataStructures.Util;
 
 namespace NitroxServer.GameLogic
 {

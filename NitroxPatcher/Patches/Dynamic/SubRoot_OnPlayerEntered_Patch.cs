@@ -9,6 +9,7 @@ namespace NitroxPatcher.Patches.Dynamic
     public class SubRoot_OnPlayerEntered_Patch : NitroxPatch, IDynamicPatch
     {
         private static readonly MethodInfo targetMethod = typeof(SubRoot).GetMethod(nameof(SubRoot.OnPlayerEntered), BindingFlags.Public | BindingFlags.Instance);
+        private static readonly MethodInfo opInequalityMethod = typeof(UnityEngine.Object).GetMethod("op_Inequality");
         private static readonly FieldInfo liveMixinInvincibleField = typeof(LiveMixin).GetField(nameof(LiveMixin.invincible), BindingFlags.Public | BindingFlags.Instance);
         private static readonly FieldInfo subRootLiveField = typeof(SubRoot).GetField("live", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -47,8 +48,6 @@ namespace NitroxPatcher.Patches.Dynamic
             }
             if (injectionPoint != 0)
             {
-
-                MethodInfo opInequalityMethod = typeof(UnityEngine.Object).GetMethod("op_Inequality");
                 List<CodeInstruction> injectedInstructions = new List<CodeInstruction> {
                                                                     new CodeInstruction(OpCodes.Ldarg_0),
                                                                     new CodeInstruction(OpCodes.Ldfld, subRootLiveField),

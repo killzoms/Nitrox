@@ -82,7 +82,7 @@ namespace NitroxTest.Threading
                     nums.Add(10);
                 }
             }
-            
+
             nums.Count.Should().Be(6);
             nums.Last().Should().Be(10);
         }

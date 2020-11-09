@@ -3,7 +3,7 @@ using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic.Buildings.Rotation;
 using ProtoBufNet;
 
-namespace NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation
+namespace NitroxModel.Subnautica.DataStructures.GameLogic.Buildings.Rotation.Metadata
 {
     [Serializable]
     [ProtoContract]
