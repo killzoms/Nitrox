@@ -13,18 +13,39 @@ namespace NitroxServer.GameLogic.Entities.Spawning
             random = new Random(seed.GetHashCode() + batchId.GetHashCode());
         }
 
+        /// <returns>Double ranging from 0 to 1</returns>
         public double NextDouble()
         {
             return random.NextDouble();
         }
 
+        /// <returns>Double ranging from min to max</returns>
+        public double NextRange(double min, double max)
+        {
+            return NextDouble() * (max - min) + min;
+        }
+
         public NitroxVector3 NextInsideUnitSphere()
         {
-            float x = (float)NextDouble();
-            float y = (float)NextDouble();
-            float z = (float)NextDouble();
+            double u = NextDouble();
+            double x1 = NextRange(-1f, 1f);
+            double x2 = NextRange(-1f, 1f);
+            double x3 = NextRange(-1f, 1f);
 
-            return new NitroxVector3(x, y, z);
+            double mag = Math.Sqrt(x1 * x1 + x2 * x2 + x3 * x3);
+            x1 /= mag;
+            x2 /= mag;
+            x3 /= mag;
+
+            // Math.cbrt is cube root
+            double c = Math.Pow(u, 1d/3d);
+
+            return new NitroxVector3((float)(x1 * c), (float)(x2 * c), (float)(x3 * c));
+        }
+
+        public NitroxVector3 NextInsideUnitSphere2()
+        {
+
         }
 
         public int NextInt(int min, int max)
