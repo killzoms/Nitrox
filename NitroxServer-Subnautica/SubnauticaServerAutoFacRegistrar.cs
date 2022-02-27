@@ -2,6 +2,7 @@
 using Autofac;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Entities;
+using NitroxModel.DataStructures.GameLogic.Pda;
 using NitroxModel.Helper;
 using NitroxModel_Subnautica.DataStructures;
 using NitroxModel_Subnautica.DataStructures.GameLogic.Entities;
@@ -43,6 +44,9 @@ namespace NitroxServer_Subnautica
             containerBuilder.Register(c => resourceAssets.WorldEntitiesByClassId).SingleInstance();
             containerBuilder.Register(c => resourceAssets.PrefabPlaceholderGroupsByGroupClassId).SingleInstance();
             containerBuilder.Register(c => resourceAssets.NitroxRandom).SingleInstance();
+            containerBuilder.Register(c => resourceAssets.NitroxPdaData).SingleInstance();
+            NitroxPdaEncyclopedia.Initialize(resourceAssets.NitroxPdaData);
+            NitroxPdaScanner.Initialize(resourceAssets.NitroxPdaData);
             containerBuilder.RegisterType<SubnauticaUweWorldEntityFactory>().As<UweWorldEntityFactory>().SingleInstance();
 
             SubnauticaUwePrefabFactory prefabFactory = new SubnauticaUwePrefabFactory(resourceAssets.LootDistributionsJson);

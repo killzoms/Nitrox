@@ -4,6 +4,7 @@ using System.Linq;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Entities;
+using NitroxModel.DataStructures.GameLogic.Pda;
 using NitroxModel.DataStructures.Unity;
 using NitroxModel.DataStructures.Util;
 using NitroxServer.Serialization;
@@ -110,38 +111,126 @@ namespace NitroxServer.GameLogic.Entities.Spawning
             return entities;
         }
 
-        private IEnumerable<Entity> SpawnEntitiesUsingRandomDistribution(EntitySpawnPoint entitySpawnPoint, List<UwePrefab> prefabs, DeterministicBatchGenerator deterministicBatchGenerator, Entity parentEntity = null)
+        private List<SlotData> GetFragmentProbabilities(EntitySpawnPoint entitySpawnPoint, List<UwePrefab> prefabs, out float isFragmentProbability, out float isFragmentCompleteProbability, bool filterKnown = true)
         {
-            List<UwePrefab> allowedPrefabs = FilterAllowedPrefabs(prefabs, entitySpawnPoint);
+            isFragmentProbability = 0f;
+            isFragmentCompleteProbability = 0f;
 
-            float rollingProbabilityDensity = allowedPrefabs.Sum(prefab => prefab.Probability / entitySpawnPoint.Density);
-
-            if (rollingProbabilityDensity <= 0)
+            List<SlotData> slotData = new List<SlotData>();
+            for (int i = 0; i < prefabs.Count; i++)
             {
-                yield break;
-            }
+                UwePrefab prefabData = prefabs[i];
 
-            double randomNumber = deterministicBatchGenerator.NextDouble();
-            if (rollingProbabilityDensity > 1f)
-            {
-                randomNumber *= rollingProbabilityDensity;
-            }
-
-            double rollingProbability = 0;
-
-            UwePrefab selectedPrefab = allowedPrefabs.FirstOrDefault(prefab =>
-            {
-                if (Math.Abs(prefab.Probability) < 0.0001)
+                if (string.Equals(prefabData.ClassId, "None") || !prefabFactory.SrcDataContainsClassId(prefabData.ClassId))
                 {
-                    return false;
+                    continue;
                 }
 
-                float probabilityDensity = prefab.Probability / entitySpawnPoint.Density;
+                Optional<UweWorldEntity> worldEnt = worldEntityFactory.From(prefabData.ClassId);
 
-                rollingProbability += probabilityDensity;
+                if (!worldEnt.HasValue)
+                {
+                    Log.Error(string.Format("Missing world entity info for prefab '{0}'", prefabData.ClassId));
+                }
+                else
+                {
+                    UweWorldEntity info = worldEnt.Value;
 
-                return rollingProbability >= randomNumber;
-            });
+                    if (!entitySpawnPoint.AllowedTypes.Contains(info.SlotType))
+                    {
+                        continue;
+                    }
+
+                    float probabiltiyOverDensity = prefabData.Probability / entitySpawnPoint.Density;
+
+                    if (probabiltiyOverDensity <= 0f)
+                    {
+                        continue;
+                    }
+
+                    NitroxTechType techType = info.TechType;
+                    bool isFragment = false;
+
+                    if (filterKnown)
+                    {
+                        isFragment = NitroxPdaScanner.IsFragment(techType);
+                        if (isFragment && NitroxPdaScanner.ContainsCompleteEntry(techType))
+                        {
+                            isFragmentCompleteProbability += probabiltiyOverDensity;
+                            continue;
+                        }
+                    }
+                    SlotData item = default;
+                    item.ClassId = prefabData.ClassId;
+                    item.Count = prefabData.Count;
+                    item.Probability = probabiltiyOverDensity;
+                    item.IsFragment = isFragment;
+                    slotData.Add(item);
+                    if (isFragment)
+                    {
+                        isFragmentProbability += probabiltiyOverDensity;
+                    }
+                }
+            }
+            return slotData;
+        }
+
+        private UwePrefab GetPrefabForSlot(EntitySpawnPoint entitySpawnPoint, List<UwePrefab> prefabs, DeterministicBatchGenerator deterministicBatchGenerator)
+        {
+            UwePrefab result = null;
+            if (prefabs.Count > 0)
+            {
+                List<SlotData> sData = GetFragmentProbabilities(entitySpawnPoint, prefabs, out float isFragmentProbability, out float isFragmentCompleteProbability);
+
+
+                bool flag2 = isFragmentCompleteProbability > 0f && isFragmentProbability > 0f;
+                float fragmentProbability = (flag2 ? ((isFragmentCompleteProbability + isFragmentProbability) / isFragmentProbability) : 1f);
+                float adjustedProbability = 0f;
+                for (int j = 0; j < sData.Count; j++)
+                {
+                    SlotData value2 = sData[j];
+                    if (flag2 && value2.IsFragment)
+                    {
+                        value2.Probability *= fragmentProbability;
+                        sData[j] = value2;
+                    }
+                    adjustedProbability += value2.Probability;
+                }
+                SlotData data2 = default(SlotData);
+                data2.Count = 0;
+                data2.ClassId = null;
+                if (adjustedProbability > 0f)
+                {
+                    float seededProbabilityModifier = (float)deterministicBatchGenerator.NextDouble();
+                    if (adjustedProbability > 1f)
+                    {
+                        seededProbabilityModifier *= adjustedProbability;
+                    }
+                    float num7 = 0f;
+                    for (int k = 0; k < sData.Count; k++)
+                    {
+                        SlotData data3 = sData[k];
+                        num7 += data3.Probability;
+                        if (num7 >= seededProbabilityModifier)
+                        {
+                            data2 = data3;
+                            break;
+                        }
+                    }
+                }
+
+                if (data2.Count > 0)
+                {
+                    result = new UwePrefab(data2.ClassId, 1, data2.Count);
+                }
+            }
+            return result;
+        }
+
+        private IEnumerable<Entity> SpawnEntitiesUsingRandomDistribution(EntitySpawnPoint entitySpawnPoint, List<UwePrefab> prefabs, DeterministicBatchGenerator deterministicBatchGenerator, Entity parentEntity = null)
+        {
+            UwePrefab selectedPrefab = GetPrefabForSlot(entitySpawnPoint, prefabs, deterministicBatchGenerator);
+
 
             if (selectedPrefab == null)
             {
@@ -156,6 +245,16 @@ namespace NitroxServer.GameLogic.Entities.Spawning
 
                 for (int i = 0; i < selectedPrefab.Count; i++)
                 {
+
+                    if (i > 0)
+                    {
+                        entitySpawnPoint.LocalPosition += deterministicBatchGenerator.NextInsideUnitSphere() * 4f;
+                    }
+                    if (uweWorldEntity.PrefabZUp)
+                    {
+                        entitySpawnPoint.LocalRotation *= NitroxQuaternion.FromEuler(new NitroxVector3(-90f, 0f, 0f));
+                    }
+
                     IEnumerable<Entity> entities = CreateEntityWithChildren(entitySpawnPoint,
                                                                             uweWorldEntity.Scale,
                                                                             uweWorldEntity.TechType,
@@ -169,26 +268,6 @@ namespace NitroxServer.GameLogic.Entities.Spawning
                     }
                 }
             }
-        }
-
-        private List<UwePrefab> FilterAllowedPrefabs(List<UwePrefab> prefabs, EntitySpawnPoint entitySpawnPoint)
-        {
-            List<UwePrefab> allowedPrefabs = new List<UwePrefab>();
-
-            foreach (UwePrefab prefab in prefabs)
-            {
-                if (prefab.ClassId != "None")
-                {
-                    Optional<UweWorldEntity> uweWorldEntity = worldEntityFactory.From(prefab.ClassId);
-
-                    if (uweWorldEntity.HasValue && entitySpawnPoint.AllowedTypes.Contains(uweWorldEntity.Value.SlotType))
-                    {
-                        allowedPrefabs.Add(prefab);
-                    }
-                }
-            }
-
-            return allowedPrefabs;
         }
 
         private IEnumerable<Entity> SpawnEntitiesStaticly(EntitySpawnPoint entitySpawnPoint, DeterministicBatchGenerator deterministicBatchGenerator, Entity parentEntity = null)

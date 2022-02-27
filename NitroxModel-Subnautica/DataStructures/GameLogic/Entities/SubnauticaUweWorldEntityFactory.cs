@@ -23,7 +23,8 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic.Entities
                                                                    worldEntityInfo.localScale.ToDto(),
                                                                    worldEntityInfo.classId,
                                                                    worldEntityInfo.slotType.ToString(),
-                                                                   (int)worldEntityInfo.cellLevel);
+                                                                   (int)worldEntityInfo.cellLevel,
+                                                                   worldEntityInfo.prefabZUp);
 
                 return Optional.Of(uweWorldEntity);
             }

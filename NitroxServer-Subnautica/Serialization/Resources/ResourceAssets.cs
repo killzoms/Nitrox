@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.GameLogic.Pda;
 using NitroxModel.Helper;
 using NitroxServer.Serialization.Resources.Datastructures;
 using UWE;
@@ -15,6 +16,7 @@ namespace NitroxServer_Subnautica.Serialization.Resources
         public Dictionary<string, PrefabPlaceholdersGroupAsset> PrefabPlaceholderGroupsByGroupClassId = new Dictionary<string, PrefabPlaceholdersGroupAsset>();
 
         public RandomStartGenerator NitroxRandom;
+        public NitroxPdaData NitroxPdaData;
 
         public static void ValidateMembers(ResourceAssets resourceAssets)
         {

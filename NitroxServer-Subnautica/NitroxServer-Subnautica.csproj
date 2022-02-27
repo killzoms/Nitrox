@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net472</TargetFramework>
@@ -14,7 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AssetsTools.NET" Version="2.0.6"/>
+        <PackageReference Include="AssetsTools.NET" Version="2.0.11" />
+        <PackageReference Include="Mono.Cecil" Version="0.11.4" />
     </ItemGroup>
 
     <ItemGroup>

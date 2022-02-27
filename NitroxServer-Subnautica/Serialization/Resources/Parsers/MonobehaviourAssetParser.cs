@@ -16,7 +16,8 @@ namespace NitroxServer_Subnautica.Serialization.Resources.Parsers
             { "PrefabPlaceholder", new PrefabPlaceholderParser() },
             { "PrefabPlaceholdersGroup", new PrefabPlaceholdersGroupParser() },
             { "PrefabIdentifier", new PrefabIdentifierParser() },
-            { "EntitySlot", new EntitySlotParser() }
+            { "EntitySlot", new EntitySlotParser() },
+            { "PDAData", new PDADataParser() }
         };
 
         public override void Parse(AssetIdentifier identifier, AssetsFileReader reader, ResourceAssets resourceAssets, Dictionary<int, string> relativeFileIdToPath)

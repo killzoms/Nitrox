@@ -41,6 +41,11 @@ namespace NitroxModel_Subnautica.DataStructures.GameLogic.Entities
             return prefabs;
         }
 
+        public override bool SrcDataContainsClassId(string classId)
+        {
+            return lootDistributionData.srcDistribution.ContainsKey(classId);
+        }
+
         private LootDistributionData GetLootDistributionData(string lootDistributionJson)
         {
             ForceCultureOverride();

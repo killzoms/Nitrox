@@ -1,5 +1,6 @@
 ﻿using System;
 using NitroxModel.DataStructures;
+using NitroxModel.DataStructures.Unity;
 
 namespace NitroxServer.GameLogic.Entities.Spawning
 {
@@ -15,6 +16,15 @@ namespace NitroxServer.GameLogic.Entities.Spawning
         public double NextDouble()
         {
             return random.NextDouble();
+        }
+
+        public NitroxVector3 NextInsideUnitSphere()
+        {
+            float x = (float)NextDouble();
+            float y = (float)NextDouble();
+            float z = (float)NextDouble();
+
+            return new NitroxVector3(x, y, z);
         }
 
         public int NextInt(int min, int max)
