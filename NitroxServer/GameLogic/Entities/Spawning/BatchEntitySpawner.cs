@@ -221,6 +221,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
 
                 if (data2.Count > 0)
                 {
+                    //Log.Debug($"Spawning from SlotData ClassId {data2.ClassId} Count {data2.Count} IsFragment {data2.IsFragment} Probability {data2.Probability}");
                     result = new UwePrefab(data2.ClassId, 1, data2.Count);
                 }
             }
@@ -305,7 +306,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
 
             spawnedEntity.ChildEntities = SpawnEntities(entitySpawnPoint.Children, deterministicBatchGenerator, spawnedEntity);
 
-            CreatePrefabPlaceholdersWithChildren(spawnedEntity, classId, deterministicBatchGenerator);
+            CreatePrefabPlaceholdersWithChildren(entitySpawnPoint, spawnedEntity, classId, deterministicBatchGenerator);
 
 
             if (customBootstrappersByTechType.TryGetValue(techType, out IEntityBootstrapper bootstrapper))
@@ -364,7 +365,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
             return entities;
         }
 
-        private void CreatePrefabPlaceholdersWithChildren(Entity entity, string classId, DeterministicBatchGenerator deterministicBatchGenerator)
+        private void CreatePrefabPlaceholdersWithChildren(EntitySpawnPoint entitySpawnPoint, Entity entity, string classId, DeterministicBatchGenerator deterministicBatchGenerator)
         {
 
             // Check to see if this entity is a PrefabPlaceholderGroup.  If it is, 
@@ -374,7 +375,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
             if (prefabPlaceholderGroupsbyClassId.TryGetValue(classId, out PrefabPlaceholdersGroupAsset group))
             {
                 List<PrefabAsset> spawnablePrefabs = new List<PrefabAsset>(group.SpawnablePrefabs);
-                entity.ChildEntities.AddRange(ConvertComponentPrefabsToEntities(group.ExistingPrefabs, entity, deterministicBatchGenerator, ref spawnablePrefabs));
+                entity.ChildEntities.AddRange(ConvertComponentPrefabsToEntities(entitySpawnPoint, group.ExistingPrefabs, entity, deterministicBatchGenerator, ref spawnablePrefabs));
                 foreach (PrefabAsset prefab in spawnablePrefabs)
                 {
                     TransformAsset transform = prefab.TransformAsset;
@@ -401,14 +402,14 @@ namespace NitroxServer.GameLogic.Entities.Spawning
 
                     if (prefab.EntitySlot.HasValue)
                     {
-                        Entity possibleEntity = SpawnEntitySlotEntities(prefab.EntitySlot.Value, transform, deterministicBatchGenerator, entity);
+                        Entity possibleEntity = SpawnEntitySlotEntities(entitySpawnPoint, prefab.EntitySlot.Value, transform, deterministicBatchGenerator, entity);
                         if (possibleEntity != null)
                         {
                             entity.ChildEntities.Add(possibleEntity);
                         }
                     }
 
-                    CreatePrefabPlaceholdersWithChildren(prefabEntity, prefabEntity.ClassId, deterministicBatchGenerator);
+                    CreatePrefabPlaceholdersWithChildren(entitySpawnPoint, prefabEntity, prefabEntity.ClassId, deterministicBatchGenerator);
                     entity.ChildEntities.Add(prefabEntity);
                 }
             }
@@ -417,7 +418,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
         // Entities that have been spawned by a parent prefab (child game objects baked into the prefab).
         // created separately as we don't actually want to spawn these but instead just update the id.
         // will refactor this piece a bit later to split these into a new data structure.
-        private List<Entity> ConvertComponentPrefabsToEntities(List<PrefabAsset> prefabs, Entity parent, DeterministicBatchGenerator deterministicBatchGenerator, ref List<PrefabAsset> spawnablePrefabs)
+        private List<Entity> ConvertComponentPrefabsToEntities(EntitySpawnPoint entitySpawnPoint, List<PrefabAsset> prefabs, Entity parent, DeterministicBatchGenerator deterministicBatchGenerator, ref List<PrefabAsset> spawnablePrefabs)
         {
             List<Entity> entities = new List<Entity>();
 
@@ -468,7 +469,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
                         
                         if (spawnablePrefab.EntitySlot.HasValue)
                         {
-                            Entity possibleEntity = SpawnEntitySlotEntities(spawnablePrefab.EntitySlot.Value, transform, deterministicBatchGenerator, parent);
+                            Entity possibleEntity = SpawnEntitySlotEntities(entitySpawnPoint, spawnablePrefab.EntitySlot.Value, transform, deterministicBatchGenerator, parent);
                             if (possibleEntity != null)
                             {
                                 parent.ChildEntities.Add(possibleEntity);
@@ -476,7 +477,7 @@ namespace NitroxServer.GameLogic.Entities.Spawning
                         }
 
                         // Setup any children this object may have attached to it.
-                        CreatePrefabPlaceholdersWithChildren(spawnableprefabEntity, spawnableprefabEntity.ClassId, deterministicBatchGenerator);
+                        CreatePrefabPlaceholdersWithChildren(entitySpawnPoint, spawnableprefabEntity, spawnableprefabEntity.ClassId, deterministicBatchGenerator);
 
                         // Add the object to the child list that that is being returned by this method.
                         entities.Add(spawnableprefabEntity);
@@ -490,22 +491,22 @@ namespace NitroxServer.GameLogic.Entities.Spawning
                     }
                 }
                 
-                prefabEntity.ChildEntities = ConvertComponentPrefabsToEntities(prefab.Children, prefabEntity, deterministicBatchGenerator, ref spawnablePrefabs);
+                prefabEntity.ChildEntities = ConvertComponentPrefabsToEntities(entitySpawnPoint, prefab.Children, prefabEntity, deterministicBatchGenerator, ref spawnablePrefabs);
                 entities.Add(prefabEntity);
             }
 
             return entities;
         }
 
-        private Entity SpawnEntitySlotEntities(NitroxEntitySlot entitySlot, TransformAsset transform, DeterministicBatchGenerator deterministicBatchGenerator, Entity parentEntity)
+        private Entity SpawnEntitySlotEntities(EntitySpawnPoint entitySpawnPoint, NitroxEntitySlot entitySlot, TransformAsset transform, DeterministicBatchGenerator deterministicBatchGenerator, Entity parentEntity)
         {
             List<UwePrefab> prefabs = prefabFactory.GetPossiblePrefabs(entitySlot.BiomeType);
             List<Entity> entities = new List<Entity>();
 
             if (prefabs.Count > 0)
             {
-                EntitySpawnPoint entitySpawnPoint = new EntitySpawnPoint(parentEntity.AbsoluteEntityCell, transform.LocalPosition, transform.LocalRotation, entitySlot.AllowedTypes.ToList(), 1f, entitySlot.BiomeType);
-                entities.AddRange(SpawnEntitiesUsingRandomDistribution(entitySpawnPoint, prefabs, deterministicBatchGenerator, parentEntity));
+                EntitySpawnPoint esp = new EntitySpawnPoint(parentEntity.AbsoluteEntityCell, transform.LocalPosition, transform.LocalRotation, entitySlot.AllowedTypes.ToList(), entitySpawnPoint.Density, entitySlot.BiomeType);
+                entities.AddRange(SpawnEntitiesUsingRandomDistribution(esp, prefabs, deterministicBatchGenerator, parentEntity));
             }
 
             return entities.FirstOrDefault();

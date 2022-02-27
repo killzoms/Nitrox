@@ -43,11 +43,6 @@ namespace NitroxServer.GameLogic.Entities.Spawning
             return new NitroxVector3((float)(x1 * c), (float)(x2 * c), (float)(x3 * c));
         }
 
-        public NitroxVector3 NextInsideUnitSphere2()
-        {
-
-        }
-
         public int NextInt(int min, int max)
         {
             return random.Next(min, max);

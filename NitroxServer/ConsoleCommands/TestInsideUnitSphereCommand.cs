@@ -27,7 +27,7 @@ namespace NitroxServer.ConsoleCommands
 
             for (int i = 0; i < 1000000; i++)
             {
-                deterministicBatchGenerator.NextInsideUnitSphere2();
+                deterministicBatchGenerator.NextInsideUnitSphere();
             }
 
             Log.Debug("done");

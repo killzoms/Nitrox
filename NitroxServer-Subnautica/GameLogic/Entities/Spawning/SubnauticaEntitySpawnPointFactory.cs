@@ -30,6 +30,7 @@ namespace NitroxServer_Subnautica.GameLogic.Entities.Spawning
                                              entitySlotData.density,
                                              entitySlotData.biomeType.ToString());
 
+                    //Log.Debug("Creating SpawnPoint with Density " + entitySlotData.density);
 
                     HandleParenting(spawnPoints, entitySpawnPoint, gameObject);
                 }
