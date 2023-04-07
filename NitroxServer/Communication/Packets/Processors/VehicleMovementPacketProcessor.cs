@@ -11,17 +11,15 @@ namespace NitroxServer.Communication.Packets.Processors
     class VehicleMovementPacketProcessor : AuthenticatedPacketProcessor<VehicleMovement>
     {
         private readonly PlayerManager playerManager;
-        private readonly EntityRegistry entityRegistry;
 
-        public VehicleMovementPacketProcessor(PlayerManager playerManager, EntityRegistry entityRegistry)
+        public VehicleMovementPacketProcessor(PlayerManager playerManager)
         {
             this.playerManager = playerManager;
-            this.entityRegistry = entityRegistry;
         }
 
         public override void Process(VehicleMovement packet, Player player)
         {
-            Optional<Entity> vehicle = entityRegistry.GetEntityById(packet.VehicleMovementData.Id);
+            Optional<Entity> vehicle = EntityRegistry.GetEntityById<Entity>(packet.VehicleMovementData.Id);
 
             if (vehicle.HasValue && vehicle.Value is WorldEntity worldVehicle)
             {

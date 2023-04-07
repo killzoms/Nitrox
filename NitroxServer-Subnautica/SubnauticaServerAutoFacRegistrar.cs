@@ -55,7 +55,6 @@ namespace NitroxServer_Subnautica
             }).SingleInstance();
 
             containerBuilder.RegisterType<SubnauticaMap>().As<IMap>().InstancePerLifetimeScope();
-            containerBuilder.RegisterType<EntityRegistry>().AsSelf().InstancePerLifetimeScope();
         }
     }
 }

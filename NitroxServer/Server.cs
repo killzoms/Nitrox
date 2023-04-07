@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.Helper;
 using NitroxServer.GameLogic.Entities;
 using NitroxServer.Serialization;
@@ -24,7 +25,6 @@ namespace NitroxServer
         private readonly Timer saveTimer;
         private readonly World world;
         private readonly WorldEntityManager worldEntityManager;
-        private readonly EntityRegistry entityRegistry;
 
         private CancellationTokenSource serverCancelSource;
 
@@ -35,14 +35,13 @@ namespace NitroxServer
 
         public int Port => serverConfig?.ServerPort ?? -1;
 
-        public Server(WorldPersistence worldPersistence, World world, ServerConfig serverConfig, Communication.NitroxServer server, WorldEntityManager worldEntityManager, EntityRegistry entityRegistry)
+        public Server(WorldPersistence worldPersistence, World world, ServerConfig serverConfig, Communication.NitroxServer server, WorldEntityManager worldEntityManager)
         {
             this.worldPersistence = worldPersistence;
             this.serverConfig = serverConfig;
             this.server = server;
             this.world = world;
             this.worldEntityManager = worldEntityManager;
-            this.entityRegistry = entityRegistry;
 
             Instance = this;
 
@@ -171,8 +170,8 @@ namespace NitroxServer
                 {
                     Log.Info("Starting to load all batches up front.");
                     Log.Info("This can take up to several minutes and you can't join until it's completed.");
-                    Log.Info($"{entityRegistry.GetAllEntities().Count} entities already cached");
-                    if (entityRegistry.GetAllEntities().Count < 504732)
+                    Log.Info($"{EntityRegistry.GetAllEntities().Count()} entities already cached");
+                    if (EntityRegistry.GetAllEntities().Count() < 504732)
                     {
                         worldEntityManager.LoadAllUnspawnedEntities(serverCancelSource.Token);
 

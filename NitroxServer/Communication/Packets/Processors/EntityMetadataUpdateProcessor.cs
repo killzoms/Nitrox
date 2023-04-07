@@ -1,4 +1,5 @@
 ﻿using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
@@ -10,17 +11,15 @@ namespace NitroxServer.Communication.Packets.Processors
     public class EntityMetadataUpdateProcessor : AuthenticatedPacketProcessor<EntityMetadataUpdate>
     {
         private readonly PlayerManager playerManager;
-        private readonly EntityRegistry entityRegistry;
 
-        public EntityMetadataUpdateProcessor(PlayerManager playerManager, EntityRegistry entityRegistry)
+        public EntityMetadataUpdateProcessor(PlayerManager playerManager)
         {
             this.playerManager = playerManager;
-            this.entityRegistry = entityRegistry;
         }
 
         public override void Process(EntityMetadataUpdate packet, Player sendingPlayer)
         {
-            Optional<Entity> entity = entityRegistry.GetEntityById(packet.Id);
+            Optional<Entity> entity = EntityRegistry.GetEntityById<Entity>(packet.Id);
 
             if (entity.HasValue)
             {

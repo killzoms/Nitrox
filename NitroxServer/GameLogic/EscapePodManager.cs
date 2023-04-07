@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Entities;
@@ -14,20 +15,18 @@ namespace NitroxServer.GameLogic
         public const int PLAYERS_PER_ESCAPEPOD = 50;
         public const int ESCAPE_POD_X_OFFSET = 40;
 
-        private readonly EntityRegistry entityRegistry;
         private readonly ThreadSafeDictionary<ushort, EscapePodWorldEntity> escapePodsByPlayerId = new ThreadSafeDictionary<ushort, EscapePodWorldEntity>();
         private EscapePodWorldEntity podForNextPlayer;
         private readonly string seed;
 
         private readonly RandomStartGenerator randomStart;
 
-        public EscapePodManager(EntityRegistry entityRegistry, RandomStartGenerator randomStart, string seed)
+        public EscapePodManager(RandomStartGenerator randomStart, string seed)
         {
             this.seed = seed;
             this.randomStart = randomStart;
-            this.entityRegistry = entityRegistry;
 
-            List<EscapePodWorldEntity> escapePods = entityRegistry.GetEntities<EscapePodWorldEntity>();
+            List<EscapePodWorldEntity> escapePods = EntityRegistry.GetEntitiesOfType<EscapePodWorldEntity>().Values.ToList();
 
             InitializePodForNextPlayer(escapePods);
             InitializeEscapePodsByPlayerId(escapePods);
@@ -63,15 +62,15 @@ namespace NitroxServer.GameLogic
             escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "9f16d82b-11f4-4eeb-aedf-f2fa2bfca8e3", new NitroxTechType("Fabricator"), 0, null, escapePod.Id));
             escapePod.ChildEntities.Add(new InventoryEntity(0, new NitroxId(), new NitroxTechType("SmallStorage"), null, escapePod.Id, new List<Entity>()));
 
-            entityRegistry.AddEntity(escapePod);
-            entityRegistry.AddEntities(escapePod.ChildEntities);
+            EntityRegistry.RegisterEntity(escapePod);
+            EntityRegistry.RegisterEntities(escapePod.ChildEntities);
 
             return escapePod;
         }
 
         private NitroxVector3 GetStartPosition()
         {
-            List<EscapePodWorldEntity> escapePods = entityRegistry.GetEntities<EscapePodWorldEntity>();
+            List<EscapePodWorldEntity> escapePods = EntityRegistry.GetEntitiesOfType<EscapePodWorldEntity>().Values.ToList();
 
             Random rnd = new Random(seed.GetHashCode());
             NitroxVector3 position = randomStart.GenerateRandomStartPosition(rnd);

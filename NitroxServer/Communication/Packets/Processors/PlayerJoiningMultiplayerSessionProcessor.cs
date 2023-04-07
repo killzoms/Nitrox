@@ -22,15 +22,13 @@ namespace NitroxServer.Communication.Packets.Processors
         private readonly ScheduleKeeper scheduleKeeper;
         private readonly StoryManager storyManager;
         private readonly World world;
-        private readonly EntityRegistry entityRegistry;
 
-        public PlayerJoiningMultiplayerSessionProcessor(ScheduleKeeper scheduleKeeper, StoryManager storyManager, PlayerManager playerManager, World world, EntityRegistry entityRegistry)
+        public PlayerJoiningMultiplayerSessionProcessor(ScheduleKeeper scheduleKeeper, StoryManager storyManager, PlayerManager playerManager, World world)
         {
             this.scheduleKeeper = scheduleKeeper;
             this.storyManager = storyManager;
             this.playerManager = playerManager;
             this.world = world;
-            this.entityRegistry = entityRegistry;
         }
 
         public override void Process(PlayerJoiningMultiplayerSession packet, NitroxConnection connection)
@@ -81,7 +79,7 @@ namespace NitroxServer.Communication.Packets.Processors
                 player.SubRootId,
                 player.Stats,
                 GetOtherPlayers(player),
-                world.WorldEntityManager.GetGlobalRootEntities(),
+                EntityRegistry.GetGlobalEntities().ToList(),
                 simulations,
                 world.GameMode,
                 player.Permissions,
@@ -103,14 +101,13 @@ namespace NitroxServer.Communication.Packets.Processors
             NitroxTransform transform = new(player.Position, player.Rotation, NitroxVector3.One);
 
             PlayerWorldEntity playerEntity = new PlayerWorldEntity(transform, 0, null, false, null, true, player.GameObjectId, NitroxTechType.None, null, null, new List<Entity>());
-            entityRegistry.AddEntity(playerEntity);
             world.WorldEntityManager.TrackEntityInTheWorld(playerEntity);
             playerManager.SendPacketToOtherPlayers(new SpawnEntities(playerEntity), player);
         }
 
         private void RespawnExistingEntity(Player player)
         {
-            Optional<Entity> playerEntity = entityRegistry.GetEntityById(player.PlayerContext.PlayerNitroxId);
+            Optional<Entity> playerEntity = EntityRegistry.GetEntityById<Entity>(player.PlayerContext.PlayerNitroxId);
 
             if (playerEntity.HasValue)
             {

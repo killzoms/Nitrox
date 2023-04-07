@@ -8,7 +8,7 @@ using NitroxModel.DataStructures.Util;
 
 namespace NitroxServer.GameLogic.Entities
 {
-    public class EntityRegistry
+    public class SEntityRegistry
     {
         private readonly ConcurrentDictionary<NitroxId, Entity> entitiesById = new();
 

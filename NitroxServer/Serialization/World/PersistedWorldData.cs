@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Runtime.Serialization;
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxServer.GameLogic.Bases;
 using NitroxServer.GameLogic.Entities;
 using NitroxServer.GameLogic.Players;
@@ -26,7 +28,7 @@ namespace NitroxServer.Serialization.World
             {
                 BaseData = BaseData.From(world.BaseManager.GetPartiallyConstructedPieces(), world.BaseManager.GetCompletedBasePieceHistory()),
                 PlayerData = PlayerData.From(world.PlayerManager.GetAllPlayers()),
-                EntityData = EntityData.From(world.EntityRegistry.GetAllEntities()),
+                EntityData = EntityData.From(EntityRegistry.GetAllEntities().ToList()),
                 WorldData =
                 {
                     ParsedBatchCells = world.BatchEntitySpawner.SerializableParsedBatches,

@@ -17,7 +17,7 @@ namespace NitroxModel.DataStructures.GameLogic
     [ProtoInclude(90, typeof(InventoryItemEntity))]
     [ProtoInclude(100, typeof(PathBasedChildEntity))]
     [ProtoInclude(110, typeof(InstalledBatteryEntity))]
-    public abstract class Entity
+    public abstract class Entity : IEntity
     {
         [DataMember(Order = 1)]
         public NitroxId Id { get; set; }

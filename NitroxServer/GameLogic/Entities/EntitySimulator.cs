@@ -13,15 +13,13 @@ namespace NitroxServer.GameLogic.Entities
     {
         private const SimulationLockType DEFAULT_ENTITY_SIMULATION_LOCKTYPE = SimulationLockType.TRANSIENT;
 
-        private readonly EntityRegistry entityRegistry;
         private readonly WorldEntityManager worldEntityManager;
         private readonly PlayerManager playerManager;
         private readonly HashSet<NitroxTechType> serverSpawnedSimulationWhiteList;
         private readonly SimulationOwnershipData simulationOwnershipData;
 
-        public EntitySimulation(EntityRegistry entityRegistry, WorldEntityManager worldEntityManager, SimulationOwnershipData simulationOwnershipData, PlayerManager playerManager, HashSet<NitroxTechType> serverSpawnedSimulationWhiteList)
+        public EntitySimulation(WorldEntityManager worldEntityManager, SimulationOwnershipData simulationOwnershipData, PlayerManager playerManager, HashSet<NitroxTechType> serverSpawnedSimulationWhiteList)
         {
-            this.entityRegistry = entityRegistry;
             this.worldEntityManager = worldEntityManager;
             this.simulationOwnershipData = simulationOwnershipData;
             this.playerManager = playerManager;
@@ -109,7 +107,7 @@ namespace NitroxServer.GameLogic.Entities
 
         public IEnumerable<NitroxId> AssignGlobalRootEntities(Player player)
         {
-            List<WorldEntity> globalRootEntities = worldEntityManager.GetGlobalRootEntities();
+            List<WorldEntity> globalRootEntities = EntityRegistry.GetGlobalEntities().ToList();
             IEnumerable<WorldEntity> entities = globalRootEntities.Where(entity => simulationOwnershipData.TryToAcquire(entity.Id, player, SimulationLockType.TRANSIENT));
             foreach (WorldEntity entity in entities)
             {
@@ -147,7 +145,7 @@ namespace NitroxServer.GameLogic.Entities
                 {
                     bool isOtherPlayer = player != oldPlayer;
 
-                    Optional<Entity> opEntity = entityRegistry.GetEntityById(id);
+                    Optional<Entity> opEntity = EntityRegistry.GetEntityById<Entity>(id);
                     Entity entity = opEntity.OrNull();
 
                     if (isOtherPlayer && (entity == null || player.CanSee(entity)) && simulationOwnershipData.TryToAcquire(id, player, DEFAULT_ENTITY_SIMULATION_LOCKTYPE))

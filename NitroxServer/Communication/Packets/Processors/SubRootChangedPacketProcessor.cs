@@ -1,3 +1,4 @@
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
 using NitroxServer.GameLogic;
@@ -8,17 +9,15 @@ namespace NitroxServer.Communication.Packets.Processors
     class SubRootChangedPacketProcessor : AuthenticatedPacketProcessor<SubRootChanged>
     {
         private readonly PlayerManager playerManager;
-        private readonly EntityRegistry entityRegistry;
 
-        public SubRootChangedPacketProcessor(PlayerManager playerManager, EntityRegistry entityRegistry)
+        public SubRootChangedPacketProcessor(PlayerManager playerManager)
         {
             this.playerManager = playerManager;
-            this.entityRegistry = entityRegistry;
         }
 
         public override void Process(SubRootChanged packet, Player player)
         {
-            entityRegistry.ReparentEntity(player.GameObjectId, packet.SubRootId.OrNull());
+            EntityRegistry.SetParent(player.GameObjectId, packet.SubRootId.OrNull());
             player.SubRootId = packet.SubRootId;
             playerManager.SendPacketToOtherPlayers(packet, player);
         }

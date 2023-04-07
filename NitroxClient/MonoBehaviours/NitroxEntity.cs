@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using NitroxModel.DataStructures;
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Helper;
 using ProtoBuf;
@@ -13,13 +14,34 @@ namespace NitroxClient.MonoBehaviours
     [Serializable]
     [DataContract]
     [ProtoContract] // REQUIRED as the game serializes/deserializes phasing entities in batches when moving around the map.
-    public class NitroxEntity : MonoBehaviour, IProtoTreeEventListener
+    public class NitroxEntity : MonoBehaviour, IProtoTreeEventListener, IEntity
     {
         private static Dictionary<NitroxId, GameObject> gameObjectsById = new Dictionary<NitroxId, GameObject>();
 
         [DataMember(Order = 1)]
         [ProtoMember(1)]
-        public NitroxId Id;
+        public NitroxId Id { get; private set; }
+
+        public NitroxId ParentId
+        {
+            get
+            {
+                if (transform.parent)
+                {
+                    NitroxEntity parentNitroxEntity = transform.parent.GetComponent<NitroxEntity>();
+                    if (parentNitroxEntity)
+                    {
+                        return parentNitroxEntity.Id;
+                    }
+                }
+
+                return null;
+            }
+            set
+            {
+                transform.parent = EntityRegistry.GetEntityById<NitroxEntity>(value).transform;
+            }
+        }
 
         private NitroxEntity() // Default for Proto
         {

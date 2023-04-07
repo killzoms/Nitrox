@@ -1,4 +1,5 @@
 using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
@@ -10,17 +11,15 @@ namespace NitroxServer.Communication.Packets.Processors
     class VehicleDockingProcessor : AuthenticatedPacketProcessor<VehicleDocking>
     {
         private readonly PlayerManager playerManager;
-        private readonly EntityRegistry entityRegistry;
 
-        public VehicleDockingProcessor(PlayerManager playerManager, EntityRegistry entityRegistry)
+        public VehicleDockingProcessor(PlayerManager playerManager)
         {
             this.playerManager = playerManager;
-            this.entityRegistry = entityRegistry;
         }
 
         public override void Process(VehicleDocking packet, Player player)
         {
-            Optional<Entity> vehicle = entityRegistry.GetEntityById(packet.VehicleId);
+            Optional<Entity> vehicle = EntityRegistry.GetEntityById<Entity>(packet.VehicleId);
 
             if (!vehicle.HasValue)
             {
@@ -28,7 +27,7 @@ namespace NitroxServer.Communication.Packets.Processors
                 return;
             }
 
-            Optional<Entity> dock = entityRegistry.GetEntityById(packet.DockId);
+            Optional<Entity> dock = EntityRegistry.GetEntityById<Entity>(packet.DockId);
 
             if (!dock.HasValue)
             {

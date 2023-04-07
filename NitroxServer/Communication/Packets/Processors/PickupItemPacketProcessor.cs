@@ -11,14 +11,12 @@ namespace NitroxServer.Communication.Packets.Processors;
 
 public class PickupItemPacketProcessor : AuthenticatedPacketProcessor<PickupItem>
 {
-    private readonly EntityRegistry entityRegistry;
     private readonly WorldEntityManager worldEntityManager;
     private readonly PlayerManager playerManager;
     private readonly SimulationOwnershipData simulationOwnershipData;
 
-    public PickupItemPacketProcessor(EntityRegistry entityRegistry, WorldEntityManager worldEntityManager, PlayerManager playerManager, SimulationOwnershipData simulationOwnershipData)
+    public PickupItemPacketProcessor(WorldEntityManager worldEntityManager, PlayerManager playerManager, SimulationOwnershipData simulationOwnershipData)
     {
-        this.entityRegistry = entityRegistry;
         this.worldEntityManager = worldEntityManager;
         this.playerManager = playerManager;
         this.simulationOwnershipData = simulationOwnershipData;
@@ -35,7 +33,7 @@ public class PickupItemPacketProcessor : AuthenticatedPacketProcessor<PickupItem
 
         StopTrackingExistingWorldEntity(packet.Id);
 
-        entityRegistry.AddOrUpdate(packet.Item);
+        EntityRegistry.AddOrUpdate(packet.Item);
 
         // Have other players respawn the item inside the inventory.
         playerManager.SendPacketToOtherPlayers(new SpawnEntities(packet.Item, true), player);
@@ -43,7 +41,7 @@ public class PickupItemPacketProcessor : AuthenticatedPacketProcessor<PickupItem
 
     private void StopTrackingExistingWorldEntity(NitroxId id)
     {
-        Optional<Entity> entity = entityRegistry.GetEntityById(id);
+        Optional<Entity> entity = EntityRegistry.GetEntityById<Entity>(id);
 
         if (entity.HasValue && entity.Value is WorldEntity worldEntity)
         {

@@ -179,8 +179,7 @@ namespace NitroxServer.Serialization.World
 
             Log.Info($"Loading world with seed {seed}");
 
-            EntityRegistry entityRegistry = NitroxServiceLocator.LocateService<EntityRegistry>();
-            entityRegistry.AddEntities(pWorldData.EntityData.Entities);
+            EntityRegistry.RegisterEntities(pWorldData.EntityData.Entities);
 
             World world = new()
             {
@@ -189,9 +188,7 @@ namespace NitroxServer.Serialization.World
 
                 BaseManager = new BaseManager(pWorldData.BaseData.PartiallyConstructedPieces, pWorldData.BaseData.CompletedBasePieceHistory),
 
-                EscapePodManager = new EscapePodManager(entityRegistry, randomStart, seed),
-
-                EntityRegistry = entityRegistry,
+                EscapePodManager = new EscapePodManager(randomStart, seed),
 
                 GameData = pWorldData.WorldData.GameData,
                 GameMode = gameMode,
@@ -213,10 +210,10 @@ namespace NitroxServer.Serialization.World
                 world.Seed
             );
 
-            world.WorldEntityManager = new WorldEntityManager(world.EntityRegistry, world.BatchEntitySpawner);
+            world.WorldEntityManager = new WorldEntityManager(world.BatchEntitySpawner);
 
             HashSet<NitroxTechType> serverSpawnedSimulationWhiteList = NitroxServiceLocator.LocateService<HashSet<NitroxTechType>>();
-            world.EntitySimulation = new EntitySimulation(world.EntityRegistry, world.WorldEntityManager, world.SimulationOwnershipData, world.PlayerManager, serverSpawnedSimulationWhiteList);
+            world.EntitySimulation = new EntitySimulation(world.WorldEntityManager, world.SimulationOwnershipData, world.PlayerManager, serverSpawnedSimulationWhiteList);
 
             return world;
         }

@@ -11,14 +11,12 @@ namespace NitroxServer.Communication.Packets.Processors
     class EntitySpawnedByClientProcessor : AuthenticatedPacketProcessor<EntitySpawnedByClient>
     {
         private readonly PlayerManager playerManager;
-        private readonly EntityRegistry entityRegistry;
         private readonly WorldEntityManager worldEntityManager;
         private readonly EntitySimulation entitySimulation;
 
-        public EntitySpawnedByClientProcessor(PlayerManager playerManager, EntityRegistry entityRegistry, WorldEntityManager worldEntityManager, EntitySimulation entitySimulation)
+        public EntitySpawnedByClientProcessor(PlayerManager playerManager, WorldEntityManager worldEntityManager, EntitySimulation entitySimulation)
         {
             this.playerManager = playerManager;
-            this.entityRegistry = entityRegistry;
             this.worldEntityManager = worldEntityManager;
             this.entitySimulation = entitySimulation;
         }
@@ -29,7 +27,7 @@ namespace NitroxServer.Communication.Packets.Processors
 
             // If the entity already exists in the registry, it is fine to update.  This is a normal case as the player
             // may have an item in their inventory (that the registry knows about) then wants to spawn it into the world.
-            entityRegistry.AddOrUpdate(entity);
+            EntityRegistry.AddOrUpdate(entity);
 
             if (entity is WorldEntity worldEntity)
             {

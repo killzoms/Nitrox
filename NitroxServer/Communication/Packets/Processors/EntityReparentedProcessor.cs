@@ -1,4 +1,5 @@
 using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
@@ -9,18 +10,16 @@ namespace NitroxServer.Communication.Packets.Processors;
 
 public class EntityReparentedProcessor : AuthenticatedPacketProcessor<EntityReparented>
 {
-    private readonly EntityRegistry entityRegistry;
     private readonly PlayerManager playerManager;
 
-    public EntityReparentedProcessor(EntityRegistry entityRegistry, PlayerManager playerManager)
+    public EntityReparentedProcessor(PlayerManager playerManager)
     {
-        this.entityRegistry = entityRegistry;
         this.playerManager = playerManager;
     }
 
     public override void Process(EntityReparented packet, Player player)
     {
-        entityRegistry.ReparentEntity(packet.Id, packet.NewParentId);
+        EntityRegistry.SetParent(packet.Id, packet.NewParentId);
         playerManager.SendPacketToOtherPlayers(packet, player);
     }
 }

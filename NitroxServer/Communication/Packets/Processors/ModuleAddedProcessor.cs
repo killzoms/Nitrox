@@ -11,17 +11,14 @@ namespace NitroxServer.Communication.Packets.Processors
     class ModuleAddedProcessor : AuthenticatedPacketProcessor<ModuleAdded>
     {
         private readonly PlayerManager playerManager;
-        private readonly EntityRegistry entityRegistry;
-
-        public ModuleAddedProcessor(PlayerManager playerManager, EntityRegistry entityRegistry)
+        public ModuleAddedProcessor(PlayerManager playerManager)
         {
             this.playerManager = playerManager;
-            this.entityRegistry = entityRegistry;
         }
 
         public override void Process(ModuleAdded packet, Player player)
         {
-            Optional<Entity> entity = entityRegistry.GetEntityById(packet.Id);
+            Optional<Entity> entity = EntityRegistry.GetEntityById<Entity>(packet.Id);
 
             if (!entity.HasValue)
             {
@@ -34,7 +31,7 @@ namespace NitroxServer.Communication.Packets.Processors
                 InstalledModuleEntity moduleEntity = new(packet.Slot, inventoryItem.ClassId, inventoryItem.Id, inventoryItem.TechType, inventoryItem.Metadata, packet.ParentId, inventoryItem.ChildEntities);
 
                 // Convert the world entity into an inventory item
-                entityRegistry.AddOrUpdate(moduleEntity);
+                EntityRegistry.AddOrUpdate(moduleEntity);
 
                 // Have other players respawn the item inside the inventory.
                 playerManager.SendPacketToOtherPlayers(new SpawnEntities(moduleEntity, true), player);

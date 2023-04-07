@@ -1,4 +1,5 @@
 ﻿using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
@@ -9,18 +10,16 @@ namespace NitroxServer.Communication.Packets.Processors
 {
     public class PingRenamedPacketProcessor : AuthenticatedPacketProcessor<PingRenamed>
     {
-        private readonly EntityRegistry entityRegistry;
         private readonly PlayerManager playerManager;
 
-        public PingRenamedPacketProcessor(PlayerManager playerManager, EntityRegistry entityRegistry)
+        public PingRenamedPacketProcessor(PlayerManager playerManager)
         {
             this.playerManager = playerManager;
-            this.entityRegistry = entityRegistry;
         }
 
         public override void Process(PingRenamed packet, Player player)
         {
-            Optional<Entity> beaconEntity = entityRegistry.GetEntityById(packet.Id);
+            Optional<Entity> beaconEntity = EntityRegistry.GetEntityById<Entity>(packet.Id);
             if (!beaconEntity.HasValue)
             {
                 Log.Error($"Beacon entity could not be found on server with nitrox id '{packet.Id}'");

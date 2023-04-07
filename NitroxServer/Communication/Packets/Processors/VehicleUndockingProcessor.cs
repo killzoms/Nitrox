@@ -1,4 +1,5 @@
 using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.Packets;
 using NitroxServer.Communication.Packets.Processors.Abstract;
@@ -10,17 +11,15 @@ namespace NitroxServer.Communication.Packets.Processors
     class VehicleUndockingProcessor : AuthenticatedPacketProcessor<VehicleUndocking>
     {
         private readonly PlayerManager playerManager;
-        private readonly EntityRegistry entityRegistry;
 
-        public VehicleUndockingProcessor(PlayerManager playerManager, EntityRegistry entityRegistry)
+        public VehicleUndockingProcessor(PlayerManager playerManager)
         {
             this.playerManager = playerManager;
-            this.entityRegistry = entityRegistry;
         }
 
         public override void Process(VehicleUndocking packet, Player player)
         {
-            Optional<Entity> vehicle = entityRegistry.GetEntityById(packet.VehicleId);
+            Optional<Entity> vehicle = EntityRegistry.GetEntityById<Entity>(packet.VehicleId);
 
             if (!vehicle.HasValue)
             {
@@ -28,7 +27,7 @@ namespace NitroxServer.Communication.Packets.Processors
                 return;
             }
 
-            Optional<Entity> parent = entityRegistry.GetEntityById(vehicle.Value.ParentId);
+            Optional<Entity> parent = EntityRegistry.GetEntityById<Entity>(vehicle.Value.ParentId);
 
             if (!parent.HasValue)
             {
