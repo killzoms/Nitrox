@@ -1,4 +1,6 @@
-* text=auto
+* text=lf
+
+*.sln text eol=crlf
 
 # Unity files
 *.meta -merge=unityamlmerge -text

@@ -11,6 +11,7 @@ resharper_wrap_object_and_collection_initializer_style = chop_if_long
 [*.{proj, csproj, targets}]
 indent_size = 4
 insert_final_newline = true
+tab_width = 4
 
 [App.config]
 indent_size = 4
@@ -20,6 +21,10 @@ insert_final_newline = true
 indent_size = 4
 insert_final_newline = true
 charset = utf-8
+csharp_using_directive_placement = outside_namespace:silent
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_prefer_braces = true:silent
+csharp_style_namespace_declarations = file_scoped:silent
 
 [*.g.cs]
 generated_code = true
