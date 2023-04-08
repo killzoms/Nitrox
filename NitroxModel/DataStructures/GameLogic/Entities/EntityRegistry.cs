@@ -126,6 +126,7 @@ public static class EntityRegistry
         {
             UnregisterGlobalEntity(entityId);
             UnregisterCellEntity(entityId);
+            UnregisterBatchEntity(entityId);
         }
     }
 
@@ -185,8 +186,8 @@ public static class EntityRegistry
         {
             if (entitiesByCellId.ContainsKey(entityId))
             {
-                entitiesByCellId.Remove(entityId);
                 UnregisterBatchEntity(entityId, entitiesByCellId[entityId].AbsoluteEntityCell.BatchId);
+                entitiesByCellId.Remove(entityId);
             }
         }
     }
@@ -259,13 +260,15 @@ public static class EntityRegistry
             }
         }
 
-        if (!childEntitiesByParentId.TryGetValue(parentId, out Dictionary<NitroxId, IEntity> parentEntitiesByChild))
+        if (!childEntitiesByParentId.TryGetValue(parentId, out Dictionary<NitroxId, IEntity> parentChildrenById))
         {
-            parentEntitiesByChild = new Dictionary<NitroxId, IEntity>();
-            childEntitiesByParentId.Add(parentId, parentEntitiesByChild);
+            parentChildrenById = new Dictionary<NitroxId, IEntity>();
+            childEntitiesByParentId.Add(parentId, parentChildrenById);
         }
-
-        parentEntitiesByChild.Add(parentId, child);
+        if (!parentChildrenById.ContainsKey(parentId))
+        {
+            parentChildrenById.Add(parentId, child);
+        }
         child.ParentId = parentId;
     }
 }

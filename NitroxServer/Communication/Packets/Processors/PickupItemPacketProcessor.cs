@@ -41,7 +41,7 @@ public class PickupItemPacketProcessor : AuthenticatedPacketProcessor<PickupItem
 
     private void StopTrackingExistingWorldEntity(NitroxId id)
     {
-        Optional<Entity> entity = EntityRegistry.GetEntityById<Entity>(id);
+        Optional<Entity> entity = Optional.OfNullable(EntityRegistry.GetEntityById<Entity>(id));
 
         if (entity.HasValue && entity.Value is WorldEntity worldEntity)
         {
