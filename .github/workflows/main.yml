@@ -1,4 +1,4 @@
-name: .NET Core Desktop
+name: .NET Core Desktopsetup-dotnet
 
 on: ["push", "workflow_dispatch"]
 
@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET 8.x
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         # Semantic version range syntax or exact version of a dotnet version
         dotnet-version: '8.x'
