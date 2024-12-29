@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using NitroxModel;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.Helper;
+using NitroxServer.GameLogic;
 using NitroxServer.GameLogic.Entities;
 using NitroxServer.Serialization;
 using NitroxServer.Serialization.World;
@@ -19,6 +20,8 @@ namespace NitroxServer
 {
     public class Server
     {
+        private const int TICKRATE = 20;
+
         private readonly Communication.NitroxServer server;
         private readonly WorldPersistence worldPersistence;
         private readonly ServerConfig serverConfig;
@@ -28,6 +31,8 @@ namespace NitroxServer
         private readonly EntityRegistry entityRegistry;
 
         private CancellationTokenSource serverCancelSource;
+        private Thread serverTicking;
+        private bool isTicking = false;
 
         public static Server Instance { get; private set; }
 
@@ -44,6 +49,8 @@ namespace NitroxServer
             this.world = world;
             this.worldEntityManager = worldEntityManager;
             this.entityRegistry = entityRegistry;
+
+            serverTicking = new Thread(TickServer);
 
             Instance = this;
 
@@ -268,6 +275,7 @@ namespace NitroxServer
         {
             DisablePeriodicSaving();
             world.TimeKeeper.StopCounting();
+            isTicking = false;
             Log.Info("Server has paused, waiting for players to connect");
         }
 
@@ -278,7 +286,35 @@ namespace NitroxServer
                 EnablePeriodicSaving();
             }
             world.TimeKeeper.StartCounting();
+
+
+            if (!isTicking)
+            {
+                isTicking = true;
+                serverTicking.Start();
+            }
+
             Log.Info("Server has resumed");
+        }
+
+        private void TickServer()
+        {
+            TickTime.Restart();
+            while (isTicking)
+            {
+                TickableTracker.TickAll();
+
+                if (TickTime.DeltaTime <= 0.05f)
+                {
+                    Thread.Sleep(50 - (int)(TickTime.DeltaTime * 1000));
+                    TickTime.Restart();
+                }
+                else if (TickTime.DeltaTime > 0.05f)
+                {
+                    Log.Debug("Tick took more than 50ms!");
+                    TickTime.Restart();
+                }
+            }
         }
     }
 }

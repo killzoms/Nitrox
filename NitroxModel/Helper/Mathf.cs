@@ -8,6 +8,16 @@ namespace NitroxModel.Helper
         public const float PI = 3.14159274f;
         public const float DEG2RAD = 0.0174532924f;
 
+        public static int Min(int a, int b)
+        {
+            return (a < b) ? a : b;
+        }
+
+        public static int Max(int a, int b)
+        {
+            return (a > b) ? a : b;
+        }
+
         public static float Sqrt(float ls)
         {
             return (float)Math.Sqrt(ls);

@@ -19,6 +19,7 @@ namespace NitroxModel.DataStructures.Unity
         public float Z;
 
         public NitroxVector3 Normalized => Normalize(this);
+        public float SqrMagnitude => X * X + Y * Y + Z * Z;
 
         public NitroxVector3(float x, float y, float z)
         {

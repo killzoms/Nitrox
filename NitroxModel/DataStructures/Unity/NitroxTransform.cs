@@ -65,6 +65,16 @@ namespace NitroxModel.DataStructures.Unity
             }
         }
 
+        public NitroxVector3 TransformPoint(NitroxVector3 point)
+        {
+            return LocalToWorldMatrix.Transform(point);
+        }
+
+        public NitroxVector3 InverseTransformPoint(NitroxVector3 wsPos)
+        {
+            return LocalToWorldMatrix.Invert().Transform(wsPos);
+        }
+
         public void SetParent(NitroxTransform parent, bool worldPositionStays = true)
         {
             if (!worldPositionStays)

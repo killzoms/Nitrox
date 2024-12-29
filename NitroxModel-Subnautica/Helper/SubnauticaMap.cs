@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.Unity;
 using NitroxModel.Helper;
 
 namespace NitroxModel_Subnautica.Helper
@@ -35,6 +36,7 @@ namespace NitroxModel_Subnautica.Helper
         public NitroxInt3 DimensionsInMeters => new NitroxInt3(4096, 3200, 4096);
         public NitroxInt3 DimensionsInBatches => NitroxInt3.Ceil(DimensionsInMeters / BATCH_SIZE);
         public NitroxInt3 BatchDimensionCenter => new NitroxInt3(DimensionsInMeters.X / 2, DimensionsInMeters.Y - SKYBOX_METERS_ABOVE_WATER, DimensionsInMeters.Z / 2);
+        public NitroxTransform MapTransform => new NitroxTransform(new NitroxVector3(-2048, -3040, -2048), NitroxQuaternion.Identity, NitroxVector3.One);
         public List<NitroxTechType> GlobalRootTechTypes { get; } = GLOBAL_ROOT_TECH_TYPES;
     }
 }

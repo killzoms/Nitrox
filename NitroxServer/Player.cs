@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NitroxModel.Core;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Entities;
@@ -9,12 +10,15 @@ using NitroxModel.Packets;
 using NitroxModel.Packets.Processors.Abstract;
 using NitroxModel.Server;
 using NitroxServer.Communication;
+using NitroxServer.GameLogic.Entities;
+using NitroxServer.GameLogic.Players;
 
 namespace NitroxServer
 {
     public class Player : IProcessorContext
     {
         private readonly ThreadSafeSet<AbsoluteEntityCell> visibleCells;
+        private readonly PlayerTicking playerTicking;
 
         public ThreadSafeList<NitroxTechType> UsedItems { get; }
         public Optional<NitroxId>[] QuickSlotsBindingIds { get; set; }
@@ -67,6 +71,8 @@ namespace NitroxServer
             PersonalCompletedGoalsWithTimestamp = new ThreadSafeDictionary<string, float>(personalCompletedGoalsWithTimestamp);
             PingInstancePreferences = new(pingInstancePreferences);
             PinnedRecipePreferences = new(pinnedRecipePreferences);
+
+            playerTicking = new PlayerTicking(this, NitroxServiceLocator.LocateService<WorldEntityManager>(), NitroxServiceLocator.LocateService<EntitySimulation>());
         }
 
         public static bool operator ==(Player left, Player right)

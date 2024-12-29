@@ -19,7 +19,7 @@ public class CellVisibilityChangedProcessor : AuthenticatedPacketProcessor<CellV
     }
 
     public override void Process(CellVisibilityChanged packet, Player player)
-    {
+    {/*
         player.AddCells(packet.Added);
         player.RemoveCells(packet.Removed);
 
@@ -49,6 +49,6 @@ public class CellVisibilityChangedProcessor : AuthenticatedPacketProcessor<CellV
         {
             SpawnEntities batchEntities = new(totalEntities);
             player.SendPacket(batchEntities);
-        }
+        }*/
     }
 }

@@ -35,6 +35,8 @@ public class WorldEntityManager
     private readonly object worldEntitiesLock;
     private readonly object globalRootEntitiesLock;
 
+    internal HashSet<NitroxInt3> loadedBatches = new HashSet<NitroxInt3>();
+
     public WorldEntityManager(EntityRegistry entityRegistry, BatchEntitySpawner batchEntitySpawner)
     {
         List<WorldEntity> worldEntities = entityRegistry.GetEntities<WorldEntity>();
@@ -49,6 +51,11 @@ public class WorldEntityManager
 
         worldEntitiesLock = new();
         globalRootEntitiesLock = new();
+
+        loadedBatches = worldEntities.Where(entity => entity is not GlobalRootEntity)
+                                     .Select(entity => entity.AbsoluteEntityCell.BatchId)
+                                     .Distinct()
+                                     .ToHashSet();
     }
 
     public List<GlobalRootEntity> GetGlobalRootEntities(bool rootOnly = false)
@@ -222,6 +229,7 @@ public class WorldEntityManager
                 for (int z = 0; z < map.DimensionsInBatches.Z; z++)
                 {
                     int spawned = LoadUnspawnedEntities(new(x, y, z), true);
+                    loadedBatches.Add(new NitroxInt3(x, y, z));
 
                     Log.Debug($"Loaded {spawned} entities from batch ({x}, {y}, {z})");
 
@@ -239,6 +247,7 @@ public class WorldEntityManager
     public int LoadUnspawnedEntities(NitroxInt3 batchId, bool suppressLogs)
     {
         List<Entity> spawnedEntities = batchEntitySpawner.LoadUnspawnedEntities(batchId, suppressLogs);
+        loadedBatches.Add(batchId);
 
         List<WorldEntity> entitiesInCells = spawnedEntities.Where(entity => typeof(WorldEntity).IsAssignableFrom(entity.GetType()) &&
                                                                                 entity.GetType() != typeof(CellRootEntity) &&

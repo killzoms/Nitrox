@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
+using NitroxModel.DataStructures.Unity;
 
 namespace NitroxModel.Helper
 {
@@ -14,6 +15,7 @@ namespace NitroxModel.Helper
         public NitroxInt3 DimensionsInMeters { get; }
         public NitroxInt3 DimensionsInBatches { get; }
         public NitroxInt3 BatchDimensionCenter { get; }
+        public NitroxTransform MapTransform { get; }
         public List<NitroxTechType> GlobalRootTechTypes { get; }
         public int ItemLevelOfDetail { get; }
     }

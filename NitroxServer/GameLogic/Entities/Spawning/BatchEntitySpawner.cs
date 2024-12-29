@@ -5,6 +5,7 @@ using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Unity;
 using NitroxServer.GameLogic.Unlockables;
+using NitroxServer.GameLogic.Visibility;
 using NitroxServer.Helper;
 using NitroxServer.Resources;
 using NitroxServer.Serialization;
@@ -100,6 +101,7 @@ public class BatchEntitySpawner : IEntitySpawner
         {
             lock (emptyBatchesLock)
             {
+                Log.Debug($"{batchId} Batch Empty");
                 emptyBatches.Add(batchId);
             }
         }
