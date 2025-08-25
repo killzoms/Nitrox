@@ -34,15 +34,7 @@ public class DefaultWorldEntitySpawner : IWorldEntitySpawner, IWorldEntitySyncSp
     {
         gameObject.transform.position = entity.Transform.Position.ToUnity();
         gameObject.transform.rotation = entity.Transform.Rotation.ToUnity();
-        gameObject.transform.localScale = entity.Transform.LocalScale.ToUnity();
-
         CrafterLogic.NotifyCraftEnd(gameObject, techType);
-
-        WaterPark parentWaterPark = null;
-        if (parent.HasValue)
-        {
-            Items.TryGetParentWaterPark(parent.Value.transform.parent, out parentWaterPark);
-        }
 
         LargeWorldEntity largeWorldEntity = gameObject.GetComponent<LargeWorldEntity>();
         if (largeWorldEntity)
@@ -50,25 +42,11 @@ public class DefaultWorldEntitySpawner : IWorldEntitySpawner, IWorldEntitySyncSp
             largeWorldEntity.cellLevel = (LargeWorldEntity.CellLevel)entity.Level;
         }
 
-        if (!parentWaterPark)
-        {
-            if (parent.HasValue && !parent.Value.GetComponent<LargeWorldEntityCell>())
-            {
-                LargeWorldEntity.Register(gameObject); // This calls SetActive on the GameObject
-            }
-            else if (largeWorldEntity && !gameObject.transform.parent && cellRoot.liveRoot)
-            {
-                gameObject.transform.SetParent(cellRoot.liveRoot.transform, true);
-                LargeWorldEntity.Register(gameObject);
-            }
-            else
-            {
-                gameObject.SetActive(true);
-            }
-        }
-
+        WaterPark parentWaterPark = null;
         if (parent.HasValue)
         {
+            Items.TryGetParentWaterPark(parent.Value.transform.parent, out parentWaterPark);
+            
             if (parentWaterPark && gameObject.TryGetComponent(out Pickupable pickupable))
             {
                 pickupable.SetVisible(false);
@@ -80,6 +58,21 @@ public class DefaultWorldEntitySpawner : IWorldEntitySpawner, IWorldEntitySyncSp
                 gameObject.transform.SetParent(parent.Value.transform, true);
             }
         }
+
+        if (!parentWaterPark)
+        {
+            if (parent.HasValue && !parent.Value.GetComponent<LargeWorldEntityCell>())
+            {
+                LargeWorldStreamer.main.cellManager.RegisterEntity(largeWorldEntity);
+            }
+            else if (largeWorldEntity && !gameObject.transform.parent && cellRoot.liveRoot)
+            {
+                LargeWorldStreamer.main.cellManager.RegisterEntity(largeWorldEntity);
+            }
+        }
+
+        gameObject.SetActive(true);
+        gameObject.transform.localScale = entity.Transform.LocalScale.ToUnity();
     }
 
     public static bool TryGetCachedPrefab(out GameObject prefab, TechType techType = TechType.None, string classId = null)

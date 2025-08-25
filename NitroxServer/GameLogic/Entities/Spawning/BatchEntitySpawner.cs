@@ -243,7 +243,7 @@ public class BatchEntitySpawner : IEntitySpawner
     /// Spawns the regular (can be children of PrefabPlaceholdersGroup) which are always the same thus context independent.
     /// </summary>
     /// <inheritdoc cref="CreateEntityWithChildren" />
-    private IEnumerable<Entity> SpawnEntitiesStaticly(EntitySpawnPoint entitySpawnPoint, DeterministicGenerator deterministicBatchGenerator, WorldEntity parentEntity = null)
+    private IEnumerable<Entity> SpawnEntitiesStatically(EntitySpawnPoint entitySpawnPoint, DeterministicGenerator deterministicBatchGenerator, WorldEntity parentEntity = null)
     {
         if (worldEntityFactory.TryFind(entitySpawnPoint.ClassId, out UweWorldEntity uweWorldEntity))
         {
@@ -305,10 +305,8 @@ public class BatchEntitySpawner : IEntitySpawner
         }
 
         // See EntitySlotsPlaceholder.Spawn
-        if (!TryCreatePrefabPlaceholdersGroupWithChildren(ref spawnedEntity, classId, deterministicBatchGenerator))
-        {
-            spawnedEntity.ChildEntities = SpawnEntities(entitySpawnPoint.Children, deterministicBatchGenerator, spawnedEntity);
-        }
+        SpawnPrefabPlaceholders(ref spawnedEntity, classId, deterministicBatchGenerator);
+        spawnedEntity.ChildEntities.AddRange(SpawnEntities(entitySpawnPoint.Children, deterministicBatchGenerator, spawnedEntity));
 
         entityBootstrapperManager.PrepareEntityIfRequired(ref spawnedEntity, deterministicBatchGenerator);
 
@@ -363,7 +361,7 @@ public class BatchEntitySpawner : IEntitySpawner
                 }
                 else if (!string.IsNullOrEmpty(esp.ClassId))
                 {
-                    entities.AddRange(SpawnEntitiesStaticly(esp, deterministicBatchGenerator, parentEntity));
+                    entities.AddRange(SpawnEntitiesStatically(esp, deterministicBatchGenerator, parentEntity));
                 }
             }
         }
@@ -377,11 +375,11 @@ public class BatchEntitySpawner : IEntitySpawner
     /// This is suppressed on the client so we don't get virtual entities that the server doesn't know about.
     /// </summary>
     /// <returns>If this Entity is a PrefabPlaceholdersGroup</returns>
-    private bool TryCreatePrefabPlaceholdersGroupWithChildren(ref WorldEntity entity, string classId, DeterministicGenerator deterministicBatchGenerator)
+    private void SpawnPrefabPlaceholders(ref WorldEntity entity, string classId, DeterministicGenerator deterministicBatchGenerator)
     {
         if (!placeholdersGroupsByClassId.TryGetValue(classId, out PrefabPlaceholdersGroupAsset groupAsset))
         {
-            return false;
+            return;
         }
 
         entity = new PlaceholderGroupWorldEntity(entity);
@@ -404,10 +402,7 @@ public class BatchEntitySpawner : IEntitySpawner
                     {
                         spawnedEntity = new PlaceholderGroupWorldEntity(spawnedEntity, i);
                     }
-                    else
-                    {
-                        spawnedEntity = new PrefabPlaceholderEntity(spawnedEntity, i);
-                    }
+                    
                     entity.ChildEntities.Add(spawnedEntity);
                 }
             }
@@ -422,7 +417,7 @@ public class BatchEntitySpawner : IEntitySpawner
                 }
 
                 EntitySpawnPoint esp = new(entity.AbsoluteEntityCell, prefabAsset.Transform.LocalPosition, prefabAsset.Transform.LocalRotation, prefabAsset.Transform.LocalScale, prefabClassId);
-                WorldEntity spawnedEntity = (WorldEntity)SpawnEntitiesStaticly(esp, deterministicBatchGenerator, entity).First();
+                WorldEntity spawnedEntity = (WorldEntity)SpawnEntitiesStatically(esp, deterministicBatchGenerator, entity).First();
                 if (prefabAsset is PrefabPlaceholdersGroupAsset)
                 {
                     spawnedEntity = new PlaceholderGroupWorldEntity(spawnedEntity, i);
@@ -435,8 +430,6 @@ public class BatchEntitySpawner : IEntitySpawner
                 entity.ChildEntities.Add(spawnedEntity);
             }
         }
-
-        return true;
     }
 
     private WorldEntity SpawnPrefabAssetInEntitySlot(NitroxTransform transform, NitroxEntitySlot entitySlot, DeterministicGenerator deterministicBatchGenerator, AbsoluteEntityCell cell, Entity parentEntity)

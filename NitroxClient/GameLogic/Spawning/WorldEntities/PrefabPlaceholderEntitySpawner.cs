@@ -28,7 +28,7 @@ public class PrefabPlaceholderEntitySpawner : IWorldEntitySpawner, IWorldEntityS
             yield break;
         }
 
-        SetupObject(entity, result.value.Value);
+        SetupObject(entity, result.value.Value, parent);
     }
 
     public bool SpawnsOwnChildren() => false;
@@ -45,7 +45,7 @@ public class PrefabPlaceholderEntitySpawner : IWorldEntitySpawner, IWorldEntityS
             return false;
         }
         
-        SetupObject(entity, result.value.Value);
+        SetupObject(entity, result.value.Value, parent);
         return true;
     }
 
@@ -63,10 +63,18 @@ public class PrefabPlaceholderEntitySpawner : IWorldEntitySpawner, IWorldEntityS
         return false;
     }
 
-    private void SetupObject(WorldEntity entity, GameObject gameObject)
+    private void SetupObject(WorldEntity entity, GameObject gameObject, Optional<GameObject> parent)
     {
         gameObject.transform.localPosition = entity.Transform.LocalPosition.ToUnity();
         gameObject.transform.localRotation = entity.Transform.LocalRotation.ToUnity();
+        LargeWorldStreamer.main.cellManager.UnregisterEntity(gameObject);
+
+        if (parent.HasValue)
+        {
+            gameObject.transform.SetParent(parent.Value.transform, false);
+        }
+        
+        gameObject.SetActive(true);
         gameObject.transform.localScale = entity.Transform.LocalScale.ToUnity();
     }
 }

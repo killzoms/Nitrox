@@ -120,7 +120,8 @@ public class PlaceholderGroupWorldEntitySpawner : IWorldEntitySpawner
                 }
             }
         }
-
+        
+        prefabPlaceholderGroup.OnPrefabGroupSpawned?.Invoke(); // Handles setting isKinematic on Floating Stones
         result.Set(prefabPlaceholderGroupGameObject);
     }
 
@@ -135,10 +136,7 @@ public class PlaceholderGroupWorldEntitySpawner : IWorldEntitySpawner
             yield break;
         }
         GameObject spawnedObject = worldEntityResult.value.Value;
-
-        spawnedObject.transform.localPosition = worldEntity.Transform.LocalPosition.ToUnity();
-        spawnedObject.transform.localRotation = worldEntity.Transform.LocalRotation.ToUnity();
-        spawnedObject.transform.localScale = worldEntity.Transform.LocalScale.ToUnity();
+        SetupObject(spawnedObject, worldEntity, parent);
     }
 
     private bool SpawnWorldEntityChildSync(WorldEntity worldEntity, EntityCell cellRoot, GameObject parent, TaskResult<Optional<GameObject>> worldEntityResult, out IEnumerator asyncInstructions)
@@ -154,10 +152,16 @@ public class PlaceholderGroupWorldEntitySpawner : IWorldEntitySpawner
         }
         GameObject spawnedObject = worldEntityResult.value.Value;
 
+        SetupObject(spawnedObject, worldEntity, parent);
+        asyncInstructions = null;
+        return true;
+    }
+
+    private void SetupObject(GameObject spawnedObject, WorldEntity worldEntity, GameObject parent)
+    {
         spawnedObject.transform.localPosition = worldEntity.Transform.LocalPosition.ToUnity();
         spawnedObject.transform.localRotation = worldEntity.Transform.LocalRotation.ToUnity();
         spawnedObject.transform.localScale = worldEntity.Transform.LocalScale.ToUnity();
-        asyncInstructions = null;
-        return true;
+        spawnedObject.transform.SetParent(parent.transform, false);
     }
 }
